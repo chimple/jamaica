@@ -16,7 +16,7 @@ class ThemeMap extends StatefulWidget {
 
 class _ThemeMapState extends State<ThemeMap>
     with SingleTickerProviderStateMixin {
-  List<String> _listItems = [
+  List<String> _iconTitle = [
     'House',
     'Sports',
     'Gym',
@@ -41,7 +41,7 @@ class _ThemeMapState extends State<ThemeMap>
   @override
   initState() {
     super.initState();
-    _maxLength = _listItems.fold(
+    _maxLength = _iconTitle.fold(
         0, (prev, element) => element.length > prev ? element.length : prev);
     _controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
@@ -171,11 +171,11 @@ class _ThemeMapState extends State<ThemeMap>
                                   iconSize: _iconSize,
                                   index: _incr0,
                                   constrainedBox: constraint,
-                                  text: _listItems[_incr0++],
+                                  text: _iconTitle[_incr0++],
                                   maxLen: _maxLength,
                                   scaleAnimate: (int index) {
                                     print(index % 5);
-                                    _text = _listItems[index];
+                                    _text = _iconTitle[index];
                                     if (!_controller.isAnimating)
                                       _animation(index % 5, constraint,
                                           _mediaQueryData.orientation);
