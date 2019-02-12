@@ -45,6 +45,8 @@ flutter:
 
   assets:
     - assets/
+    - assets/coin.flr
+    
 
   # To add assets to your application, add an assets section, like this:
   # assets:
