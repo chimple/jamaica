@@ -50,7 +50,7 @@ class _GameLevelState extends State<GameLevel>
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
     // var size = media.size;
-    print("hey this is cool");
+    print("hey this is cool ${widget.gameName}");
     print("this is the length ${media.size.height}");
     print("this is the height ${media.size.width}");
     return new Stack(
