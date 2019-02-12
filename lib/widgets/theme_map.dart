@@ -6,9 +6,9 @@ import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 
 class ThemeMap extends StatefulWidget {
-  final List<String> flareBackgroundPath;
-  final List<String> flareIconPath;
-  final List<String> flareIconTitle;
+  final List<String> flareBackgroundPath; // use later
+  final List<String> flareIconPath; // use later
+  final List<String> flareIconTitle; // use later
   ThemeMap({this.flareIconPath, this.flareIconTitle, this.flareBackgroundPath});
   @override
   _ThemeMapState createState() => new _ThemeMapState();
