@@ -5,6 +5,19 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 
+final List<String> _iconTitle = [
+  'House',
+  'Sports',
+  'Gym',
+  'Play Ground',
+  'Cycle',
+  'College',
+  'School',
+  'Teacher',
+  'Book',
+  'Cricket',
+];
+
 class ThemeMap extends StatefulWidget {
   final List<String> flareBackgroundPath; // use later
   final List<String> flareIconPath; // use later
@@ -16,18 +29,6 @@ class ThemeMap extends StatefulWidget {
 
 class _ThemeMapState extends State<ThemeMap>
     with SingleTickerProviderStateMixin {
-  List<String> _iconTitle = [
-    'House',
-    'Sports',
-    'Gym',
-    'Play Ground',
-    'Cycle',
-    'College',
-    'School',
-    'Teacher',
-    'Book',
-    'Cricket',
-  ];
   List<int> _list = [0, 1];
   List<Offset> _iconPosition = List(5);
   Offset _offset = Offset(0.0, 0.0), _centerOffset;
@@ -286,10 +287,9 @@ class FlareThemeMapBackground extends StatelessWidget {
       height: constraints.maxHeight,
       width: constraints.maxWidth,
       child: Container(
-        color: Colors.blue,
         child: Center(
           child: FlareActor(
-            'assets/map_background${index + 2}.flr',
+            'assets/map/map_background${index + 2}.flr',
             fit: MediaQuery.of(context).orientation == Orientation.portrait
                 ? BoxFit.fitHeight
                 : BoxFit.fitWidth,
@@ -361,7 +361,7 @@ class FlareIcon extends StatelessWidget {
                 child: Container(
                   // color: Colors.red,
                   child: FlareActor(
-                    'assets/elephant.flr',
+                    'assets/map/elephant.flr',
                     fit: BoxFit.fill,
                     animation: 'door',
                   ),
