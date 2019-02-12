@@ -13,6 +13,7 @@ class GameLevel extends StatefulWidget {
 
 class _GameLevelState extends State<GameLevel>
     with SingleTickerProviderStateMixin {
+  List<String> _solvedLetters = [];
   AnimationController _controller;
   Animation _animation;
 
@@ -39,7 +40,8 @@ class _GameLevelState extends State<GameLevel>
       ),
     );
   }
-   @override
+
+  @override
   void dispose() {
     super.dispose();
     _controller.dispose();
@@ -50,7 +52,7 @@ class _GameLevelState extends State<GameLevel>
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
     // var size = media.size;
-    print("hey this is cool ${widget.gameName}");
+    print("hey this is cool");
     print("this is the length ${media.size.height}");
     print("this is the height ${media.size.width}");
     return new Stack(
@@ -99,7 +101,6 @@ class _GameLevelState extends State<GameLevel>
                       new Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                        
                           SvgPicture.asset(
                             "assets/${widget.gameName}.svg",
                             fit: BoxFit.fill,
@@ -124,33 +125,32 @@ class _GameLevelState extends State<GameLevel>
                               ),
                             ],
                           ),
-                         
                           Container(
-                              height: media.size.height * 0.082,
+                              height: media.size.height * 0.085,
                               width: media.size.width,
-                              padding: EdgeInsets.all(10.0),
+                              // padding: EdgeInsets.all(12.0),
                               child: ListView(
+                                padding: EdgeInsets.all(10.0),
                                 scrollDirection: Axis.horizontal,
                                 children: widget.levelList
                                     .map((e) => RawMaterialButton(
-                                      // constraints: BoxConstraints.expand(width:70.0, height:70.0),
-                                      key: ValueKey("$e"),
-                                      shape: new CircleBorder(),
-                                      elevation: 2.0,
-                                      fillColor:
-                                          widget.levelList.first == e
+                                          // constraints: BoxConstraints.expand(width:70.0, height:70.0),
+                                          key: ValueKey("$e"),
+                                          shape: new CircleBorder(),
+                                          elevation: 2.0,
+                                          fillColor: widget.levelList.first == e
                                               ? Color(0XFF2a2538)
                                               : Color(0XFFe8e6e4),
-                                      onPressed: () {},
-                                      child: Text(
-                                        "$e",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize:
-                                                media.size.width * 0.05,
-                                            color: Colors.white),
-                                      ),
-                                    ))
+                                          onPressed: () {},
+                                          child: Text(
+                                            "$e",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize:
+                                                    media.size.width * 0.05,
+                                                color: Colors.white),
+                                          ),
+                                        ))
                                     .toList(growable: false),
                               )),
                         ],
@@ -166,81 +166,79 @@ class _GameLevelState extends State<GameLevel>
 //
 
             Positioned(
-                left:media.size.width /4,
+                left: media.size.width / 4,
                 height: media.size.height * 0.72,
                 width: media.size.width / 2,
                 top: _animation.value * 40 + 40,
                 child: Stack(children: <Widget>[
-                    Container(
-                      decoration: new BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: new BorderRadius.all(
-                            Radius.circular(30.0),
-                          )),
-                      child: SvgPicture.asset(
-                        "assets/background_popup.svg",
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    new Column(
-                      
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        
-                        SvgPicture.asset(
-                          "assets/${widget.gameName}.svg",
-                          fit: BoxFit.fill,
-                          // height: orientation == Orientation.portrait
-                          //     ? media.size.height * 0.15
-                          //     : media.size.height * 0.35,
-                          height:media.size.height * 0.30,
-                          width: media.size.width * 0.23,
-                        ),
-                        Material(
-                          type: MaterialType.transparency,
-                          child: new Text(
-                            widget.gameName,
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      
-                        Container(
-                            // height: orientation == Orientation.landscape
-                            //     ? media.size.height * 0.2
-                            //     : media.size.height * 0.082,
-                            height:  media.size.height * 0.15,
-                            width: media.size.width / 2,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: widget.levelList
-                .map((e) => RawMaterialButton(
-                  // constraints: BoxConstraints(
-                  //     minHeight: 100.0, minWidth: 100.0),
-                  key: ValueKey("$e"),
-                  shape: new CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: widget.levelList.first == e
-                      ? Color(0XFF2a2538)
-                      : Color(0XFFe8e6e4),
-                  onPressed: () {},
-                  child: Center(
-                    child: Text(
-                      "$e",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: media.size.width * 0.03,
-                          color: Colors.white),
+                  Container(
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: new BorderRadius.all(
+                          Radius.circular(30.0),
+                        )),
+                    child: SvgPicture.asset(
+                      "assets/background_popup.svg",
+                      fit: BoxFit.fill,
                     ),
                   ),
-                ))
-                .toList(growable: false),
-                            )),
-                      ],
-                    )
-                  ]),
+                  new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        "assets/${widget.gameName}.svg",
+                        fit: BoxFit.fill,
+                        // height: orientation == Orientation.portrait
+                        //     ? media.size.height * 0.15
+                        //     : media.size.height * 0.35,
+                        height: media.size.height * 0.30,
+                        width: media.size.width * 0.23,
+                      ),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: new Text(
+                          widget.gameName,
+                          style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                          // height: orientation == Orientation.landscape
+                          //     ? media.size.height * 0.2
+                          //     : media.size.height * 0.082,
+                          height: media.size.height * 0.15,
+                          width: media.size.width / 2,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: widget.levelList
+                                .map((e) => RawMaterialButton(
+                                      // constraints: BoxConstraints(
+                                      //     minHeight: 100.0, minWidth: 100.0),
+                                      padding: EdgeInsets.all(10.0),
+                                      key: ValueKey("$e"),
+                                      shape: new CircleBorder(),
+                                      elevation: 2.0,
+                                      fillColor: widget.levelList.first == e
+                                          ? Color(0XFF2a2538)
+                                          : Color(0XFFe8e6e4),
+                                      onPressed: () {},
+                                      child: Center(
+                                        child: Text(
+                                          "$e",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: media.size.width * 0.03,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ))
+                                .toList(growable: false),
+                          )),
+                    ],
+                  )
+                ]),
               )
       ],
     );
