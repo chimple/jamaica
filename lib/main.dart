@@ -1,6 +1,7 @@
+import 'package:flare_dart/math/aabb.dart';
+import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_flutter/flare.dart';
-import 'package:flare_flutter/flare/math/aabb.dart';
-import 'package:flare_flutter/flare/math/mat2d.dart';
+import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/basic_counting_game.dart';
 import 'package:jamaica/bento_box.dart';
