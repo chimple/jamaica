@@ -1,11 +1,10 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class GameLevel extends StatefulWidget {
-  String gameName;
-  List levelList;
+  final String gameName;
+  final List levelList;
   GameLevel({Key key, this.gameName, this.levelList}) : super(key: key);
   @override
   _GameLevelState createState() => new _GameLevelState();
@@ -13,13 +12,11 @@ class GameLevel extends StatefulWidget {
 
 class _GameLevelState extends State<GameLevel>
     with SingleTickerProviderStateMixin {
-  List<String> _solvedLetters = [];
   AnimationController _controller;
   Animation _animation;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = AnimationController(
       vsync: this,
@@ -51,12 +48,7 @@ class _GameLevelState extends State<GameLevel>
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
-    // var size = media.size;
-    print("hey this is cool");
-    print("this is the length ${media.size.height}");
-    print("this is the height ${media.size.width}");
     return new Stack(
-      // alignment: Alignment.bottomCenter,
       children: <Widget>[
         new BackdropFilter(
           filter: new ImageFilter.blur(
@@ -82,14 +74,12 @@ class _GameLevelState extends State<GameLevel>
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
-                    // color: Colors.red,
                     height: media.size.height * 0.40,
                     width: media.size.width * 0.1,
                     child: Stack(children: <Widget>[
                       Container(
-                        // color: Colors.blue,
                         child: SvgPicture.asset(
-                          "assets/background_popup.svg",
+                          "assets/game/background_popup.svg",
                           fit: BoxFit.fill,
                         ),
                         decoration: new BoxDecoration(
@@ -102,11 +92,8 @@ class _GameLevelState extends State<GameLevel>
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           SvgPicture.asset(
-                            "assets/${widget.gameName}.svg",
+                            "assets/game/${widget.gameName}.svg",
                             fit: BoxFit.fill,
-                            // height: orientation == Orientation.portrait
-                            //     ? media.size.height * 0.15
-                            //     : media.size.height * 0.35,
                             height: media.size.height * 0.15,
                             width: media.size.width * 0.23,
                           ),
@@ -128,13 +115,11 @@ class _GameLevelState extends State<GameLevel>
                           Container(
                               height: media.size.height * 0.085,
                               width: media.size.width,
-                              // padding: EdgeInsets.all(12.0),
                               child: ListView(
                                 padding: EdgeInsets.all(10.0),
                                 scrollDirection: Axis.horizontal,
                                 children: widget.levelList
                                     .map((e) => RawMaterialButton(
-                                          // constraints: BoxConstraints.expand(width:70.0, height:70.0),
                                           key: ValueKey("$e"),
                                           shape: new CircleBorder(),
                                           elevation: 2.0,
@@ -162,8 +147,6 @@ class _GameLevelState extends State<GameLevel>
             :
 
 //This for landscape as there is problem in position widget
-//
-//
 
             Positioned(
                 left: media.size.width / 4,
@@ -178,7 +161,7 @@ class _GameLevelState extends State<GameLevel>
                           Radius.circular(30.0),
                         )),
                     child: SvgPicture.asset(
-                      "assets/background_popup.svg",
+                      "assets/game/background_popup.svg",
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -186,11 +169,8 @@ class _GameLevelState extends State<GameLevel>
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       SvgPicture.asset(
-                        "assets/${widget.gameName}.svg",
+                        "assets/game/${widget.gameName}.svg",
                         fit: BoxFit.fill,
-                        // height: orientation == Orientation.portrait
-                        //     ? media.size.height * 0.15
-                        //     : media.size.height * 0.35,
                         height: media.size.height * 0.30,
                         width: media.size.width * 0.23,
                       ),
@@ -205,17 +185,12 @@ class _GameLevelState extends State<GameLevel>
                         ),
                       ),
                       Container(
-                          // height: orientation == Orientation.landscape
-                          //     ? media.size.height * 0.2
-                          //     : media.size.height * 0.082,
                           height: media.size.height * 0.15,
                           width: media.size.width / 2,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: widget.levelList
                                 .map((e) => RawMaterialButton(
-                                      // constraints: BoxConstraints(
-                                      //     minHeight: 100.0, minWidth: 100.0),
                                       padding: EdgeInsets.all(10.0),
                                       key: ValueKey("$e"),
                                       shape: new CircleBorder(),
