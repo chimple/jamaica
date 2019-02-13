@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamaica/widgets/theme_map.dart';
 
 class MapScreen extends StatelessWidget {
   @override
@@ -7,6 +8,6 @@ class MapScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Map'),
         ),
-        body: Container());
+        body: ThemeMap());
   }
 }
