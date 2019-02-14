@@ -10,7 +10,6 @@ abstract class GameConfig implements Built<GameConfig, GameConfigBuilder> {
   String get name;
   String get image;
   int get levels;
-  Color get color;
 
   GameConfig._();
   factory GameConfig([updates(GameConfigBuilder b)]) = _$GameConfig;
