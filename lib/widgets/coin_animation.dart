@@ -5,9 +5,11 @@ import 'package:flutter/rendering.dart';
 class MoveCoinAnimation extends StatefulWidget {
   Function(bool) callback;
   int index;
+  int starCount;
   Offset offset;
 
-  MoveCoinAnimation({Key key, this.callback, this.index, this.offset})
+  MoveCoinAnimation(
+      {Key key, this.callback, this.index, this.starCount, this.offset})
       : super(key: key);
 
   @override
@@ -21,11 +23,12 @@ class MoveCoinState extends State<MoveCoinAnimation>
   GlobalKey _globalKey2 = new GlobalKey();
   Animation<double> _size;
   AnimationController _controller;
-  Offset begin = Offset(0.0, 0.0);
-  Offset end = Offset(100, 200.0);
+  Offset beginOffset = Offset(0.0, 0.0);
+  // Offset endOffset = Offset(100, 200.0);
   var extraSize = 0.0;
   double animationDuration = 0.0;
   double start = 0.0;
+  double end = 0.0;
 
   @override
   void initState() {
@@ -37,7 +40,8 @@ class MoveCoinState extends State<MoveCoinAnimation>
     _controller = AnimationController(
         vsync: this, duration: new Duration(milliseconds: totalDuration));
     animationDuration = totalDuration / (100 * (totalDuration / widget.index));
-     start = (animationDuration * widget.index).toDouble();
+
+    //  start = (animationDuration * widget.index).toDouble();
 
     _size = Tween<double>(
       begin: 0,
@@ -58,13 +62,13 @@ class MoveCoinState extends State<MoveCoinAnimation>
       if (_controller.value < 0.3) {
         extraSize = extraSize;
       } else if (_controller.value > 0.3 && _controller.value < 0.35) {
-        extraSize = extraSize + 3;
+        extraSize = extraSize + 1;
       } else if (_controller.value > 0.35 && _controller.value < 0.6) {
-        extraSize = extraSize;
+        extraSize = extraSize + 1;
       } else if (_controller.value > 0.6 && _controller.value < .7) {
-        extraSize = extraSize - 1;
+        extraSize = extraSize - 2;
       } else {
-        extraSize = extraSize - 2.5;
+        extraSize = extraSize - 3;
       }
     });
     _controller.forward();
@@ -81,7 +85,7 @@ class MoveCoinState extends State<MoveCoinAnimation>
     final RenderBox renderBoxRed =
         _globalKey2.currentContext.findRenderObject();
     Offset offset = -renderBoxRed.globalToLocal(Offset.zero);
-    begin = offset;
+    beginOffset = offset;
   }
 
   @override
@@ -92,41 +96,44 @@ class MoveCoinState extends State<MoveCoinAnimation>
 
   @override
   Widget build(BuildContext context) {
+    for (int i = 0; i < widget.starCount; ++i) {
+      start = (animationDuration * i).toDouble();
+      end = start + 0.5;
+    }
     Size media = MediaQuery.of(context).size;
-
     return AnimatedBuilder(
         animation: _controller,
         builder: (BuildContext context, Widget child) {
           return Stack(
             children: <Widget>[
               _AnimatedCoin(
-                scale: Tween<Offset>(
-                        begin: begin / 100, end: widget.offset / 100)
-                    .animate(
-                  CurvedAnimation(
-                    parent: _controller,
-                    curve: Interval(
-                      start,
-                      1.0,
-                      curve: Curves.fastOutSlowIn,
+                  scale: Tween<Offset>(
+                          begin: beginOffset / 100, end: widget.offset / 100)
+                      .animate(
+                    CurvedAnimation(
+                      parent: _controller,
+                      curve: Interval(
+                        start,
+                        end,
+                        curve: Curves.easeOut,
+                      ),
                     ),
                   ),
-                ),
-                child: Container(
-                  key: _globalKey2,
-                  height: media.height * 0.15 + extraSize,
-                  width: media.width * 0.15 + extraSize,
-                  child: FlareActor(
-                    "assets/coin.flr",
-                    // animation: "rotate",
-                  ),
-                ),
-              ),
+                  child: Container(
+                    key: _globalKey2,
+                    height: media.height * 0.15 + extraSize,
+                    width: media.width * 0.15 + extraSize,
+                    child: FlareActor(
+                      "assets/coin.flr",
+                      // animation: "rotate",
+                    ),
+                  )),
             ],
           );
         });
   }
 }
+
 // using to handle coins animation by passing proper offset
 class _AnimatedCoin extends AnimatedWidget {
   final Widget child;
