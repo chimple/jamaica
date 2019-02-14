@@ -13,11 +13,13 @@ class _$GameConfig extends GameConfig {
   final String image;
   @override
   final int levels;
+  @override
+  final Color color;
 
   factory _$GameConfig([void updates(GameConfigBuilder b)]) =>
       (new GameConfigBuilder()..update(updates)).build();
 
-  _$GameConfig._({this.name, this.image, this.levels}) : super._() {
+  _$GameConfig._({this.name, this.image, this.levels, this.color}) : super._() {
     if (name == null) {
       throw new BuiltValueNullFieldError('GameConfig', 'name');
     }
@@ -27,6 +29,9 @@ class _$GameConfig extends GameConfig {
     if (levels == null) {
       throw new BuiltValueNullFieldError('GameConfig', 'levels');
     }
+    // if (color == null) {
+    //   throw new BuiltValueNullFieldError('GameConfig', 'color');
+    // }
   }
 
   @override
@@ -42,13 +47,15 @@ class _$GameConfig extends GameConfig {
     return other is GameConfig &&
         name == other.name &&
         image == other.image &&
-        levels == other.levels;
+        levels == other.levels &&
+        color == other.color;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, name.hashCode), image.hashCode), levels.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, name.hashCode), image.hashCode), levels.hashCode),
+        color.hashCode));
   }
 
   @override
@@ -56,7 +63,8 @@ class _$GameConfig extends GameConfig {
     return (newBuiltValueToStringHelper('GameConfig')
           ..add('name', name)
           ..add('image', image)
-          ..add('levels', levels))
+          ..add('levels', levels)
+          ..add('color', color))
         .toString();
   }
 }
@@ -76,6 +84,10 @@ class GameConfigBuilder implements Builder<GameConfig, GameConfigBuilder> {
   int get levels => _$this._levels;
   set levels(int levels) => _$this._levels = levels;
 
+  Color _color;
+  Color get color => _$this._color;
+  set color(Color color) => _$this.color = color;
+
   GameConfigBuilder();
 
   GameConfigBuilder get _$this {
@@ -83,6 +95,7 @@ class GameConfigBuilder implements Builder<GameConfig, GameConfigBuilder> {
       _name = _$v.name;
       _image = _$v.image;
       _levels = _$v.levels;
+      _color = _$v.color;
       _$v = null;
     }
     return this;
@@ -103,8 +116,9 @@ class GameConfigBuilder implements Builder<GameConfig, GameConfigBuilder> {
 
   @override
   _$GameConfig build() {
-    final _$result =
-        _$v ?? new _$GameConfig._(name: name, image: image, levels: levels);
+    final _$result = _$v ??
+        new _$GameConfig._(
+            name: name, image: image, levels: levels, color: color);
     replace(_$result);
     return _$result;
   }
