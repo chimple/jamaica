@@ -65,78 +65,80 @@ class CuteButtonState extends State<CuteButton> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print('onTap');
-      },
-      onTapDown: (t) {
-        print('onTapDown');
-        Future.delayed(const Duration(milliseconds: 250), () {
-          if (buttonStatus == _ButtonStatus.downToUp) {
-            setState(() {
-              buttonStatus = _ButtonStatus.up;
-            });
-          } else {
-            buttonStatus = _ButtonStatus.down;
-          }
-        });
-        setState(() {
-          buttonStatus = _ButtonStatus.upToDown;
-        });
-      },
-      onTapUp: (t) {
-        print('onTapUp');
-        if (widget.onPressed != null) {
-          setState(() => reaction = widget.onPressed());
-        }
-        if (buttonStatus == _ButtonStatus.upToDown) {
-          buttonStatus = _ButtonStatus.downToUp;
-        } else {
-          setState(() {
-            buttonStatus = _ButtonStatus.up;
-          });
-        }
-      },
-      onTapCancel: () => setState(() => buttonStatus = _ButtonStatus.up),
-      child: CustomMultiChildLayout(
-        children: <Widget>[
-          LayoutId(
-            id: _Slot.bottom,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            ),
+    final buttonChild = CustomMultiChildLayout(
+      children: <Widget>[
+        LayoutId(
+          id: _Slot.bottom,
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.all(Radius.circular(16.0))),
           ),
-          LayoutId(
-            id: _Slot.top,
-            child: Container(
-              child: widget.child,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
-            ),
+        ),
+        LayoutId(
+          id: _Slot.top,
+          child: Container(
+            child: widget.child,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(16.0))),
           ),
-          LayoutId(
-            id: _Slot.animation,
-            child: reaction != null && buttonStatus == _ButtonStatus.up
-                ? FlareActor(
-                    "assets/button.flr",
-                    alignment: Alignment.center,
-                    fit: BoxFit.contain,
-                    animation:
-                        reaction == Reaction.success ? 'correct' : 'wrong',
-                    callback: (s) {
-                      print(s);
-                      setState(() => reaction = null);
-                    },
-                  )
-                : Container(),
-          )
-        ],
-        delegate: OneOverOther(buttonStatus == _ButtonStatus.up ? false : true),
-      ),
+        ),
+        LayoutId(
+          id: _Slot.animation,
+          child: reaction != null && buttonStatus == _ButtonStatus.up
+              ? FlareActor(
+                  "assets/button.flr",
+                  alignment: Alignment.center,
+                  fit: BoxFit.contain,
+                  animation: reaction == Reaction.success ? 'correct' : 'wrong',
+                  callback: (s) {
+                    print(s);
+                    setState(() => reaction = null);
+                  },
+                )
+              : Container(),
+        )
+      ],
+      delegate: OneOverOther(buttonStatus == _ButtonStatus.up ? false : true),
     );
+    return widget.onPressed == null
+        ? buttonChild
+        : GestureDetector(
+            onTap: () {
+              print('onTap');
+            },
+            onTapDown: (t) {
+              print('onTapDown');
+              Future.delayed(const Duration(milliseconds: 250), () {
+                if (buttonStatus == _ButtonStatus.downToUp) {
+                  setState(() {
+                    buttonStatus = _ButtonStatus.up;
+                  });
+                } else {
+                  buttonStatus = _ButtonStatus.down;
+                }
+              });
+              setState(() {
+                buttonStatus = _ButtonStatus.upToDown;
+              });
+            },
+            onTapUp: (t) {
+              print('onTapUp');
+              if (widget.onPressed != null) {
+                setState(() => reaction = widget.onPressed());
+              }
+              if (buttonStatus == _ButtonStatus.upToDown) {
+                buttonStatus = _ButtonStatus.downToUp;
+              } else {
+                setState(() {
+                  buttonStatus = _ButtonStatus.up;
+                });
+              }
+            },
+            onTapCancel: () => setState(() => buttonStatus = _ButtonStatus.up),
+            child: buttonChild,
+          );
   }
 }
 

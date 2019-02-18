@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jamaica/animated_scale.dart';
-import 'package:jamaica/bento_box.dart';
-import 'package:jamaica/cute_button.dart';
+import 'package:jamaica/widgets/animated_scale.dart';
+import 'package:jamaica/widgets/bento_box.dart';
+import 'package:jamaica/widgets/cute_button.dart';
 
 class _ChoiceDetail {
   int choice;
