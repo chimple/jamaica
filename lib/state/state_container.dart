@@ -43,6 +43,12 @@ class StateContainerState extends State<StateContainer> {
         ..isLoading = state.isLoading);
     });
   }
+
+  void currentTheme(String t) {
+    state = AppState((s) => s
+      ..userProfile.currentTheme = t
+      ..isLoading = state.isLoading);
+  }
 }
 
 class _InheritedStateContainer extends InheritedWidget {
