@@ -1,7 +1,9 @@
-
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/collected_item_data.dart';
+import 'package:jamaica/models/user_profile.dart';
 import 'package:tuple/tuple.dart';
+
 class CollectedItemScreen extends StatefulWidget {
   CollectedItemScreen({Key key}) : super(key: key);
 
@@ -13,9 +15,15 @@ class CollectedItemScreen extends StatefulWidget {
 
 class CollectedItemScreenState extends State<CollectedItemScreen>
     with SingleTickerProviderStateMixin {
-  final Map<CollectionTitle, List<CollectionItem>> items;
+  final Map<CollectionTitle, List<CollectedItemData>> items;
+
+  UserProfile userProfileObject;
+  BuiltMap<String, int> itemsValue;
+
   final int itemCrossAxisCount;
   TabController _tabController;
+  
+
   int _itemCount = 0;
   List<Tuple4<String, String, int, int>> itemRange =
       List<Tuple4<String, String, int, int>>();
@@ -30,18 +38,25 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
       _itemCount += (l.length / itemCrossAxisCount).ceil();
     });
     _tabController = new TabController(vsync: this, length: itemRange.length);
-
+    
+    list.forEach((k, v) {
+      v.forEach((p) {
+        itemsValue = BuiltMap<String, int>({
+          p.categoryName: 0,
+        });
+      });
+    });
+    userProfileObject =
+          UserProfile((b) => b..items = itemsValue);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    if (_tabController != null) _tabController.dispose();
     super.dispose();
   }
 
-
-
-  Future _calling(CollectionTitle r, int index) async {
+  Future _displayPopup(CollectionTitle r, int index) async {
     await showDialog(
       context: context,
       builder: (context) {
@@ -64,7 +79,9 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset(items[r].elementAt(index).imageName,),
+                Image.asset(
+                  items[r].elementAt(index).imageName,
+                ),
                 Text(
                   items[r].elementAt(index).categoryName,
                   textScaleFactor: 2.0,
@@ -146,17 +163,13 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
                                                   BorderRadius.circular(10.0),
                                               color: Colors.indigo[300]),
                                           child: InkWell(
-                                            onTap: () {
-                                              if (items[r]
-                                                  .elementAt(index)
-                                                  .isEnabled) {
-                                                _calling(r, index);
-                                              }
-                                            },
+                                            onTap: userProfileObject.items.values.elementAt(0)==1
+                                                ? () {
+                                                    _displayPopup(r, index);
+                                                  }
+                                                : null,
                                             child: Opacity(
-                                              opacity: items[r]
-                                                      .elementAt(index)
-                                                      .isEnabled
+                                              opacity: userProfileObject.items.values.elementAt(0)==1
                                                   ? 1.0
                                                   : 0.5,
                                               child: Padding(
@@ -175,9 +188,7 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
                                           padding: EdgeInsets.only(top: 4.0),
                                         ),
                                         Opacity(
-                                          opacity: items[r]
-                                                  .elementAt(index)
-                                                  .isEnabled
+                                          opacity: userProfileObject.items.values.elementAt(0)==1
                                               ? 1.0
                                               : 0.5,
                                           child: Text(
@@ -219,4 +230,3 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
     ));
   }
 }
-
