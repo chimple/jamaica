@@ -18,13 +18,20 @@ class _ScoreScreenState extends State<ScoreScreen>
   AnimationController _animationController;
   double animationDuration = 0.0;
   GlobalKey _globalKey = new GlobalKey();
-  int inc = 0;
   int starCount = 5;
+  // Random().nextInt(5-0)+1;
   List<int> starValues = [];
   Offset _offset = Offset(0.0, 0.0);
   int coinCount = 100;
   bool moveAnime = false;
   bool animationCompleted = false;
+  List<String> gameplaytitle = [
+    "Very Bad",
+    "Bad",
+    "Good",
+    "Very Good",
+    "Excellent"
+  ];
 
   callback(t) {
     setState(() {
@@ -82,10 +89,12 @@ class _ScoreScreenState extends State<ScoreScreen>
     super.dispose();
   }
 
-  _buildCoinItem(int inc, int e) {
+  _buildCoinItem(int index, int e) {
     return MoveCoinAnimation(
+      key: new ValueKey<int>(index),
       callback: callback,
-      index: inc,
+      index: index,
+      starCount: starCount,
       offset: _offset,
     );
   }
@@ -107,6 +116,7 @@ class _ScoreScreenState extends State<ScoreScreen>
     return new LayoutBuilder(builder: (context, constraints) {
       double ht = constraints.maxHeight;
       double wd = constraints.maxWidth;
+      int inc = 0;
 
       return new Scaffold(
           backgroundColor: Colors.blue[900],
@@ -126,8 +136,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           new Container(
-                              height: ht * 0.1,
-                              width: ht * 0.1,
+                              height: ht > wd ? ht * 0.1 : ht * .15,
+                              width: ht > wd ? ht * 0.1 : ht * .15,
                               decoration: new ShapeDecoration(
                                   shape: CircleBorder(
                                       side: BorderSide(
@@ -150,7 +160,7 @@ class _ScoreScreenState extends State<ScoreScreen>
                               ),
                               Container(
                                 // height: ht * .05,
-                                width: wd * 0.15,
+                                width: wd * 0.18,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
@@ -164,7 +174,7 @@ class _ScoreScreenState extends State<ScoreScreen>
                                     ),
                                     Text("$coinCount",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: 15.0,
                                             fontWeight: FontWeight.w600,
                                             color: Colors.orange)),
                                   ],
@@ -175,8 +185,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                         ],
                       ),
                       new Container(
-                          height: ht * 0.1,
-                          width: ht * 0.1,
+                          height: ht > wd ? ht * 0.1 : ht * .15,
+                          width: ht > wd ? ht * 0.1 : ht * .15,
                           decoration: new ShapeDecoration(
                               shape: CircleBorder(
                                   side: BorderSide(
@@ -199,7 +209,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                       Stack(
                         children: <Widget>[
                           Container(
-                            height: ht * .22,
+                            padding: EdgeInsets.all(10),
+                            height: ht > wd ? ht * .2 : ht * .25,
                           ),
                           Align(
                             alignment: Alignment.center,
@@ -209,9 +220,11 @@ class _ScoreScreenState extends State<ScoreScreen>
                                     ? Container(
                                         height: ht * .15,
                                         child: Center(
-                                            child: Text("Excellent",
+                                            child: Text(
+                                                "${gameplaytitle[starCount - 1]}",
                                                 style: TextStyle(
-                                                    fontSize: 60.0,
+                                                    fontSize:
+                                                        ht > wd ? 60.0 : 40.0,
                                                     fontWeight:
                                                         FontWeight.w900))))
                                     : !moveAnime
@@ -249,9 +262,9 @@ class _ScoreScreenState extends State<ScoreScreen>
                   ),
                   Container(
                     child: new Text(
-                      '105',
+                      '123',
                       style: new TextStyle(
-                          fontSize: ht > wd ? ht * 0.08 : wd * 0.08,
+                          fontSize: ht > wd ? ht * 0.08 : ht * 0.08,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
