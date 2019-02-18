@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/game_config.dart';
 import 'package:jamaica/models/game_status.dart';
+import 'package:jamaica/screens/game_level.dart';
 
 class GameList extends StatelessWidget {
   final Map<String, List<GameConfig>> games;
@@ -33,10 +34,28 @@ class GameList extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             final gameConfig = v[index];
+            List gamelevel = [];
+            for(int i=1;i<=gameConfig.levels;i++){
+               gamelevel.add(i);
+            }
             return Column(
               children: <Widget>[
                 Image.asset(gameConfig.image),
-                Text(gameConfig.name)
+                RaisedButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return GameLevel(
+                              gameName: gameConfig.name,
+                              levelList:gamelevel
+                            );
+                          });
+                    },
+                    child: Text(
+                      gameConfig.name,
+                      style: TextStyle(color: Colors.amber),
+                    )),
               ],
             );
           },
