@@ -44,7 +44,7 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  void currentTheme(String t) {
+  void setCurrentTheme(String t) {
     state = AppState((s) => s
       ..userProfile.currentTheme = t
       ..isLoading = state.isLoading);

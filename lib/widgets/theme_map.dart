@@ -401,7 +401,7 @@ class FlareIcon extends StatelessWidget {
 }
 
 void navigateToScreen(BuildContext context, String text, String t) {
-  StateContainer.of(context).currentTheme(t);
+  StateContainer.of(context).setCurrentTheme(t);
   // print(StateContainer.of(context).state.userProfile.currentTheme);
   print(t);
   Widget child = Container(
