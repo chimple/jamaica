@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jamaica/loca.dart';
 import 'package:jamaica/screens/user_progress.dart';
+import 'package:jamaica/widgets/parent_access.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -10,12 +12,9 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
-              Tab(
-                text: "Progress",
-              ),
-              Tab(
-                text: "Collection",
-              ),
+              new Tab(text: Loca.of(context).progress),
+              new Tab(text: Loca.of(context).collection),
+          
             ],
           ),
         ),
