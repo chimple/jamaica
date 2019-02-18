@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:jamaica/games/sequence_the_number_game.dart';
 import 'package:jamaica/screens/score_screen.dart';
 import 'package:storyboard/storyboard.dart';
 
