@@ -214,8 +214,6 @@ class StoreWidget extends State<Store> with SingleTickerProviderStateMixin {
                       crossAxisCount: 4),
                   children: items[r].map((f) {
                     index++;
-                    String catergoryName;
-                    catergoryName = r.accessoryCategoryName;
                     return StoreAccessoryButton(
                       index: index,
                       coin: f.coin,
@@ -227,7 +225,7 @@ class StoreWidget extends State<Store> with SingleTickerProviderStateMixin {
                           itemName = s;
                           _colorStatus[n] = 1;
                           container.setAccessories(BuiltMap<String, String>(
-                              {catergoryName: itemName}));
+                              {r.accessoryCategoryName: itemName}));
                           print(container.state.userProfile);
                         });
                       },
