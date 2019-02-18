@@ -20,6 +20,8 @@ class Loca {
   }
 
   String intl(String name) => Intl.message(name, name: name);
+  String get collection => Intl.message('Collection', name: 'collection');
+  String get progress => Intl.message('Progress', name: 'progress');
   String get zero => Intl.message('Zero', name: 'zero');
   String get one => Intl.message('One', name: 'one');
   String get two => Intl.message('Two', name: 'two');

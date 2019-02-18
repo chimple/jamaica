@@ -48,7 +48,8 @@ class _$GameConfig extends GameConfig {
   @override
   int get hashCode {
     return $jf(
-        $jc($jc($jc(0, name.hashCode), image.hashCode), levels.hashCode));
+      $jc($jc($jc(0, name.hashCode), image.hashCode), levels.hashCode),
+    );
   }
 
   @override
@@ -83,6 +84,7 @@ class GameConfigBuilder implements Builder<GameConfig, GameConfigBuilder> {
       _name = _$v.name;
       _image = _$v.image;
       _levels = _$v.levels;
+
       _$v = null;
     }
     return this;
@@ -103,8 +105,12 @@ class GameConfigBuilder implements Builder<GameConfig, GameConfigBuilder> {
 
   @override
   _$GameConfig build() {
-    final _$result =
-        _$v ?? new _$GameConfig._(name: name, image: image, levels: levels);
+    final _$result = _$v ??
+        new _$GameConfig._(
+          name: name,
+          image: image,
+          levels: levels,
+        );
     replace(_$result);
     return _$result;
   }
