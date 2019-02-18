@@ -4,14 +4,15 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 
-class Chimp extends StatefulWidget {
+class ChimpCharacter extends StatefulWidget {
   String itemName;
-  Chimp({Key key, this.itemName}) : super(key: key);
+  ChimpCharacter({Key key, this.itemName}) : super(key: key);
   @override
-  _ChimpState createState() => _ChimpState();
+  _ChimpCharacterState createState() => _ChimpCharacterState();
 }
 
-class _ChimpState extends State<Chimp> implements FlareController {
+class _ChimpCharacterState extends State<ChimpCharacter>
+    implements FlareController {
   @override
   void initState() {
     if (widget.itemName == null) {
@@ -26,7 +27,7 @@ class _ChimpState extends State<Chimp> implements FlareController {
   Widget build(BuildContext context) {
     print('item name is ${widget.itemName}');
     return new FlareActor(
-      "assets/chimple.flr",
+      "assets/character/chimple.flr",
       alignment: Alignment.center,
       fit: BoxFit.contain,
       animation: "happy",
@@ -36,9 +37,6 @@ class _ChimpState extends State<Chimp> implements FlareController {
 
   @override
   bool advance(FlutterActorArtboard artboard, double elapsed) {
-    //print('advance');
-    //    shape.collapsedVisibility = false;
-    //_skyAnimation.apply(artboard);
     final acceName = artboard.getNode(widget.itemName);
     acceName.collapsedVisibility = false;
     return false;
@@ -71,8 +69,5 @@ class _ChimpState extends State<Chimp> implements FlareController {
   }
 
   @override
-  void setViewTransform(Mat2D viewTransform) {
-    print('setViewTransform');
-    // TODO: implement setViewTransform
-  }
+  void setViewTransform(Mat2D viewTransform) {}
 }
