@@ -56,6 +56,8 @@ class MoveCoinState extends State<MoveCoinAnimation>
         ),
       ),
     );
+    start = (animationDuration * widget.starCount).toDouble();
+    end = start + 0.5;
 
     // to increase and decrease coins size from begin to end
     _size.addListener(() {
@@ -96,10 +98,6 @@ class MoveCoinState extends State<MoveCoinAnimation>
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < widget.starCount; ++i) {
-      start = (animationDuration * i).toDouble();
-      end = start + 0.5;
-    }
     Size media = MediaQuery.of(context).size;
     return AnimatedBuilder(
         animation: _controller,

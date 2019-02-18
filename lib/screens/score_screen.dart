@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:jamaica/widgets/coin_animation.dart';
@@ -27,11 +26,11 @@ class _ScoreScreenState extends State<ScoreScreen>
   bool moveAnime = false;
   bool animationCompleted = false;
   List<String> gameplaytitle = [
-    "very bad",
-    "bad",
-    "good",
-    "very good",
-    "exellent"
+    "Very Bad",
+    "Bad",
+    "Good",
+    "Very Good",
+    "Excellent"
   ];
 
   callback(t) {
@@ -186,8 +185,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                         ],
                       ),
                       new Container(
-                           height: ht > wd ? ht * 0.1 : ht * .15,
-                              width: ht > wd ? ht * 0.1 : ht * .15,
+                          height: ht > wd ? ht * 0.1 : ht * .15,
+                          width: ht > wd ? ht * 0.1 : ht * .15,
                           decoration: new ShapeDecoration(
                               shape: CircleBorder(
                                   side: BorderSide(
@@ -224,7 +223,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                                             child: Text(
                                                 "${gameplaytitle[starCount - 1]}",
                                                 style: TextStyle(
-                                                    fontSize:ht>wd? 60.0: 40.0,
+                                                    fontSize:
+                                                        ht > wd ? 60.0 : 40.0,
                                                     fontWeight:
                                                         FontWeight.w900))))
                                     : !moveAnime
