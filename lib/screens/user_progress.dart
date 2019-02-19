@@ -38,7 +38,7 @@ class UserProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("testing widget here its comming or not..$_games");
-    // final container = StateContainer.of(context);
+    final container = StateContainer.of(context);
     BuiltMap<String, GameStatus> gameStatuses;
     Size size = MediaQuery.of(context).size;
 
@@ -48,13 +48,13 @@ class UserProgress extends StatelessWidget {
     List gameStatus = [];
     List<Widget> widget = [];
     _games.forEach((k, value) {
-      gameStatuses = BuiltMap<String, GameStatus>({
-        "${value.name}": GameStatus((b) => b
-          ..currentLevel = 2
-          ..highestLevel = value.levels
-          ..maxScore = 5
-          ..open = true),
-      });
+      // gameStatuses = BuiltMap<String, GameStatus>({
+      //   "${value.name}": GameStatus((b) => b
+      //     ..currentLevel = 2
+      //     ..highestLevel = value.levels
+      //     ..maxScore = 5
+      //     ..open = true),
+      // });
       print("hello what its means her not comming");
       // container.setGameStatuses(BuiltMap<String, GameStatus>({
       //   "${value.name}": GameStatus((b) => b
@@ -64,10 +64,10 @@ class UserProgress extends StatelessWidget {
       //     ..open = true),
       // }));
 
-      UserProfile userProfileObject =
-          UserProfile((b) => b..gameStatuses = gameStatuses);
+      // UserProfile userProfileObject =
+      //     UserProfile((b) => b..gameStatuses = gameStatuses);
 
-      userProfileObject.gameStatuses.forEach((k, v) {
+      container.state.userProfile.gameStatuses.forEach((k, v) {
         widget.add(Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
