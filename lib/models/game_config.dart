@@ -1,5 +1,7 @@
 library game_config;
 
+import 'dart:ui';
+
 import 'package:built_value/built_value.dart';
 
 part 'game_config.g.dart';
