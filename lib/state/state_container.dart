@@ -44,12 +44,6 @@ class StateContainerState extends State<StateContainer> {
         ..isLoading = state.isLoading);
     });
   }
-
-  void setGameStatuses(BuiltMap<String, GameStatus> gameStatuses) {
-    state = AppState((s) => s
-      ..userProfile.gameStatuses = gameStatuses
-      ..isLoading = state.isLoading);
-  }
 }
 
 class _InheritedStateContainer extends InheritedWidget {

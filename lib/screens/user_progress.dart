@@ -3,6 +3,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/game_config.dart';
 import 'package:jamaica/models/game_status.dart';
+import 'package:jamaica/models/user_profile.dart';
 import 'package:jamaica/screens/collection_progress_indicator.dart';
 import 'package:jamaica/state/state_container.dart';
 
@@ -36,19 +37,9 @@ class UserProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-
- StateContainer.of(context).setGameStatuses(BuiltMap<String, GameStatus>({
-        "s": GameStatus((b) => b
-          ..currentLevel = 2
-          ..highestLevel = 2
-          ..maxScore = 5
-          ..open = true),
-      }));
-
-      print("testing widget here its comming or not..$_games");
-    final container = StateContainer.of(context);
-    // BuiltMap<String, GameStatus> gameStatuses;
+    print("testing widget here its comming or not..$_games");
+    // final container = StateContainer.of(context);
+    BuiltMap<String, GameStatus> gameStatuses;
     Size size = MediaQuery.of(context).size;
 
     double width = size.width / 5;
@@ -57,26 +48,26 @@ class UserProgress extends StatelessWidget {
     List gameStatus = [];
     List<Widget> widget = [];
     _games.forEach((k, value) {
-      // gameStatuses = BuiltMap<String, GameStatus>({
-      //   "${value.name}": GameStatus((b) => b
-      //     ..currentLevel = 2
-      //     ..highestLevel = value.levels
-      //     ..maxScore = 5
-      //     ..open = true),
-      // });
-      print("hello what its means her not comming");
-      container.setGameStatuses(BuiltMap<String, GameStatus>({
+      gameStatuses = BuiltMap<String, GameStatus>({
         "${value.name}": GameStatus((b) => b
           ..currentLevel = 2
           ..highestLevel = value.levels
           ..maxScore = 5
           ..open = true),
-      }));
+      });
+      print("hello what its means her not comming");
+      // container.setGameStatuses(BuiltMap<String, GameStatus>({
+      //   "${value.name}": GameStatus((b) => b
+      //     ..currentLevel = 2
+      //     ..highestLevel = value.levels
+      //     ..maxScore = 5
+      //     ..open = true),
+      // }));
 
-      // UserProfile userProfileObject =
-      //     UserProfile((b) => b..gameStatuses = gameStatuses);
-      gameStatus.add(container.state.userProfile.gameStatuses);
-      container.state.userProfile.gameStatuses.forEach((k, v) {
+      UserProfile userProfileObject =
+          UserProfile((b) => b..gameStatuses = gameStatuses);
+
+      userProfileObject.gameStatuses.forEach((k, v) {
         widget.add(Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
