@@ -10,6 +10,8 @@ class _$UserProfile extends UserProfile {
   @override
   final String name;
   @override
+  final String currentTheme;
+  @override
   final BuiltMap<String, GameStatus> gameStatuses;
   @override
   final BuiltMap<String, int> items;
@@ -19,10 +21,18 @@ class _$UserProfile extends UserProfile {
   factory _$UserProfile([void updates(UserProfileBuilder b)]) =>
       (new UserProfileBuilder()..update(updates)).build() as _$UserProfile;
 
-  _$UserProfile._({this.name, this.gameStatuses, this.items, this.accessories})
+  _$UserProfile._(
+      {this.name,
+      this.currentTheme,
+      this.gameStatuses,
+      this.items,
+      this.accessories})
       : super._() {
     if (name == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'name');
+    }
+    if (currentTheme == null) {
+      throw new BuiltValueNullFieldError('UserProfile', 'currentTheme');
     }
     if (gameStatuses == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'gameStatuses');
@@ -47,6 +57,7 @@ class _$UserProfile extends UserProfile {
     if (identical(other, this)) return true;
     return other is UserProfile &&
         name == other.name &&
+        currentTheme == other.currentTheme &&
         gameStatuses == other.gameStatuses &&
         items == other.items &&
         accessories == other.accessories;
@@ -55,7 +66,10 @@ class _$UserProfile extends UserProfile {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, name.hashCode), gameStatuses.hashCode), items.hashCode),
+        $jc(
+            $jc($jc($jc(0, name.hashCode), currentTheme.hashCode),
+                gameStatuses.hashCode),
+            items.hashCode),
         accessories.hashCode));
   }
 
@@ -63,6 +77,7 @@ class _$UserProfile extends UserProfile {
   String toString() {
     return (newBuiltValueToStringHelper('UserProfile')
           ..add('name', name)
+          ..add('currentTheme', currentTheme)
           ..add('gameStatuses', gameStatuses)
           ..add('items', items)
           ..add('accessories', accessories))
@@ -83,6 +98,18 @@ class _$UserProfileBuilder extends UserProfileBuilder {
   set name(String name) {
     _$this;
     super.name = name;
+  }
+
+  @override
+  String get currentTheme {
+    _$this;
+    return super.currentTheme;
+  }
+
+  @override
+  set currentTheme(String currentTheme) {
+    _$this;
+    super.currentTheme = currentTheme;
   }
 
   @override
@@ -126,6 +153,7 @@ class _$UserProfileBuilder extends UserProfileBuilder {
   UserProfileBuilder get _$this {
     if (_$v != null) {
       super.name = _$v.name;
+      super.currentTheme = _$v.currentTheme;
       super.gameStatuses = _$v.gameStatuses;
       super.items = _$v.items;
       super.accessories = _$v.accessories;
@@ -152,6 +180,7 @@ class _$UserProfileBuilder extends UserProfileBuilder {
     final _$result = _$v ??
         new _$UserProfile._(
             name: name,
+            currentTheme: currentTheme,
             gameStatuses: gameStatuses,
             items: items,
             accessories: accessories);
