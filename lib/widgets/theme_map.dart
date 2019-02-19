@@ -44,7 +44,6 @@ class _ThemeMapState extends State<ThemeMap>
   final List<int> _list = [0, 1];
   List<Offset> _iconPosition = List(5);
   Offset _offset = Offset(0.0, 0.0), _centerOffset;
-  GlobalKey _globalKey = new GlobalKey(debugLabel: 'ThemeMap');
   MediaQueryData _mediaQueryData;
   AnimationController _controller;
   String _text, _currentTheme;
@@ -99,7 +98,7 @@ class _ThemeMapState extends State<ThemeMap>
 
   @override
   Widget build(BuildContext context) {
-    final stateContainer = StateContainer.of(context);
+    // final stateContainer = StateContainer.of(context);
     // print(
     //     'stateContainer.state.userProfile ${stateContainer.state..userProfile.name}');
     int _incr0 = 0;
@@ -107,7 +106,7 @@ class _ThemeMapState extends State<ThemeMap>
     _mediaQueryData = MediaQuery.of(context);
     final ScrollPhysics physics = _kPagePhysics.applyTo(ScrollPhysics());
     return LayoutBuilder(
-      key: _globalKey,
+      key: Key('ThemeMap'),
       builder: (context, constraint) {
         if (MediaQuery.of(context).orientation == Orientation.portrait) {
           _iconSize = Size(constraint.maxWidth * .3, constraint.maxWidth * .25);
@@ -150,12 +149,10 @@ class _ThemeMapState extends State<ThemeMap>
               child: Stack(
                 alignment: AlignmentDirectional.center,
                 children: <Widget>[
-                  Container(
-                    child: FlareThemeMapBackground(
-                      constraints: constraint,
-                      index: s,
-                      doAnimate: _startAnimation,
-                    ),
+                  FlareThemeMapBackground(
+                    constraints: constraint,
+                    index: s,
+                    doAnimate: _startAnimation,
                   ),
                   ScaleTransition(
                     scale: Tween<double>(begin: 1.0, end: 4.5)
@@ -204,8 +201,6 @@ class _ThemeMapState extends State<ThemeMap>
                                       if (!_controller.isAnimating)
                                         _animation(index % 5, constraint,
                                             _mediaQueryData.orientation);
-
-                                      print(stateContainer.state.userProfile);
                                     }),
                               ),
                             ),
