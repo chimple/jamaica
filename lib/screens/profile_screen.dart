@@ -11,10 +11,17 @@ class ProfileScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
+            indicatorWeight: 5.0,
+            labelColor: Colors.white,
+            labelStyle: new TextStyle(
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.normal),
             tabs: [
-              new Tab(text: Loca.of(context).progress),
+              new Tab(
+                text: Loca.of(context).progress,
+              ),
               new Tab(text: Loca.of(context).collection),
-          
             ],
           ),
         ),
