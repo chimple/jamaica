@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jamaica/bento_box.dart';
-import 'package:jamaica/cute_button.dart';
+import 'package:jamaica/widgets/bento_box.dart';
+import 'package:jamaica/widgets/cute_button.dart';
 
 class _ChoiceDetail {
-  int choice;
+  String choice;
   Reaction reaction;
   _ChoiceDetail({this.choice, this.reaction});
 }
@@ -24,19 +24,25 @@ class SequenceTheNumberGame extends StatefulWidget {
 class _SequenceTheNumberGameState extends State<SequenceTheNumberGame> {
   List<_ChoiceDetail> choiceDetails;
   List<_ChoiceDetail> questionDetails;
+  bool solved;
+  int answerPosition;
 
   @override
   void initState() {
     super.initState();
+    solved = false;
+    answerPosition = widget.choices
+        .indexWhere((c) => c == widget.sequence[widget.blankPosition]);
     questionDetails = widget.sequence
         .map((s) => _ChoiceDetail(
-              choice: s,
+              choice: s.toString(),
               reaction: Reaction.success,
             ))
         .toList(growable: false);
+    questionDetails[widget.blankPosition].choice = '?';
     choiceDetails = widget.choices
         .map((c) => _ChoiceDetail(
-              choice: c,
+              choice: c.toString(),
               reaction: Reaction.success,
             ))
         .toList(growable: false);
@@ -44,26 +50,46 @@ class _SequenceTheNumberGameState extends State<SequenceTheNumberGame> {
 
   @override
   Widget build(BuildContext context) {
+    final qChildren = questionDetails
+        .map((c) => CuteButton(
+              key: Key(c.choice),
+              child: Center(
+                child: Text(c.choice),
+              ),
+            ))
+        .toList(growable: false);
+    final children = choiceDetails
+        .map((c) => CuteButton(
+              key: Key(c.choice),
+              child: Center(
+                child: Text(c.choice),
+              ),
+              reaction: c.reaction,
+              onPressed: () {
+                setState(() {
+                  if (c.choice ==
+                      widget.sequence[widget.blankPosition].toString()) {
+                    c.reaction = Reaction.success;
+                    Future.delayed(const Duration(milliseconds: 1000),
+                        () => setState(() => solved = true));
+                  } else {
+                    c.reaction = Reaction.failure;
+                  }
+                });
+              },
+            ) as Widget)
+        .toList(growable: false);
+    if (solved) {
+      qChildren[widget.blankPosition] = children[answerPosition];
+      children[answerPosition] = Container();
+    }
     return BentoBox(
       qRows: 1,
       qCols: questionDetails.length,
-      qChildren: questionDetails
-          .map((c) => CuteButton(
-                child: Center(
-                  child: Text(c.choice.toString()),
-                ),
-              ))
-          .toList(growable: false),
+      qChildren: qChildren,
       rows: 1,
       cols: choiceDetails.length,
-      children: choiceDetails
-          .map((c) => CuteButton(
-                child: Center(
-                  child: Text(c.choice.toString()),
-                ),
-                reaction: c.reaction,
-              ))
-          .toList(growable: false),
+      children: children,
     );
   }
 }
