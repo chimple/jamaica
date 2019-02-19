@@ -41,6 +41,7 @@ class _ScoreScreenState extends State<ScoreScreen>
 
   @override
   void initState() {
+    super.initState();
     // to get coin animation destination offset
     WidgetsBinding.instance.addPostFrameCallback((s) {
       _afterLayout();
@@ -71,8 +72,6 @@ class _ScoreScreenState extends State<ScoreScreen>
     new Future.delayed(Duration(milliseconds: 50), () {
       buttoncontroller.forward();
     });
-
-    super.initState();
     controller.forward();
   }
 

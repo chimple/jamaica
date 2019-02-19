@@ -40,9 +40,6 @@ class MoveCoinState extends State<MoveCoinAnimation>
     _controller = AnimationController(
         vsync: this, duration: new Duration(milliseconds: totalDuration));
     animationDuration = totalDuration / (100 * (totalDuration / widget.index));
-
-    //  start = (animationDuration * widget.index).toDouble();
-
     _size = Tween<double>(
       begin: 0,
       end: 50,
