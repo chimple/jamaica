@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/storyboards/games/counting_game_story.dart';
 import 'package:jamaica/storyboards/games/dice_game_story.dart';
+import 'package:jamaica/storyboards/games/finger_game_story.dart';
 import 'package:jamaica/storyboards/games/game_list_story.dart';
 import 'package:jamaica/storyboards/games/match_the_shape_game_story.dart';
 import 'package:jamaica/storyboards/games/math_op_game_story.dart';
@@ -23,6 +24,7 @@ void main() {
     DiceGameStory(),
     MathOpGameStory(),
     CountingGameStory(),
+    FingerGameStory(),
     GameListStory(),
     DotNumberStory(),
     UserProgressStory(),

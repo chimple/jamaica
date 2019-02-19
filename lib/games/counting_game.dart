@@ -61,7 +61,7 @@ class _CountingGameState extends State<CountingGame> {
             children: List<Widget>.generate(
                 widget.answer,
                 (i) => Expanded(
-                    child: Image.asset('assets/apple.png',
+                    child: Image.asset('assets/accessories/apple.png',
                         fit: BoxFit.scaleDown))),
           ),
         ),
