@@ -50,6 +50,13 @@ flutter:
     - assets/
     - assets/coin.flr
     - assets/map/
+    - assets/game/addition.svg
+    - assets/game/background_popup.svg
+    - assets/game/domino_math.svg
+    - assets/game/find_the_size.svg
+    - assets/game/match_the_shape.svg
+    - assets/game/memory_match.svg
+    - assets/game/sequence.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

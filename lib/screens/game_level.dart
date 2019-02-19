@@ -1,11 +1,14 @@
 import 'dart:ui';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class GameLevel extends StatefulWidget {
   final String gameName;
   final List levelList;
-  GameLevel({Key key, this.gameName, this.levelList}) : super(key: key);
+  final String gameImage;
+  GameLevel({Key key, this.gameName, this.levelList, this.gameImage})
+      : super(key: key);
   @override
   _GameLevelState createState() => new _GameLevelState();
 }
@@ -26,13 +29,13 @@ class _GameLevelState extends State<GameLevel>
       });
     _controller.forward();
 
-    _animation = Tween<double>(begin: -2.0, end: 1.0).animate(
+    _animation = Tween<double>(begin: -8.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Interval(
           0.4,
           1.0,
-          curve: Curves.bounceInOut,
+          curve: Curves.ease,
         ),
       ),
     );
@@ -40,14 +43,15 @@ class _GameLevelState extends State<GameLevel>
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
+    print("this is my animation vslur ${_animation.value}");
     return new Stack(
       children: <Widget>[
         new BackdropFilter(
@@ -92,7 +96,7 @@ class _GameLevelState extends State<GameLevel>
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           SvgPicture.asset(
-                            "assets/game/${widget.gameName}.svg",
+                            "assets/game/${widget.gameImage}",
                             fit: BoxFit.fill,
                             height: media.size.height * 0.15,
                             width: media.size.width * 0.23,
@@ -116,10 +120,29 @@ class _GameLevelState extends State<GameLevel>
                               height: media.size.height * 0.085,
                               width: media.size.width,
                               child: ListView(
-                                padding: EdgeInsets.all(10.0),
+                                padding:
+                                    EdgeInsets.all(media.size.height * 0.01),
                                 scrollDirection: Axis.horizontal,
-                                children: widget.levelList
-                                    .map((e) => RawMaterialButton(
+                                children: widget.levelList.map((e) {
+                                  return widget.levelList[2] == e
+                                      ?
+                                      RawMaterialButton(
+                                          key: ValueKey("$e"),
+                                          shape: new CircleBorder(),
+                                          elevation: 2.0,
+                                          fillColor: widget.levelList[2] == e
+                                              ? Color(0XFF2a2538)
+                                              : Color(0XFFe8e6e4),
+                                          onPressed: () {},
+                                          child:  Container(
+                                        height: media.size.height,
+                                        width: 88.0,
+                                        child:FlareActor(
+                                          "assets/coin.flr",
+                                          animation: "coin",
+                                        ) ,)
+                                        )
+                                      : RawMaterialButton(
                                           key: ValueKey("$e"),
                                           shape: new CircleBorder(),
                                           elevation: 2.0,
@@ -135,8 +158,8 @@ class _GameLevelState extends State<GameLevel>
                                                     media.size.width * 0.05,
                                                 color: Colors.white),
                                           ),
-                                        ))
-                                    .toList(growable: false),
+                                        );
+                                }).toList(growable: false),
                               )),
                         ],
                       )
@@ -149,10 +172,11 @@ class _GameLevelState extends State<GameLevel>
 //This for landscape as there is problem in position widget
 
             Positioned(
-                left: media.size.width / 4,
+                // left: media.size.width,
+                right: media.size.height / 2.3,
                 height: media.size.height * 0.72,
-                width: media.size.width / 2,
-                top: _animation.value * 40 + 40,
+                width: media.size.width / 1.8,
+                top: _animation.value * 40,
                 child: Stack(children: <Widget>[
                   Container(
                     decoration: new BoxDecoration(
@@ -169,7 +193,7 @@ class _GameLevelState extends State<GameLevel>
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       SvgPicture.asset(
-                        "assets/game/${widget.gameName}.svg",
+                        "assets/game/${widget.gameImage}",
                         fit: BoxFit.fill,
                         height: media.size.height * 0.30,
                         width: media.size.width * 0.23,
@@ -186,12 +210,13 @@ class _GameLevelState extends State<GameLevel>
                       ),
                       Container(
                           height: media.size.height * 0.15,
-                          width: media.size.width / 2,
+                          width: media.size.width / 1.8,
                           child: ListView(
+                            padding: EdgeInsets.all(media.size.height * 0.01),
                             scrollDirection: Axis.horizontal,
                             children: widget.levelList
                                 .map((e) => RawMaterialButton(
-                                      padding: EdgeInsets.all(10.0),
+                                      // padding: EdgeInsets.all(10.0),
                                       key: ValueKey("$e"),
                                       shape: new CircleBorder(),
                                       elevation: 2.0,
