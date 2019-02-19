@@ -88,7 +88,7 @@ class CuteButtonState extends State<CuteButton> {
           id: _Slot.animation,
           child: reaction != null && buttonStatus == _ButtonStatus.up
               ? FlareActor(
-                  "assets/button.flr",
+                  "assets/character/button.flr",
                   alignment: Alignment.center,
                   fit: BoxFit.contain,
                   animation: reaction == Reaction.success ? 'correct' : 'wrong',

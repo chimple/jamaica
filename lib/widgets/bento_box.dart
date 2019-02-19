@@ -137,7 +137,7 @@ class _BentoBoxState extends State<BentoBox> {
                 top: c.offset.dy)
             : AnimatedPositioned(
                 key: ValueKey(c.child.key),
-                child: wrapWithDraggable(childSize, c),
+                child: buildChild(childSize, c.child),
                 duration: c.moveImmediately
                     ? Duration.zero
                     : Duration(milliseconds: 500),
