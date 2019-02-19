@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:jamaica/widgets/collected.dart';
 import 'package:jamaica/loca.dart';
 import 'package:jamaica/screens/user_progress.dart';
-import 'package:jamaica/widgets/parent_access.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
@@ -25,11 +25,11 @@ class ProfileScreen extends StatelessWidget {
           TabBarView(
             children: [
               UserProgress(),
-              Center(child: Text("data")),
+              Collected(),
             ],
           ),
         ]),
       ),
     );
-  }
+    }
 }
