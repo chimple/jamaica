@@ -1,29 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:jamaica/widgets/collected_item_screen.dart';
+import 'package:jamaica/widgets/collected.dart';
 import 'package:jamaica/loca.dart';
 import 'package:jamaica/screens/user_progress.dart';
-import 'package:jamaica/widgets/parent_access.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Profile'),
-          bottom: TabBar(
-            tabs: [Text('Status'), Text('Collection'), Text('Store')],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            Text('Content1'),
-            CollectedItemScreen(),
-            Text('Content3')
-          ],
-        ),
-      length: 2,
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
@@ -41,11 +25,11 @@ class ProfileScreen extends StatelessWidget {
           TabBarView(
             children: [
               UserProgress(),
-              Center(child: Text("data")),
+              Collected(),
             ],
           ),
         ]),
       ),
     );
-  }
+    }
 }

@@ -3,6 +3,25 @@ class CollectedItemData {
   final String categoryName;
 
   CollectedItemData(this.imageName, this.categoryName);
+
+  @override
+  String toString() {
+    return '{imageName:$imageName,categoryName:$categoryName}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CollectedItemData &&
+          runtimeType == other.runtimeType &&
+          imageName == other.imageName &&
+          categoryName == other.categoryName; 
+
+  @override
+  int get hashcode => imageName.hashCode ^ categoryName.hashCode;
+
+
+
 }
 
 class CollectionTitle {

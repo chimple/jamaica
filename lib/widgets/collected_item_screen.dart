@@ -1,53 +1,39 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/collected_item_data.dart';
-import 'package:jamaica/models/user_profile.dart';
 import 'package:tuple/tuple.dart';
 
 class CollectedItemScreen extends StatefulWidget {
-  CollectedItemScreen({Key key}) : super(key: key);
+  final BuiltMap<String, int> itemsValue;
+  final Map<CollectionTitle, List<CollectedItemData>> staticItems;
+  CollectedItemScreen({Key key, this.itemsValue, this.staticItems})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new CollectedItemScreenState(items: list);
+    return new CollectedItemScreenState();
   }
 }
 
 class CollectedItemScreenState extends State<CollectedItemScreen>
     with SingleTickerProviderStateMixin {
-  final Map<CollectionTitle, List<CollectedItemData>> items;
-
-  UserProfile userProfileObject;
-  BuiltMap<String, int> itemsValue;
-
   final int itemCrossAxisCount;
   TabController _tabController;
-  
 
   int _itemCount = 0;
   List<Tuple4<String, String, int, int>> itemRange =
       List<Tuple4<String, String, int, int>>();
-  CollectedItemScreenState({this.items, this.itemCrossAxisCount = 4});
+  CollectedItemScreenState({this.itemCrossAxisCount = 4});
 
   @override
   void initState() {
     super.initState();
-    items.forEach((e, l) {
+    widget.staticItems.forEach((e, l) {
       itemRange.add(Tuple4(e.imageName, e.categoryName, _itemCount,
           _itemCount + (l.length / itemCrossAxisCount).ceil()));
       _itemCount += (l.length / itemCrossAxisCount).ceil();
     });
     _tabController = new TabController(vsync: this, length: itemRange.length);
-    
-    list.forEach((k, v) {
-      v.forEach((p) {
-        itemsValue = BuiltMap<String, int>({
-          p.categoryName: 0,
-        });
-      });
-    });
-    userProfileObject =
-          UserProfile((b) => b..items = itemsValue);
   }
 
   @override
@@ -80,10 +66,10 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  items[r].elementAt(index).imageName,
+                  widget.staticItems[r].elementAt(index).imageName,
                 ),
                 Text(
-                  items[r].elementAt(index).categoryName,
+                  widget.staticItems[r].elementAt(index).categoryName,
                   textScaleFactor: 2.0,
                 ),
               ],
@@ -105,7 +91,7 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
               flex: 5,
               child: new TabBarView(
                 controller: _tabController,
-                children: items.keys
+                children: widget.staticItems.keys
                     .map((r) => CustomScrollView(
                           slivers: <Widget>[
                             SliverToBoxAdapter(
@@ -163,20 +149,24 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
                                                   BorderRadius.circular(10.0),
                                               color: Colors.indigo[300]),
                                           child: InkWell(
-                                            onTap: userProfileObject.items.values.elementAt(0)==1
+                                            onTap: widget.itemsValue.values
+                                                        .elementAt(0) ==
+                                                    1
                                                 ? () {
                                                     _displayPopup(r, index);
                                                   }
                                                 : null,
                                             child: Opacity(
-                                              opacity: userProfileObject.items.values.elementAt(0)==1
+                                              opacity: widget.itemsValue.values
+                                                          .elementAt(0) ==
+                                                      1
                                                   ? 1.0
                                                   : 0.5,
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(10.0),
                                                 child: Image.asset(
-                                                  items[r]
+                                                  widget.staticItems[r]
                                                       .elementAt(index)
                                                       .imageName,
                                                 ),
@@ -188,11 +178,13 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
                                           padding: EdgeInsets.only(top: 4.0),
                                         ),
                                         Opacity(
-                                          opacity: userProfileObject.items.values.elementAt(0)==1
+                                          opacity: widget.itemsValue.values
+                                                      .elementAt(0) ==
+                                                  1
                                               ? 1.0
                                               : 0.5,
                                           child: Text(
-                                            items[r]
+                                            widget.staticItems[r]
                                                 .elementAt(index)
                                                 .categoryName,
                                             style: TextStyle(
@@ -215,7 +207,7 @@ class CollectedItemScreenState extends State<CollectedItemScreen>
                                       ]),
                                     );
                                   },
-                                  childCount: items[r].length,
+                                  childCount: widget.staticItems[r].length,
                                 ),
                               ),
                             ),
