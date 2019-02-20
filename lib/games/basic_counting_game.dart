@@ -46,7 +46,8 @@ class _BasicCountingGameState extends State<BasicCountingGame> {
     List<Widget> answers = [];
     for (var i = 0; i < widget.answer; i++) {
       answers.add(Expanded(
-          child: Image.asset('assets/apple.png', fit: BoxFit.scaleDown)));
+          child: Image.asset('assets/accessories/apple.png',
+              fit: BoxFit.scaleDown)));
     }
     ;
     return Column(
