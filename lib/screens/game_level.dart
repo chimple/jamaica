@@ -76,7 +76,7 @@ class _GameLevelState extends State<GameLevel>
                     ? _animation.value * 300
                     : _animation.value,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
                   child: Container(
                     height: media.size.height * 0.40,
                     width: media.size.width * 0.1,
@@ -123,26 +123,8 @@ class _GameLevelState extends State<GameLevel>
                                 padding:
                                     EdgeInsets.all(media.size.height * 0.01),
                                 scrollDirection: Axis.horizontal,
-                                children: widget.levelList.map((e) {
-                                  return widget.levelList[2] == e
-                                      ?
+                                children: widget.levelList.map((e) =>
                                       RawMaterialButton(
-                                          key: ValueKey("$e"),
-                                          shape: new CircleBorder(),
-                                          elevation: 2.0,
-                                          fillColor: widget.levelList[2] == e
-                                              ? Color(0XFF2a2538)
-                                              : Color(0XFFe8e6e4),
-                                          onPressed: () {},
-                                          child:  Container(
-                                        height: media.size.height,
-                                        width: 88.0,
-                                        child:FlareActor(
-                                          "assets/coin.flr",
-                                          animation: "coin",
-                                        ) ,)
-                                        )
-                                      : RawMaterialButton(
                                           key: ValueKey("$e"),
                                           shape: new CircleBorder(),
                                           elevation: 2.0,
@@ -158,8 +140,8 @@ class _GameLevelState extends State<GameLevel>
                                                     media.size.width * 0.05,
                                                 color: Colors.white),
                                           ),
-                                        );
-                                }).toList(growable: false),
+                                        )
+                                ).toList(growable: false),
                               )),
                         ],
                       )
