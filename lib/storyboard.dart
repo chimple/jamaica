@@ -18,6 +18,7 @@ import 'package:jamaica/storyboards/games/game_level_story.dart';
 import 'package:jamaica/storyboards/games/score_screen_story.dart';
 import 'package:jamaica/storyboards/user_progress_story.dart';
 import 'package:jamaica/storyboards/theme_map_story.dart';
+import 'package:jamaica/storyboards/widgets/store_screen_story.dart';
 import 'package:storyboard/storyboard.dart';
 
 void main() {
@@ -34,6 +35,7 @@ void main() {
     OrderBySizeGameStory(),
     FindWordGameStory(),
     GameListStory(),
+    StoreScreenStory(),
     CollectedItemStory(),
     DotNumberStory(),
     UserProgressStory(),
