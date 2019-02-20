@@ -8,6 +8,7 @@ part 'user_profile.g.dart';
 
 abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
   String get name;
+  String get currentTheme;
   BuiltMap<String, GameStatus> get gameStatuses;
   BuiltMap<String, int> get items;
   BuiltMap<String, String> get accessories;
@@ -19,6 +20,7 @@ abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
 abstract class UserProfileBuilder
     implements Builder<UserProfile, UserProfileBuilder> {
   String name = '';
+  String currentTheme = '';
   BuiltMap<String, GameStatus> gameStatuses = BuiltMap<String, GameStatus>({});
   BuiltMap<String, int> items = BuiltMap<String, int>({});
   BuiltMap<String, String> accessories = BuiltMap<String, String>({});
