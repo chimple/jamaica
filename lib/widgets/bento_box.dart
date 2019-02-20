@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:jamaica/cute_button.dart';
+import 'package:jamaica/widgets/cute_button.dart';
 
 enum DragConfig {
   fixed,
@@ -51,9 +51,7 @@ class _ChildDetail {
 }
 
 class _BentoBoxState extends State<BentoBox> {
-  List<_ChildDetail> childDetails;
-  List<_ChildDetail> qChildDetails;
-  List<_ChildDetail> frontChildDetails;
+  Map<Key, _ChildDetail> _children;
   Size size;
   int rows;
   int cols;
@@ -61,76 +59,73 @@ class _BentoBoxState extends State<BentoBox> {
   @override
   void initState() {
     super.initState();
-    calculateLayout();
+    _children = {};
+    size = Size(1024.0, 1024.0); //Nominal size
+    calculateLayout(true);
   }
 
-  void calculateLayout() {
-    print(widget.frontChildren);
-    Random random = Random();
-    size = Size(1024.0, 1024.0);
+  void calculateLayout(bool positionRandomized) {
     int k = 0;
     rows = widget.rows + widget.qRows;
     cols = max(widget.cols, widget.qCols);
     final childWidth = size.width / cols;
     final childHeight = size.height / rows;
 
-    frontChildDetails = (widget.frontChildren ?? []).map((c) {
-      return _ChildDetail(
-          child: c,
-          offset: Offset(
-              ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
-              (rows - 1) / 2 * childHeight));
-    }).toList(growable: false);
+    (widget.frontChildren ?? []).forEach((c) => _children[c.key] = _ChildDetail(
+        child: c,
+        offset: Offset(
+            ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
+            (rows - 1) / 2 * childHeight)));
     int i = 0;
-    qChildDetails = (widget.qChildren ?? []).map((c) {
-      final childDetail = _ChildDetail(
-        child: c,
-        offset: widget.randomize
-            ? Offset(random.nextDouble() * size.width,
-                random.nextDouble() * size.height)
-            : Offset((i % widget.qCols) * childWidth,
+    if (!widget.randomize) {
+      (widget.qChildren ?? []).forEach((c) => _children[c.key] = _ChildDetail(
+            child: c,
+            offset: Offset(
+                ((cols - widget.qCols) / 2 + (i % widget.qCols)) * childWidth,
                 (i++ ~/ widget.qCols) * childHeight),
-      );
-      return childDetail;
-    }).toList(growable: false);
-
-    i = 0;
-    childDetails = widget.children.map((c) {
-      final childDetail = _ChildDetail(
-        child: c,
-        offset: widget.randomize
-            ? Offset(random.nextDouble() * size.width,
-                random.nextDouble() * size.height)
-            : Offset((i % widget.cols) * childWidth,
-                (i++ ~/ widget.cols) * childHeight),
-      );
-      return childDetail;
-    }).toList(growable: false);
+          ));
+      i = 0;
+      widget.children.forEach((c) => _children[c.key] = _ChildDetail(
+            child: c,
+            offset: Offset(
+                ((cols - widget.cols) / 2 + (i % widget.cols)) * childWidth,
+                (widget.qRows + (i++ ~/ widget.cols)) * childHeight),
+          ));
+    } else if (positionRandomized) {
+      Random random = Random();
+      (widget.qChildren ?? []).forEach((c) => _children[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset(random.nextDouble() * size.width,
+              random.nextDouble() * size.height)));
+      i = 0;
+      widget.children.forEach((c) => _children[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset(max(0, random.nextDouble() * size.width - childWidth),
+              max(0, random.nextDouble() * size.height - childHeight))));
+    }
   }
 
   @override
   void didUpdateWidget(BentoBox oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.children != widget.children ||
-        oldWidget.frontChildren != widget.frontChildren ||
-        oldWidget.rows != widget.rows ||
-        oldWidget.cols != widget.cols) {
-      calculateLayout();
+    if (oldWidget.frontChildren != widget.frontChildren ||
+        oldWidget.qChildren != widget.qChildren ||
+        oldWidget.children != widget.children) {
+      calculateLayout(false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     print('BentoBox:build');
-    print(childDetails);
-    print(qChildDetails);
     return LayoutBuilder(builder: (context, constraints) {
       var i = 0;
       final biggest = constraints.biggest;
       List<Widget> widgets = [Container()];
       Size childSize = Size(biggest.width / cols, biggest.height / rows);
 
-      widgets.addAll(qChildDetails.map((c) {
+      widgets.addAll((widget.qChildren ?? []).map((child) {
+        final c = _children[child.key];
         if (size != biggest) {
           c.offset = c.offset
               .scale(biggest.width / size.width, biggest.height / size.height);
@@ -142,7 +137,7 @@ class _BentoBoxState extends State<BentoBox> {
                 top: c.offset.dy)
             : AnimatedPositioned(
                 key: ValueKey(c.child.key),
-                child: buildOuterChild(childSize, c),
+                child: buildChild(childSize, c.child),
                 duration: c.moveImmediately
                     ? Duration.zero
                     : Duration(milliseconds: 500),
@@ -150,7 +145,14 @@ class _BentoBoxState extends State<BentoBox> {
                 top: c.offset.dy);
       }));
 
-      widgets.addAll(childDetails.map((c) {
+      widgets.addAll(widget.children.map((child) {
+        final c = _children[child.key];
+        if (c == null) {
+          print('null ${child.key}');
+          return Positioned(
+            child: Container(),
+          );
+        }
         if (size != biggest) {
           c.offset = c.offset
               .scale(biggest.width / size.width, biggest.height / size.height);
@@ -162,7 +164,7 @@ class _BentoBoxState extends State<BentoBox> {
                 top: c.offset.dy)
             : AnimatedPositioned(
                 key: ValueKey(c.child.key),
-                child: buildOuterChild(childSize, c),
+                child: wrapWithDraggable(childSize, c),
                 duration: c.moveImmediately
                     ? Duration.zero
                     : Duration(milliseconds: 500),
@@ -170,14 +172,15 @@ class _BentoBoxState extends State<BentoBox> {
                 top: c.offset.dy);
       }));
 
-      widgets.addAll(frontChildDetails.map((c) {
+      widgets.addAll((widget.frontChildren ?? []).map((child) {
+        final c = _children[child.key];
         if (size != biggest) {
           c.offset = c.offset
               .scale(biggest.width / size.width, biggest.height / size.height);
         }
         return AnimatedPositioned(
           key: ValueKey(c.child.key),
-          child: buildOuterChild(childSize, c),
+          child: wrapWithDraggable(childSize, c),
           duration: Duration(milliseconds: 500),
           left: c.offset.dx,
           top: c.offset.dy,
@@ -191,7 +194,7 @@ class _BentoBoxState extends State<BentoBox> {
     });
   }
 
-  Widget buildOuterChild(Size childSize, _ChildDetail c) {
+  Widget wrapWithDraggable(Size childSize, _ChildDetail c) {
     return widget.dragConfig == DragConfig.fixed
         ? buildChild(childSize, c.child)
         : Draggable(
@@ -203,21 +206,23 @@ class _BentoBoxState extends State<BentoBox> {
             feedback: buildChild(childSize, c.child),
             data: (c.child.key as ValueKey<String>).value,
             onDragEnd: (d) {
-              if (!d.wasAccepted) {
-                setState(() {
-                  if (widget.dragConfig == DragConfig.draggableBounceBack) {
-                    final currentOffset = Offset(c.offset.dx, c.offset.dy);
-                    WidgetsBinding.instance
-                        .addPostFrameCallback((_) => setState(() {
-                              c.offset = currentOffset;
-                              c.moveImmediately = false;
-                            }));
-                  }
+              print("c was accepted: ${d.wasAccepted}");
+              setState(() {
+                if (!d.wasAccepted &&
+                    widget.dragConfig == DragConfig.draggableBounceBack) {
+                  final currentOffset = Offset(c.offset.dx, c.offset.dy);
+                  WidgetsBinding.instance
+                      .addPostFrameCallback((_) => setState(() {
+                            c.offset = currentOffset;
+                            c.moveImmediately = false;
+                          }));
+                }
+                if (widget.dragConfig != DragConfig.draggableMultiPack) {
                   c.offset = (context.findRenderObject() as RenderBox)
                       .globalToLocal(d.offset);
                   c.moveImmediately = true;
-                });
-              }
+                }
+              });
             },
           );
   }
@@ -227,7 +232,7 @@ class _BentoBoxState extends State<BentoBox> {
       width: size.width,
       height: size.height,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: Center(
           child: AspectRatio(
             aspectRatio: 1.0,
