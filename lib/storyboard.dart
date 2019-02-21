@@ -6,6 +6,7 @@ import 'package:jamaica/storyboards/games/find_word_game_story.dart';
 import 'package:jamaica/storyboards/games/finger_game_story.dart';
 import 'package:jamaica/storyboards/games/game_list_story.dart';
 import 'package:jamaica/storyboards/games/match_the_shape_game_story.dart';
+import 'package:jamaica/storyboards/games/match_with_image_game_story.dart';
 import 'package:jamaica/storyboards/games/math_op_game_story.dart';
 import 'package:jamaica/storyboards/games/memory_game_story.dart';
 import 'package:jamaica/storyboards/games/order_by_size_game_story.dart';
@@ -33,6 +34,7 @@ void main() {
     RecognizeNumberGameStory(),
     OrderBySizeGameStory(),
     FindWordGameStory(),
+    MatchWithImageGameStory(),
     GameListStory(),
     CollectedItemStory(),
     DotNumberStory(),
