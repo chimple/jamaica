@@ -12,6 +12,7 @@ import 'package:jamaica/storyboards/games/memory_game_story.dart';
 import 'package:jamaica/storyboards/games/order_by_size_game_story.dart';
 import 'package:jamaica/storyboards/games/recognize_number_game_story.dart';
 import 'package:jamaica/storyboards/games/rhyme_words_game_story.dart';
+import 'package:jamaica/storyboards/games/sequence_alphabet_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
@@ -39,6 +40,7 @@ void main() {
     FindWordGameStory(),
     MatchWithImageGameStory(),
     RhymeWordsGameStory(),
+    SequenceAlphabetGameStory(),
     GameListStory(),
     StoreScreenStory(),
     CollectedItemStory(),
@@ -48,6 +50,5 @@ void main() {
     ScoreScreenStory(),
     ThemeMapStory(),
     AudioWidgetStory()
-
   ]));
 }
