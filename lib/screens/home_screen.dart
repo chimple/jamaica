@@ -26,6 +26,10 @@ class HomeScreen extends StatelessWidget {
                   icon: Icon(Icons.store),
                   onPressed: () => Navigator.of(context).pushNamed('/store'),
                 ),
+                IconButton(
+                  icon: Icon(Icons.book),
+                  onPressed: () => Navigator.of(context).pushNamed('/story'),
+                ),
               ],
             ),
           ],
