@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:jamaica/models/story_modal.dart';
+import 'package:jamaica/models/story_config.dart';
 import 'package:jamaica/widgets/story/story_page.dart';
 
 class StoryCard extends StatelessWidget {
   final index;
-  final StoryModal storyModal;
+  final StoryConfig storyModal;
   StoryCard({this.index, @required this.storyModal});
   Widget build(BuildContext context) {
+    print('storyModal.coverImagePath ${storyModal.coverImagePath}');
     return InkWell(
       splashColor: Colors.blueAccent,
       onTap: () {

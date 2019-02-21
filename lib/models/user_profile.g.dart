@@ -12,6 +12,8 @@ class _$UserProfile extends UserProfile {
   @override
   final String currentTheme;
   @override
+  final List<StoryConfig> storyList;
+  @override
   final BuiltMap<String, GameStatus> gameStatuses;
   @override
   final BuiltMap<String, int> items;
@@ -24,6 +26,7 @@ class _$UserProfile extends UserProfile {
   _$UserProfile._(
       {this.name,
       this.currentTheme,
+      this.storyList,
       this.gameStatuses,
       this.items,
       this.accessories})
@@ -33,6 +36,9 @@ class _$UserProfile extends UserProfile {
     }
     if (currentTheme == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'currentTheme');
+    }
+    if (storyList == null) {
+      throw new BuiltValueNullFieldError('UserProfile', 'storyList');
     }
     if (gameStatuses == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'gameStatuses');
@@ -58,6 +64,7 @@ class _$UserProfile extends UserProfile {
     return other is UserProfile &&
         name == other.name &&
         currentTheme == other.currentTheme &&
+        storyList == other.storyList &&
         gameStatuses == other.gameStatuses &&
         items == other.items &&
         accessories == other.accessories;
@@ -67,7 +74,9 @@ class _$UserProfile extends UserProfile {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, name.hashCode), currentTheme.hashCode),
+            $jc(
+                $jc($jc($jc(0, name.hashCode), currentTheme.hashCode),
+                    storyList.hashCode),
                 gameStatuses.hashCode),
             items.hashCode),
         accessories.hashCode));
@@ -78,6 +87,7 @@ class _$UserProfile extends UserProfile {
     return (newBuiltValueToStringHelper('UserProfile')
           ..add('name', name)
           ..add('currentTheme', currentTheme)
+          ..add('storyList', storyList)
           ..add('gameStatuses', gameStatuses)
           ..add('items', items)
           ..add('accessories', accessories))
@@ -110,6 +120,18 @@ class _$UserProfileBuilder extends UserProfileBuilder {
   set currentTheme(String currentTheme) {
     _$this;
     super.currentTheme = currentTheme;
+  }
+
+  @override
+  List<StoryConfig> get storyList {
+    _$this;
+    return super.storyList;
+  }
+
+  @override
+  set storyList(List<StoryConfig> storyList) {
+    _$this;
+    super.storyList = storyList;
   }
 
   @override
@@ -154,6 +176,7 @@ class _$UserProfileBuilder extends UserProfileBuilder {
     if (_$v != null) {
       super.name = _$v.name;
       super.currentTheme = _$v.currentTheme;
+      super.storyList = _$v.storyList;
       super.gameStatuses = _$v.gameStatuses;
       super.items = _$v.items;
       super.accessories = _$v.accessories;
@@ -181,6 +204,7 @@ class _$UserProfileBuilder extends UserProfileBuilder {
         new _$UserProfile._(
             name: name,
             currentTheme: currentTheme,
+            storyList: storyList,
             gameStatuses: gameStatuses,
             items: items,
             accessories: accessories);

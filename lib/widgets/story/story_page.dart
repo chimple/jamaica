@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jamaica/models/story_modal.dart';
+import 'package:jamaica/models/story_config.dart';
 
 class StoryPage extends StatelessWidget {
   final List<Pages> pages;
