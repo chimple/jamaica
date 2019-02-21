@@ -164,7 +164,6 @@ class _BentoBoxState extends State<BentoBox> {
   @override
   Widget build(BuildContext context) {
     print('BentoBox:build');
-    print(_children);
     return LayoutBuilder(builder: (context, constraints) {
       var i = 0;
       final biggest = constraints.biggest;
