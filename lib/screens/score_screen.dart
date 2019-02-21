@@ -4,8 +4,14 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:jamaica/widgets/coin_animation.dart';
 
 class ScoreScreen extends StatefulWidget {
+  int starCount;
+  int coinsCount;
+  int score;
   ScoreScreen({
     Key key,
+    this.starCount,
+    this.coinsCount,
+    this.score,
   }) : super(key: key);
 
   @override
@@ -18,13 +24,20 @@ class _ScoreScreenState extends State<ScoreScreen>
   AnimationController _animationController;
   double animationDuration = 0.0;
   GlobalKey _globalKey = new GlobalKey();
-  int inc = 0;
-  int starCount = 5;
+  // int starCount = 5;
+  // Random().nextInt(5-0)+1;
   List<int> starValues = [];
   Offset _offset = Offset(0.0, 0.0);
-  int coinCount = 100;
+  // int coinCount = 100;
   bool moveAnime = false;
   bool animationCompleted = false;
+  List<String> gameplaytitle = [
+    "Very Bad",
+    "Bad",
+    "Good",
+    "Very Good",
+    "Excellent"
+  ];
 
   callback(t) {
     setState(() {
@@ -34,6 +47,7 @@ class _ScoreScreenState extends State<ScoreScreen>
 
   @override
   void initState() {
+    super.initState();
     // to get coin animation destination offset
     WidgetsBinding.instance.addPostFrameCallback((s) {
       _afterLayout();
@@ -47,25 +61,23 @@ class _ScoreScreenState extends State<ScoreScreen>
     final int totalDuration = 4000;
     _animationController = AnimationController(
         vsync: this, duration: new Duration(milliseconds: totalDuration));
-    animationDuration = totalDuration / (100 * (totalDuration / starCount));
+    animationDuration = totalDuration / (100 * (totalDuration / widget.starCount));
     _animationController.forward();
     _animationController.addStatusListener((status) {
       if (_animationController.isCompleted) {
         setState(() {
           moveAnime = true;
-          coinCount = coinCount + starCount;
+          widget.coinsCount = widget.coinsCount + widget.starCount;
         });
       }
     });
-    for (int i = 1; i <= starCount; i++) {
+    for (int i = 1; i <= widget.starCount; i++) {
       starValues..add(0);
     }
 
     new Future.delayed(Duration(milliseconds: 50), () {
       buttoncontroller.forward();
     });
-
-    super.initState();
     controller.forward();
   }
 
@@ -82,10 +94,12 @@ class _ScoreScreenState extends State<ScoreScreen>
     super.dispose();
   }
 
-  _buildCoinItem(int inc, int e) {
+  _buildCoinItem(int index, int e) {
     return MoveCoinAnimation(
+      key: new ValueKey<int>(index),
       callback: callback,
-      index: inc,
+      index: index,
+      starCount: widget.starCount,
       offset: _offset,
     );
   }
@@ -107,14 +121,13 @@ class _ScoreScreenState extends State<ScoreScreen>
     return new LayoutBuilder(builder: (context, constraints) {
       double ht = constraints.maxHeight;
       double wd = constraints.maxWidth;
+      int inc = 0;
 
       return new Scaffold(
-          backgroundColor: Colors.blue[900],
-          body: new SafeArea(
-              child: Stack(
-            overflow: Overflow.visible,
-            children: <Widget>[
-              new Flex(
+        backgroundColor: Colors.blue[900],
+        body: new SafeArea(
+          child: Stack(overflow: Overflow.visible, children: <Widget>[
+            new Flex(
                 direction: Axis.vertical,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,8 +139,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           new Container(
-                              height: ht * 0.1,
-                              width: ht * 0.1,
+                              height: ht > wd ? ht * 0.1 : ht * .15,
+                              width: ht > wd ? ht * 0.1 : ht * .15,
                               decoration: new ShapeDecoration(
                                   shape: CircleBorder(
                                       side: BorderSide(
@@ -135,7 +148,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                                           width: 2.0,
                                           style: BorderStyle.solid)),
                                   image: new DecorationImage(
-                                      image: AssetImage("assets/apple.png"),
+                                      image: AssetImage(
+                                          "assets/accessories/apple.png"),
                                       fit: BoxFit.fill))),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +164,7 @@ class _ScoreScreenState extends State<ScoreScreen>
                               ),
                               Container(
                                 // height: ht * .05,
-                                width: wd * 0.15,
+                                width: wd * 0.18,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
@@ -162,9 +176,9 @@ class _ScoreScreenState extends State<ScoreScreen>
                                         "assets/coin.flr",
                                       ),
                                     ),
-                                    Text("$coinCount",
+                                    Text("${widget.coinsCount}",
                                         style: TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: 15.0,
                                             fontWeight: FontWeight.w600,
                                             color: Colors.orange)),
                                   ],
@@ -175,8 +189,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                         ],
                       ),
                       new Container(
-                          height: ht * 0.1,
-                          width: ht * 0.1,
+                          height: ht > wd ? ht * 0.1 : ht * .15,
+                          width: ht > wd ? ht * 0.1 : ht * .15,
                           decoration: new ShapeDecoration(
                               shape: CircleBorder(
                                   side: BorderSide(
@@ -184,14 +198,15 @@ class _ScoreScreenState extends State<ScoreScreen>
                                       width: 2.0,
                                       style: BorderStyle.solid)),
                               image: new DecorationImage(
-                                  image: AssetImage("assets/apple.png"),
+                                  image: AssetImage(
+                                      "assets/accessories/apple.png"),
                                   fit: BoxFit.fill))),
                     ],
                   ),
                   new Container(
                       height: ht > wd ? ht * 0.2 : wd * 0.13,
                       child: Image(
-                          image: AssetImage("assets/apple.png"),
+                          image: AssetImage("assets/accessories/apple.png"),
                           fit: BoxFit.fill)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -199,7 +214,8 @@ class _ScoreScreenState extends State<ScoreScreen>
                       Stack(
                         children: <Widget>[
                           Container(
-                            height: ht * .22,
+                            padding: EdgeInsets.all(10),
+                            height: ht > wd ? ht * .2 : ht * .25,
                           ),
                           Align(
                             alignment: Alignment.center,
@@ -209,9 +225,11 @@ class _ScoreScreenState extends State<ScoreScreen>
                                     ? Container(
                                         height: ht * .15,
                                         child: Center(
-                                            child: Text("Excellent",
+                                            child: Text(
+                                                "${gameplaytitle[widget.starCount - 1]}",
                                                 style: TextStyle(
-                                                    fontSize: 60.0,
+                                                    fontSize:
+                                                        ht > wd ? 60.0 : 40.0,
                                                     fontWeight:
                                                         FontWeight.w900))))
                                     : !moveAnime
@@ -249,51 +267,57 @@ class _ScoreScreenState extends State<ScoreScreen>
                   ),
                   Container(
                     child: new Text(
-                      '105',
+                      '${widget.score}',
                       style: new TextStyle(
-                          fontSize: ht > wd ? ht * 0.08 : wd * 0.08,
+                          fontSize: ht > wd ? ht * 0.08 : ht * 0.08,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
                   ),
                   Container(
-                      child: new ScaleTransition(
-                          scale: buttoncontroller,
-                          child: new Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Center(
-                                  child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Container(
-                                  height: ht > wd ? ht * .07 : ht * 0.1,
-                                  width: ht > wd ? wd * .3 : wd * .2,
-                                  margin: EdgeInsets.only(bottom: 10.0),
-                                  decoration: new BoxDecoration(
-                                    color: Colors.orange,
-                                    border: new Border.all(
-                                        color: Colors.white, width: 2.0),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                      child: Text("Next",
-                                          style: new TextStyle(
-                                              fontSize: ht > wd
-                                                  ? ht * 0.03
-                                                  : wd * 0.03,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white))),
-                                ),
-                              ))
-                            ],
-                          ))),
-                ],
-              ),
-            ],
-          )));
+                    child: new ScaleTransition(
+                      scale: buttoncontroller,
+                      child: Center(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Stack(children: <Widget>[
+                            Container(
+                              height: ht > wd ? ht * .075 : ht * 0.11,
+                              width: ht > wd ? wd * .3 : wd * .2,
+                              decoration: new BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            Container(
+                              height: ht > wd ? ht * .07 : ht * 0.1,
+                              width: ht > wd ? wd * .3 : wd * .2,
+                              margin: EdgeInsets.only(bottom: 10.0),
+                              decoration: new BoxDecoration(
+                                color: Colors.orange,
+                                border: new Border.all(
+                                    color: Colors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text("Next",
+                                      style: new TextStyle(
+                                          fontSize:
+                                              ht > wd ? ht * 0.03 : wd * 0.03,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white))),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+          ]),
+        ),
+      );
     });
   }
 }
