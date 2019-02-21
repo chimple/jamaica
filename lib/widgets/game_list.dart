@@ -48,7 +48,8 @@ class GameList extends StatelessWidget {
                           builder: (BuildContext context) {
                             return GameLevel(
                               gameName: gameConfig.name,
-                              levelList:gamelevel
+                              levelList:gamelevel,
+                              gameImage: gameConfig.image,
                             );
                           });
                     },
