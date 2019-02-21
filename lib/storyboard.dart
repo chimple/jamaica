@@ -49,8 +49,7 @@ void main() {
     GameLevelStory(),
     ScoreScreenStory(),
     ThemeMapStory(),
-    StoryBoard()
+    StoryBoard(),
     AudioWidgetStory()
-
   ]));
 }
