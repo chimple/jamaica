@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jamaica/animated_scale.dart';
-import 'package:jamaica/bento_box.dart';
-import 'package:jamaica/cute_button.dart';
+import 'package:jamaica/widgets/animated_scale.dart';
+import 'package:jamaica/widgets/bento_box.dart';
+import 'package:jamaica/widgets/cute_button.dart';
 
 class _ChoiceDetail {
   int choice;
@@ -46,7 +46,8 @@ class _BasicCountingGameState extends State<BasicCountingGame> {
     List<Widget> answers = [];
     for (var i = 0; i < widget.answer; i++) {
       answers.add(Expanded(
-          child: Image.asset('assets/apple.png', fit: BoxFit.scaleDown)));
+          child: Image.asset('assets/accessories/apple.png',
+              fit: BoxFit.scaleDown)));
     }
     ;
     return Column(

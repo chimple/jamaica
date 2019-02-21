@@ -1,9 +1,7 @@
 import 'package:flutter/rendering.dart';
-import 'package:flare_dart/math/mat2d.dart';
-import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/state_container.dart';
 
 final List<String> _iconTitle = [
   'House',
@@ -18,6 +16,22 @@ final List<String> _iconTitle = [
   'Cricket',
 ];
 
+final List<String> _iconPath = [
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+  'assets/map/elephant.flr',
+];
+const PageScrollPhysics _kPagePhysics = PageScrollPhysics();
+
+
 class ThemeMap extends StatefulWidget {
   final List<String> flareBackgroundPath; // use later
   final List<String> flareIconPath; // use later
@@ -29,13 +43,12 @@ class ThemeMap extends StatefulWidget {
 
 class _ThemeMapState extends State<ThemeMap>
     with SingleTickerProviderStateMixin {
-  List<int> _list = [0, 1];
+  final List<int> _list = [0, 1];
   List<Offset> _iconPosition = List(5);
   Offset _offset = Offset(0.0, 0.0), _centerOffset;
-  GlobalKey _globalKey = new GlobalKey(debugLabel: 'ThemeMap');
   MediaQueryData _mediaQueryData;
   AnimationController _controller;
-  String _text;
+  String _text, _currentTheme;
   Size _iconSize;
   int _maxLength;
   bool _startAnimation = false;
@@ -45,12 +58,12 @@ class _ThemeMapState extends State<ThemeMap>
     _maxLength = _iconTitle.fold(
         0, (prev, element) => element.length > prev ? element.length : prev);
     _controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+        vsync: this, duration: Duration(milliseconds: 1200));
     _controller.addStatusListener((status) {
       print(status);
       if (_controller.isCompleted && _startAnimation) {
         new Future.delayed(Duration(milliseconds: 300), () {
-          navigateToScreen(context, _text);
+          navigateToScreen(context, _text, _currentTheme);
         });
         new Future.delayed(Duration(milliseconds: 600), () {
           if (_controller != null) _controller.reset();
@@ -87,11 +100,15 @@ class _ThemeMapState extends State<ThemeMap>
 
   @override
   Widget build(BuildContext context) {
+    // final stateContainer = StateContainer.of(context);
+    // print(
+    //     'stateContainer.state.userProfile ${stateContainer.state..userProfile.name}');
     int _incr0 = 0;
     int _incr1 = 0;
     _mediaQueryData = MediaQuery.of(context);
+    final ScrollPhysics physics = _kPagePhysics.applyTo(ScrollPhysics());
     return LayoutBuilder(
-      key: _globalKey,
+      key: Key('ThemeMap'),
       builder: (context, constraint) {
         if (MediaQuery.of(context).orientation == Orientation.portrait) {
           _iconSize = Size(constraint.maxWidth * .3, constraint.maxWidth * .25);
@@ -120,77 +137,84 @@ class _ThemeMapState extends State<ThemeMap>
               (Offset(constraint.maxWidth * .57, constraint.maxHeight * .6));
         }
         _centerOffset = Offset(constraint.maxWidth, constraint.maxHeight) / 2;
-
-        return PageView(
+        return ListView(
+          scrollDirection: Axis.horizontal,
           physics: (_controller.isAnimating || _startAnimation)
               ? NeverScrollableScrollPhysics()
-              : ScrollPhysics(),
-          scrollDirection: Axis.horizontal,
+              : physics,
           children: _list.map((s) {
             if ((_incr1 - 5) / 5 == 0) {
               _incr1 = 0;
             }
-            return Stack(
-              alignment: AlignmentDirectional.center,
-              children: <Widget>[
-                FlareThemeMapBackground(
-                  constraints: constraint,
-                  index: s,
-                  doAnimate: _startAnimation,
-                ),
-                ScaleTransition(
-                  scale: Tween<double>(begin: 1.0, end: 4.5)
-                      .animate(CurvedAnimation(
-                    parent: _controller,
-                    curve: Interval(0.1, 1, curve: Curves.easeIn),
-                  )),
-                  child: Container(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: _iconPosition.map((s) {
-                        return Positioned(
-                          left: s.dx,
-                          top: s.dy,
-                          child: Container(
-                            child: _AnimatedWidget(
-                              isAnimating: _controller.isAnimating,
-                              animation: Tween<Offset>(
-                                      begin: (_controller.isAnimating &&
-                                              _iconPosition != null)
-                                          ? _iconPosition[_incr1] -
-                                              Offset(0.0, 0.0)
-                                          : Offset.zero,
-                                      end: (_controller.isAnimating &&
-                                              _iconPosition != null)
-                                          ? _iconPosition[_incr1++] + _offset
-                                          : Offset.zero)
-                                  .animate(CurvedAnimation(
-                                      curve: Interval(0, 1,
-                                          curve: Curves.fastOutSlowIn),
-                                      parent: _controller)),
-                              child: FlareIcon(
-                                  iconSize: _iconSize,
-                                  index: _incr0,
-                                  constrainedBox: constraint,
-                                  text: _iconTitle[_incr0++],
-                                  maxLen: _maxLength,
-                                  scaleAnimate: (int index) {
-                                    print(index % 5);
-                                    _text = _iconTitle[index];
-                                    if (!_controller.isAnimating)
-                                      _animation(index % 5, constraint,
-                                          _mediaQueryData.orientation);
-                                  }),
+            return ConstrainedBox(
+              constraints: constraint,
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: <Widget>[
+                  FlareThemeMapBackground(
+                    constraints: constraint,
+                    index: s,
+                    doAnimate: _startAnimation,
+                  ),
+                  ScaleTransition(
+                    scale: Tween<double>(begin: 1.0, end: 4.5)
+                        .animate(CurvedAnimation(
+                      parent: _controller,
+                      curve: Interval(0.1, 1, curve: Curves.easeIn),
+                    )),
+                    child: Container(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: _iconPosition.map((s) {
+                          return Positioned(
+                            left: s.dx,
+                            top: s.dy,
+                            child: Container(
+                              child: _AnimatedWidget(
+                                isAnimating: _controller.isAnimating,
+                                animation: Tween<Offset>(
+                                        begin: (_controller.isAnimating &&
+                                                _iconPosition != null)
+                                            ? _iconPosition[_incr1] -
+                                                Offset(0.0, 0.0)
+                                            : Offset.zero,
+                                        end: (_controller.isAnimating &&
+                                                _iconPosition != null)
+                                            ? _iconPosition[_incr1++] + _offset
+                                            : Offset.zero)
+                                    .animate(CurvedAnimation(
+                                        curve: Interval(0, 1,
+                                            curve: Curves.fastOutSlowIn),
+                                        parent: _controller)),
+                                child: FlareIcon(
+                                    iconPath: _iconPath[_incr0],
+                                    iconSize: _iconSize,
+                                    index: _incr0,
+                                    constrainedBox: constraint,
+                                    text: _iconTitle[_incr0++],
+                                    maxLen: _maxLength,
+                                    scaleAnimate: (
+                                      int index,
+                                      String t,
+                                    ) {
+                                      print(index % 5);
+                                      _text = _iconTitle[index];
+                                      _currentTheme = t;
+                                      if (!_controller.isAnimating)
+                                        _animation(index % 5, constraint,
+                                            _mediaQueryData.orientation);
+                                    }),
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
-          }).toList(),
+          }).toList(growable: false),
         );
       },
     );
@@ -286,16 +310,14 @@ class FlareThemeMapBackground extends StatelessWidget {
       key: Key('BackGroundImage${index}'),
       height: constraints.maxHeight,
       width: constraints.maxWidth,
-      child: Container(
-        child: Center(
-          child: FlareActor(
-            'assets/map/map_background${index + 2}.flr',
-            fit: MediaQuery.of(context).orientation == Orientation.portrait
-                ? BoxFit.fitHeight
-                : BoxFit.fitWidth,
-            animation: 'bird',
-            alignment: Alignment.center,
-          ),
+      child: Center(
+        child: FlareActor(
+          'assets/map/map_background${index + 2}.flr',
+          fit: MediaQuery.of(context).orientation == Orientation.portrait
+              ? BoxFit.fitHeight
+              : BoxFit.fitWidth,
+          animation: 'bird',
+          alignment: Alignment.center,
         ),
       ),
     );
@@ -304,7 +326,7 @@ class FlareThemeMapBackground extends StatelessWidget {
 
 class FlareIcon extends StatelessWidget {
   final Size iconSize;
-  final String iconUrl;
+  final String iconPath;
   final String text;
   final int maxLen;
   final int index;
@@ -314,7 +336,7 @@ class FlareIcon extends StatelessWidget {
   FlareIcon(
       {key,
       this.iconSize,
-      this.iconUrl,
+      this.iconPath,
       this.index,
       this.constrainedBox,
       this.text = 'Empty',
@@ -331,7 +353,7 @@ class FlareIcon extends StatelessWidget {
         splashColor: Colors.white10,
         onTap: () {
           print(index);
-          scaleAnimate(index);
+          scaleAnimate(index, iconPath);
         },
         child: SizedBox(
           // key: _globalKey,
@@ -361,7 +383,7 @@ class FlareIcon extends StatelessWidget {
                 child: Container(
                   // color: Colors.red,
                   child: FlareActor(
-                    'assets/map/elephant.flr',
+                    iconPath ?? 'assets/map/elephant.flr',
                     fit: BoxFit.fill,
                     animation: 'door',
                   ),
@@ -375,7 +397,10 @@ class FlareIcon extends StatelessWidget {
   }
 }
 
-void navigateToScreen(BuildContext context, String text) {
+void navigateToScreen(BuildContext context, String text, String t) {
+  StateContainer.of(context).setCurrentTheme(t);
+  // print(StateContainer.of(context).state.userProfile.currentTheme);
+  print(t);
   Widget child = Container(
     child: Center(
         child: Text(

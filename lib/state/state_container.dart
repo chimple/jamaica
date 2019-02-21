@@ -1,5 +1,7 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
+import 'package:jamaica/models/user_profile.dart';
 
 class StateContainer extends StatefulWidget {
   final AppState state;
@@ -32,6 +34,20 @@ class StateContainerState extends State<StateContainer> {
       data: this,
       child: widget.child,
     );
+  }
+
+  void setAccessories(BuiltMap<String, String> accessories) {
+    setState(() {
+      state = AppState((s) => s
+        ..userProfile.accessories = accessories
+        ..isLoading = state.isLoading);
+    });
+  }
+
+  void setCurrentTheme(String t) {
+    state = AppState((s) => s
+      ..userProfile.currentTheme = t
+      ..isLoading = state.isLoading);
   }
 }
 
