@@ -15,6 +15,7 @@ final List<String> _iconTitle = [
   'Book',
   'Cricket',
 ];
+
 final List<String> _iconPath = [
   'assets/map/elephant.flr',
   'assets/map/elephant.flr',
@@ -29,6 +30,7 @@ final List<String> _iconPath = [
   'assets/map/elephant.flr',
 ];
 const PageScrollPhysics _kPagePhysics = PageScrollPhysics();
+
 
 class ThemeMap extends StatefulWidget {
   final List<String> flareBackgroundPath; // use later
