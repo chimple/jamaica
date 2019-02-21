@@ -7,17 +7,17 @@ import 'package:tuple/tuple.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
 class Store extends StatefulWidget {
-  BuiltMap<String, String> accessories;
-  Store(this.accessories, {Key key}) : super(key: key);
+  final BuiltMap<String, String> accessories;
+  final Map<AccessoryCategory, List<AccessoryData>> items;
+  Store(this.accessories, this.items, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new StoreWidget(items: list);
+    return new StoreWidget();
   }
 }
 
 class StoreWidget extends State<Store> with SingleTickerProviderStateMixin {
-  final Map<AccessoryCategory, List<AccessoryData>> items;
   final int itemCrossAxisCount;
   TabController _tabController;
   List<Tab> tabs;
@@ -30,12 +30,12 @@ class StoreWidget extends State<Store> with SingleTickerProviderStateMixin {
   int _itemCount = 0;
   List<Tuple4<String, String, int, int>> itemRange =
       List<Tuple4<String, String, int, int>>();
-  StoreWidget({this.items, this.itemCrossAxisCount = 4});
+  StoreWidget({this.itemCrossAxisCount = 4});
 
   @override
   void initState() {
     super.initState();
-    items.forEach((e, l) {
+    widget.items.forEach((e, l) {
       itemRange.add(Tuple4(
           e.accessoryCategoryImagePath,
           e.accessoryCategoryName,
@@ -44,7 +44,7 @@ class StoreWidget extends State<Store> with SingleTickerProviderStateMixin {
       _itemCount += (l.length / itemCrossAxisCount).ceil();
     });
     var totalAccessories =
-        items.values.map((v) => v.length).reduce((a, b) => a + b);
+        widget.items.values.map((v) => v.length).reduce((a, b) => a + b);
     for (int i = 0; i < totalAccessories + 1; i++) _colorStatus.add(0);
     _tabController = new TabController(vsync: this, length: itemRange.length);
     _tabController.addListener(() {
@@ -207,32 +207,54 @@ class StoreWidget extends State<Store> with SingleTickerProviderStateMixin {
     return Container(
         child: new TabBarView(
             controller: _tabController,
-            children: items.keys.map((r) {
+            children: widget.items.keys.map((r) {
               return Container(
-                child: GridView(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4),
-                  children: items[r].map((f) {
-                    index++;
-                    return StoreAccessoryButton(
-                      index: index,
-                      coin: f.coin,
-                      colorStatus: _colorStatus,
-                      imagePath: f.imagePath,
-                      name: f.accessoryName,
-                      setName: (String s, int n) {
-                        setState(() {
-                          itemName = s;
-                          _colorStatus[n] = 1;
-                          container.setAccessories(BuiltMap<String, String>(
-                              {r.accessoryCategoryName: itemName}));
-                          print(container.state.userProfile);
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-              );
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30, top: 10),
+                      child: Text(
+                        r.accessoryCategoryName,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 9,
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4),
+                      children: widget.items[r].map((f) {
+                        index++;
+                        return StoreAccessoryButton(
+                          index: index,
+                          coin: f.coin,
+                          colorStatus: _colorStatus,
+                          imagePath: f.imagePath,
+                          name: f.accessoryName,
+                          setName: (String s, int n) {
+                            setState(() {
+                              itemName = s;
+                              if (coin <= 0)
+                                coin = 0;
+                              else if (_colorStatus[n] == 0) {
+                                coin = coin - 100;
+                              }
+                              _colorStatus[n] = 1;
+                              container.setAccessories(BuiltMap<String, String>(
+                                  {r.accessoryCategoryName: itemName}));
+                              print(container.state.userProfile);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ));
             }).toList()));
   }
 }
