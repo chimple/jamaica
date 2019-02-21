@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/store.dart';
+import 'package:jamaica/models/accessories_data.dart';
 
 class StoreScreen extends StatelessWidget {
   @override
@@ -10,6 +11,6 @@ class StoreScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Store'),
         ),
-        body: Store(accessories));
+        body: Store(accessories, list));
   }
 }
