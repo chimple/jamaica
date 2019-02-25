@@ -19,8 +19,9 @@ final Map<String, List<GameConfig>> games;
         Scaffold(
           body: SafeArea(
             child: GameLevel(
-                gameName:'Match the Following',
-                levelList: ["1"],
+                gameName:'Match the shape',
+                levelList: ["1","2","3","4","5","6","7","8","9","10"],
+                gameImage: 'match_the_shape.svg',
             ),
           ),
         ),
