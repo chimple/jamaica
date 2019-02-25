@@ -1,0 +1,54 @@
+[
+    {
+        "storyId": "001",
+        "title": "Ahilyabai Holkar",
+        "coverImagePath": "assets/stories/images/cover.jpg",
+        "pages": [
+            {
+                "pageNumber": "1",
+                "text": "1 Look at these beautiful horses and elephants! Who brought them here? squealed Ahilya. Reluctantly, she tore her eyes away from the beautiful animals – it would get dark soon! She hurried inside the temple and lit a lamp. Ahilya closed her eyes and bowed in prayer.",
+                "imagePath": "assets/stories/images/page1.jpg",
+                "audioPath": ""
+            },
+            {
+                "pageNumber": "2",
+                "text": "Ahilya was the daughter of the village head, Mankoji Shinde. She hailed from a shepherd family. In those days, girls were not sent to school. Society considered the role of women as only managing the household and taking care of the family; educating a girl was not given importance. But Ahilya’s father thought differently and taught her to read and write. After Ahilya and Khanderao were married, Ahilya went to Indore, which was in the Malwa province, as the Holkar family’s daughter-in- law. The rest is history. She was destined to become a queen!",
+                "imagePath": "assets/stories/images/page2.jpg"
+            }
+        ]
+    },
+    {
+        "storyId": "002",
+        "title": "Ahilyabai Holkar..",
+        "coverImagePath": "assets/stories/images/cover.jpg",
+        "pages": [
+            {
+                "pageNumber": "1",
+                "text": "2 Look at these beautiful horses and elephants! Who brought them here? squealed Ahilya. Reluctantly, she tore her eyes away from the beautiful animals – it would get dark soon! She hurried inside the temple and lit a lamp. Ahilya closed her eyes and bowed in prayer.",
+                "imagePath": "assets/stories/images/page1.jpg"
+            },
+            {
+                "pageNumber": "2",
+                "text": "Ahilya was the daughter of the village head, Mankoji Shinde. She hailed from a shepherd family. In those days, girls were not sent to school. Society considered the role of women as only managing the household and taking care of the family; educating a girl was not given importance. But Ahilya’s father thought differently and taught her to read and write. After Ahilya and Khanderao were married, Ahilya went to Indore, which was in the Malwa province, as the Holkar family’s daughter-in- law. The rest is history. She was destined to become a queen!",
+                "imagePath": "assets/stories/images/page2.jpg"
+            }
+        ]
+    },
+    {
+        "storyId": "002",
+        "title": "Ahilyabai Holkar...",
+        "coverImagePath": "assets/stories/images/cover.jpg",
+        "pages": [
+            {
+                "pageNumber": "1",
+                "text": "3 Look at these beautiful horses and elephants! Who brought them here?  squealed Ahilya. Reluctantly, she tore her eyes away from the beautiful animals – it would get dark soon! She hurried inside the temple and lit a lamp. Ahilya closed her eyes and bowed in prayer.",
+                "imagePath": "assets/stories/images/page1.jpg"
+            },
+            {
+                "pageNumber": "2",
+                "text": "Ahilya was the daughter of the village head, Mankoji Shinde. She hailed from a shepherd family. In those days, girls were not sent to school. Society considered the role of women as only managing the household and taking care of the family; educating a girl was not given importance. But Ahilya’s father thought differently and taught her to read and write. After Ahilya and Khanderao were married, Ahilya went to Indore, which was in the Malwa province, as the Holkar family’s daughter-in- law. The rest is history. She was destined to become a queen!",
+                "imagePath": "assets/stories/images/page2.jpg"
+            }
+        ]
+    }
+]
