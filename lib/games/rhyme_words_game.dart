@@ -42,16 +42,16 @@ class _RhymeWordsGameState extends State<RhymeWordsGame> {
     int i = 0;
     return BentoBox(
       dragConfig: DragConfig.draggableBounceBack,
-      qCols: widget.questions.length,
-      qRows: 1,
+      qCols: 1,
+      qRows: widget.questions.length,
       qChildren: widget.questions
           .map((q) => CuteButton(
                 key: Key(q),
                 child: Center(child: Text(q)),
               ))
           .toList(growable: false),
-      cols: choiceDetails.length,
-      rows: 1,
+      cols: 1,
+      rows: choiceDetails.length,
       children: choiceDetails
           .map((c) => DragTarget<String>(
               key: Key(c.choice),
