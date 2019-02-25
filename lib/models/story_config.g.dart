@@ -13,7 +13,7 @@ StoryConfig _$StoryConfigFromJson(Map<String, dynamic> json) {
       title: json['title'] as String,
       page: (json['page'] as List)
           ?.map((e) =>
-              e == null ? null : Page.fromJson(e as Map<String, dynamic>))
+              e == null ? null : Pages.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 
@@ -25,14 +25,14 @@ Map<String, dynamic> _$StoryConfigToJson(StoryConfig instance) =>
       'page': instance.page
     };
 
-Page _$PageFromJson(Map<String, dynamic> json) {
-  return Page(
+Pages _$PagesFromJson(Map<String, dynamic> json) {
+  return Pages(
       text: json['text'] as String,
       imagePath: json['imagePath'] as String,
       pageNumber: json['pageNumber'] as String);
 }
 
-Map<String, dynamic> _$PageToJson(Page instance) {
+Map<String, dynamic> _$PagesToJson(Pages instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

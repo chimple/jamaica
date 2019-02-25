@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jamaica/models/story_config.dart';
 
 class StoryPage extends StatelessWidget {
-  final List<Page> page;
+  final List<Pages> page;
   StoryPage({this.page});
 
   @override
@@ -36,7 +36,7 @@ class StoryPage extends StatelessWidget {
                         page[index].text,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 23,
+                            fontSize: 21,
                             wordSpacing: 4.0,
                             letterSpacing: 2.0),
                       ),
