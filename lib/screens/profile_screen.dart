@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/collected.dart';
 import 'package:jamaica/loca.dart';
-import 'package:jamaica/screens/user_progress.dart';
+import 'package:jamaica/widgets/progress.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -31,12 +31,12 @@ class ProfileScreen extends StatelessWidget {
           ),
           TabBarView(
             children: [
-              UserProgress(),
+              Progress(),
               Collected(),
             ],
           ),
         ]),
       ),
     );
-    }
+  }
 }

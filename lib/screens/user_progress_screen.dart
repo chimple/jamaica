@@ -2,8 +2,8 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/game_config.dart';
+import 'package:jamaica/models/game_status.dart';
 import 'package:jamaica/screens/collection_progress_indicator.dart';
-import 'package:jamaica/state/state_container.dart';
 
 final BuiltMap<String, GameConfig> _games = BuiltMap<String, GameConfig>({
   'Match the shape': GameConfig((b) => b
@@ -28,88 +28,91 @@ final BuiltMap<String, GameConfig> _games = BuiltMap<String, GameConfig>({
     ..levels = 10),
 });
 
-class UserProgress extends StatelessWidget {
-  UserProgress({
+class UserProgressScreen extends StatelessWidget {
+  final BuiltMap<String, GameStatus> gameStatuses;
+  UserProgressScreen({
     Key key,
+    this.gameStatuses,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final container = StateContainer.of(context);
     Size size = MediaQuery.of(context).size;
     double width = size.width / 5;
     double widthSize = width / 5;
     double fontSize = min(widthSize, 23.0);
-    List gameStatus = [];
+
     List<Widget> widget = [];
-    _games.forEach((k, value) {
-      container.state.userProfile.gameStatuses.forEach((k, v) {
-        widget.add(Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: width,
-                child: Center(
-                  child: Column(children: [
-                    Image.asset(
-                      value.image,
-                      height: width * .8,
-                      width: width * .8,
-                    ),
-                    Container(
-                      width: width * 0.8,
-                      child: Center(
-                        child: Text("$k",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.white, fontSize: fontSize * .75)),
+    gameStatuses.forEach((key, v) {
+      _games.forEach((k, value) {
+        if (key == k) {
+          widget.add(Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: width,
+                  child: Center(
+                    child: Column(children: [
+                      Image.asset(
+                        value.image,
+                        height: width * .8,
+                        width: width * .8,
                       ),
-                    ),
-                  ]),
+                      Container(
+                        width: width * 0.8,
+                        child: Center(
+                          child: Text("$k",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: fontSize * .75)),
+                        ),
+                      ),
+                    ]),
+                  ),
                 ),
-              ),
-              Container(
-                width: width,
-              ),
-              Container(
-                width: width * .8,
-                child: Center(
-                  child: Text("${v.currentLevel}",
-                      style:
-                          TextStyle(color: Colors.white, fontSize: fontSize)),
+                Container(
+                  width: width,
                 ),
-              ),
-              Container(
-                width: width * .8,
-                child: Center(
-                  child: Text("${v.maxScore}",
-                      style:
-                          TextStyle(color: Colors.white, fontSize: fontSize)),
+                Container(
+                  width: width * .8,
+                  child: Center(
+                    child: Text("${v.currentLevel}",
+                        style:
+                            TextStyle(color: Colors.grey, fontSize: fontSize)),
+                  ),
                 ),
-              ),
-              Container(
-                  width: width * 1.2,
-                  child: Center(child: _buildStars(3, fontSize)))
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 2.0,
-              left: 5.0,
+                Container(
+                  width: width * .8,
+                  child: Center(
+                    child: Text("${v.maxScore}",
+                        style:
+                            TextStyle(color: Colors.grey, fontSize: fontSize)),
+                  ),
+                ),
+                Container(
+                    width: width * 1.2,
+                    child: Center(child: _buildStars(3, fontSize)))
+              ],
             ),
-            child: CollectionProgressIndicator(
-              progress: v.currentLevel / v.highestLevel,
-              color: Colors.red,
-              width: size.width - 10,
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 2.0,
+                left: 5.0,
+              ),
+              child: CollectionProgressIndicator(
+                progress: v.currentLevel / v.highestLevel,
+                color: Colors.red,
+                width: size.width - 10,
+              ),
             ),
-          ),
-        ]));
+          ]));
+        }
       });
     });
 
-    print("all stored status is.......$gameStatus");
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

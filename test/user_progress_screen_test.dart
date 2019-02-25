@@ -1,21 +1,31 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jamaica/screens/user_progress.dart';
-import 'package:jamaica/state/state_container.dart';
+import 'package:jamaica/models/game_status.dart';
+import 'package:jamaica/screens/user_progress_screen.dart';
 
 void main() {
   testWidgets('user profile', (WidgetTester tester) async {
     print("just checking working or not ");
-
     var testKey = UniqueKey();
-
     await tester.pumpWidget(new MaterialApp(
       home: new Material(
-        child: StateContainer(
-          child: new UserProgress(
+        child: new UserProgressScreen(
             key: testKey,
-          ),
-        ),
+            gameStatuses: BuiltMap<String, GameStatus>(
+              {
+                'Basic Addition': GameStatus((b) => b
+                  ..currentLevel = 5
+                  ..maxScore = 20
+                  ..highestLevel = 10
+                  ..open = true),
+                'Memory match': GameStatus((b) => b
+                  ..currentLevel = 3
+                  ..maxScore = 30
+                  ..highestLevel = 10
+                  ..open = true),
+              },
+            )),
       ),
     ));
 
