@@ -64,7 +64,7 @@ class _BentoBoxState extends State<BentoBox> {
     calculateLayout(true);
   }
 
-  void calculateLayout(bool positionRandomized) {
+  void calculateLayout(bool reCalculate) {
     int k = 0;
     rows = widget.rows + widget.qRows;
     cols = max(widget.cols, widget.qCols);
@@ -76,33 +76,79 @@ class _BentoBoxState extends State<BentoBox> {
         offset: Offset(
             ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
             (rows - 1) / 2 * childHeight)));
-    int i = 0;
-    if (!widget.randomize) {
-      (widget.qChildren ?? []).forEach((c) => _children[c.key] = _ChildDetail(
-            child: c,
-            offset: Offset(
-                ((cols - widget.qCols) / 2 + (i % widget.qCols)) * childWidth,
-                (i++ ~/ widget.qCols) * childHeight),
-          ));
-      i = 0;
-      widget.children.forEach((c) => _children[c.key] = _ChildDetail(
-            child: c,
-            offset: Offset(
-                ((cols - widget.cols) / 2 + (i % widget.cols)) * childWidth,
-                (widget.qRows + (i++ ~/ widget.cols)) * childHeight),
-          ));
-    } else if (positionRandomized) {
-      Random random = Random();
-      (widget.qChildren ?? []).forEach((c) => _children[c.key] = _ChildDetail(
-          child: c,
-          offset: Offset(random.nextDouble() * size.width,
-              random.nextDouble() * size.height)));
-      i = 0;
-      widget.children.forEach((c) => _children[c.key] = _ChildDetail(
-          child: c,
-          offset: Offset(max(0, random.nextDouble() * size.width - childWidth),
-              max(0, random.nextDouble() * size.height - childHeight))));
+    if (widget.randomize) {
+      if (reCalculate)
+        calculateRandomizedLayout(
+            cols: widget.cols,
+            rows: widget.rows,
+            children: widget.children,
+            qCols: widget.qCols,
+            qRows: widget.qRows,
+            qChildren: widget.qChildren,
+            childrenMap: _children,
+            size: size);
+    } else {
+      calculateVerticalLayout(
+          cols: widget.cols,
+          rows: widget.rows,
+          children: widget.children,
+          qCols: widget.qCols,
+          qRows: widget.qRows,
+          qChildren: widget.qChildren,
+          childrenMap: _children,
+          size: size);
     }
+  }
+
+  static calculateVerticalLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, _ChildDetail> childrenMap,
+      Size size}) {
+    final allRows = rows + qRows;
+    final allCols = max(cols, qCols);
+    final childWidth = size.width / allCols;
+    final childHeight = size.height / allRows;
+
+    int i = 0;
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset(((allCols - qCols) / 2 + (i % qCols)) * childWidth,
+              (i++ ~/ qCols) * childHeight),
+        ));
+    i = 0;
+    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset(((allCols - cols) / 2 + (i % cols)) * childWidth,
+              (qRows + (i++ ~/ cols)) * childHeight),
+        ));
+  }
+
+  static calculateRandomizedLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, _ChildDetail> childrenMap,
+      Size size}) {
+    final childWidth = size.width / cols;
+    final childHeight = size.height / rows;
+
+    Random random = Random();
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
+        child: c,
+        offset: Offset(random.nextDouble() * size.width,
+            random.nextDouble() * size.height)));
+    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
+        child: c,
+        offset: Offset(max(0, random.nextDouble() * size.width - childWidth),
+            max(0, random.nextDouble() * size.height - childHeight))));
   }
 
   @override

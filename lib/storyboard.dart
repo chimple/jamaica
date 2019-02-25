@@ -5,12 +5,15 @@ import 'package:jamaica/storyboards/games/dice_game_story.dart';
 import 'package:jamaica/storyboards/games/find_word_game_story.dart';
 import 'package:jamaica/storyboards/games/finger_game_story.dart';
 import 'package:jamaica/storyboards/games/game_list_story.dart';
+import 'package:jamaica/storyboards/games/jumbled_words_game_story.dart';
 import 'package:jamaica/storyboards/games/match_the_shape_game_story.dart';
 import 'package:jamaica/storyboards/games/match_with_image_game_story.dart';
 import 'package:jamaica/storyboards/games/math_op_game_story.dart';
 import 'package:jamaica/storyboards/games/memory_game_story.dart';
 import 'package:jamaica/storyboards/games/order_by_size_game_story.dart';
 import 'package:jamaica/storyboards/games/recognize_number_game_story.dart';
+import 'package:jamaica/storyboards/games/rhyme_words_game_story.dart';
+import 'package:jamaica/storyboards/games/sequence_alphabet_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
@@ -37,6 +40,9 @@ void main() {
     OrderBySizeGameStory(),
     FindWordGameStory(),
     MatchWithImageGameStory(),
+    RhymeWordsGameStory(),
+    SequenceAlphabetGameStory(),
+    JumbledWordsGameStory(),
     GameListStory(),
     StoreScreenStory(),
     CollectedItemStory(),
@@ -46,6 +52,5 @@ void main() {
     ScoreScreenStory(),
     ThemeMapStory(),
     AudioWidgetStory()
-
   ]));
 }
