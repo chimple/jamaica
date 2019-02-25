@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jamaica/models/story_config.dart';
 
 class StoryPage extends StatelessWidget {
-  final List<Pages> page;
-  StoryPage({this.page});
+  final List<Page> pages;
+  StoryPage({this.pages});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class StoryPage extends StatelessWidget {
                   flex: 7,
                   child: Card(
                     child: Image.asset(
-                      page[index].imagePath,
+                      pages[index].imagePath,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -33,7 +33,7 @@ class StoryPage extends StatelessWidget {
                         const EdgeInsets.only(left: 15, right: 10, top: 20),
                     child: SingleChildScrollView(
                       child: Text(
-                        page[index].text,
+                        pages[index].text,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 21,
@@ -46,7 +46,7 @@ class StoryPage extends StatelessWidget {
               ],
             );
           },
-          itemCount: page.length,
+          itemCount: pages.length,
         ),
       ),
     );

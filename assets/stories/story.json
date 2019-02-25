@@ -3,11 +3,12 @@
         "storyId": "001",
         "title": "Ahilyabai Holkar",
         "coverImagePath": "assets/stories/images/cover.jpg",
-        "page": [
+        "pages": [
             {
                 "pageNumber": "1",
                 "text": "1 Look at these beautiful horses and elephants! Who brought them here? squealed Ahilya. Reluctantly, she tore her eyes away from the beautiful animals – it would get dark soon! She hurried inside the temple and lit a lamp. Ahilya closed her eyes and bowed in prayer.",
-                "imagePath": "assets/stories/images/page1.jpg"
+                "imagePath": "assets/stories/images/page1.jpg",
+                "audioPath": ""
             },
             {
                 "pageNumber": "2",
@@ -20,7 +21,7 @@
         "storyId": "002",
         "title": "Ahilyabai Holkar..",
         "coverImagePath": "assets/stories/images/cover.jpg",
-        "page": [
+        "pages": [
             {
                 "pageNumber": "1",
                 "text": "2 Look at these beautiful horses and elephants! Who brought them here? squealed Ahilya. Reluctantly, she tore her eyes away from the beautiful animals – it would get dark soon! She hurried inside the temple and lit a lamp. Ahilya closed her eyes and bowed in prayer.",
@@ -37,7 +38,7 @@
         "storyId": "002",
         "title": "Ahilyabai Holkar...",
         "coverImagePath": "assets/stories/images/cover.jpg",
-        "page": [
+        "pages": [
             {
                 "pageNumber": "1",
                 "text": "3 Look at these beautiful horses and elephants! Who brought them here?  squealed Ahilya. Reluctantly, she tore her eyes away from the beautiful animals – it would get dark soon! She hurried inside the temple and lit a lamp. Ahilya closed her eyes and bowed in prayer.",

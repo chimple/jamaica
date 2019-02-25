@@ -7,14 +7,14 @@ class StoryCard extends StatelessWidget {
   final StoryConfig storyConfig;
   StoryCard({this.index, @required this.storyConfig});
   Widget build(BuildContext context) {
-    print('storyConfig.coverImagePath ${storyConfig}');
+    print('storyConfig:: ${storyConfig}');
     return InkWell(
       splashColor: Colors.blueAccent,
       onTap: () {
-        print(storyConfig.page);
+        print(storyConfig.pages);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => StoryPage(
-                  page: storyConfig.page,
+                  pages: storyConfig.pages,
                 )));
       },
       child: new Card(

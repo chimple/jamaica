@@ -7,17 +7,17 @@ class StoryConfig {
   String storyId;
   String coverImagePath;
   String title;
-  List<Pages> page;
-  StoryConfig({this.storyId, this.coverImagePath, this.title, this.page});
+  List<Page> pages;
+  StoryConfig({this.storyId, this.coverImagePath, this.title, this.pages});
   factory StoryConfig.fromJson(Map<String, dynamic> parsedJson) =>
       _$StoryConfigFromJson(parsedJson);
 }
 
 @JsonSerializable(includeIfNull: false)
-class Pages {
+class Page {
   String pageNumber;
   String imagePath;
   String text;
-  Pages({this.text, this.imagePath, this.pageNumber});
-  factory Pages.fromJson(Map<String, dynamic> json) => _$PagesFromJson(json);
+  Page({this.text, this.imagePath, this.pageNumber});
+  factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
 }
