@@ -63,7 +63,7 @@ class StoryListState extends State<StoryList> {
           gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (context, index) {
-            return StoryCard(storyModal: stateContainer[index]);
+            return StoryCard(storyConfig: stateContainer[index]);
           },
           itemCount: stateContainer.length,
         ),

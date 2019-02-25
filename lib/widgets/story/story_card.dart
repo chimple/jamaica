@@ -4,17 +4,17 @@ import 'package:jamaica/widgets/story/story_page.dart';
 
 class StoryCard extends StatelessWidget {
   final index;
-  final StoryConfig storyModal;
-  StoryCard({this.index, @required this.storyModal});
+  final StoryConfig storyConfig;
+  StoryCard({this.index, @required this.storyConfig});
   Widget build(BuildContext context) {
-    print('storyModal.coverImagePath ${storyModal.coverImagePath}');
+    print('storyConfig.coverImagePath ${storyConfig}');
     return InkWell(
       splashColor: Colors.blueAccent,
       onTap: () {
-        print(storyModal.pages);
+        print(storyConfig.page);
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => StoryPage(
-                  pages: storyModal.pages,
+                  page: storyConfig.page,
                 )));
       },
       child: new Card(
@@ -23,12 +23,12 @@ class StoryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              storyModal.coverImagePath,
+              storyConfig.coverImagePath,
               fit: BoxFit.cover,
             ),
             Text(
-              storyModal.title,
-              style: TextStyle(fontSize: 20),
+              storyConfig.title,
+              style: TextStyle(fontSize: 17),
             )
           ],
         ),
