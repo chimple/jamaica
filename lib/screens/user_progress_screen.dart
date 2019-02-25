@@ -41,7 +41,6 @@ class UserProgressScreen extends StatelessWidget {
     double width = size.width / 5;
     double widthSize = width / 5;
     double fontSize = min(widthSize, 23.0);
-
     List<Widget> widget = [];
     gameStatuses.forEach((key, v) {
       _games.forEach((k, value) {
