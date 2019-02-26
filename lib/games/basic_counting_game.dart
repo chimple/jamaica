@@ -66,7 +66,6 @@ class _BasicCountingGameState extends State<BasicCountingGame> {
           flex: 1,
           child: BentoBox(
             dragConfig: DragConfig.draggableBounceBack,
-            randomize: false,
             rows: 4,
             cols: (choiceDetails.length / 3).round(),
             children: choiceDetails

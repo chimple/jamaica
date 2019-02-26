@@ -10,6 +10,17 @@ enum DragConfig {
   draggableMultiPack
 }
 
+typedef CalculateLayout = void Function({
+  int cols,
+  int rows,
+  List<Widget> children,
+  int qCols,
+  int qRows,
+  List<Widget> qChildren,
+  Map<Key, _ChildDetail> childrenMap,
+  Size size,
+});
+
 class BentoBox extends StatefulWidget {
   final List<Widget> children;
   final List<Widget> qChildren;
@@ -18,7 +29,8 @@ class BentoBox extends StatefulWidget {
   final int rows;
   final int qCols;
   final int qRows;
-  final bool randomize;
+  final CalculateLayout calculateLayout;
+  final Axis axis;
   final DragConfig dragConfig;
 
   const BentoBox({
@@ -26,7 +38,8 @@ class BentoBox extends StatefulWidget {
     this.cols,
     this.rows,
     this.children,
-    this.randomize = false,
+    this.calculateLayout = calculateVerticalLayout,
+    this.axis,
     this.dragConfig = DragConfig.fixed,
     this.frontChildren,
     this.qChildren,
@@ -36,6 +49,89 @@ class BentoBox extends StatefulWidget {
 
   @override
   _BentoBoxState createState() => _BentoBoxState();
+
+  static calculateVerticalLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, _ChildDetail> childrenMap,
+      Size size}) {
+    final allRows = rows + qRows;
+    final allCols = max(cols, qCols);
+    final childWidth = size.width / allCols;
+    final childHeight = size.height / allRows;
+
+    int i = 0;
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset(((allCols - qCols) / 2 + (i % qCols)) * childWidth,
+              (i++ ~/ qCols) * childHeight),
+        ));
+    i = 0;
+    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset(((allCols - cols) / 2 + (i % cols)) * childWidth,
+              (qRows + (i++ ~/ cols)) * childHeight),
+        ));
+  }
+
+  static calculateHorizontalLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, _ChildDetail> childrenMap,
+      Size size}) {
+    // final allRows = rows + qRows;
+    // final allCols = max(cols, qCols);
+    final allRows = max(rows, qRows);
+    final allCols = cols + qCols;
+    final childWidth = size.width / allCols;
+    final childHeight = size.height / allRows;
+
+    int i = 0;
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset((i ~/ qRows) * childWidth,
+              ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight),
+        ));
+    i = 0;
+    (qChildren ?? []).forEach((c) => print('$c, <>'));
+    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset((qCols + (i ~/ qRows)) * childWidth,
+              ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight),
+        ));
+    (children ?? []).forEach((c) => print('$c, <<>>'));
+  }
+
+  static calculateRandomizedLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, _ChildDetail> childrenMap,
+      Size size}) {
+    final childWidth = size.width / cols;
+    final childHeight = size.height / rows;
+
+    Random random = Random();
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
+        child: c,
+        offset: Offset(random.nextDouble() * size.width,
+            random.nextDouble() * size.height)));
+    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
+        child: c,
+        offset: Offset(max(0, random.nextDouble() * size.width - childWidth),
+            max(0, random.nextDouble() * size.height - childHeight))));
+  }
 }
 
 class _ChildDetail {
@@ -66,8 +162,13 @@ class _BentoBoxState extends State<BentoBox> {
 
   void calculateLayout(bool reCalculate) {
     int k = 0;
-    rows = widget.rows + widget.qRows;
-    cols = max(widget.cols, widget.qCols);
+    if (widget.calculateLayout == BentoBox.calculateHorizontalLayout) {
+      rows = max(widget.rows, widget.qRows);
+      cols = widget.cols + widget.qCols;
+    } else {
+      rows = widget.rows + widget.qRows;
+      cols = max(widget.cols, widget.qCols);
+    }
     final childWidth = size.width / cols;
     final childHeight = size.height / rows;
 
@@ -76,19 +177,9 @@ class _BentoBoxState extends State<BentoBox> {
         offset: Offset(
             ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
             (rows - 1) / 2 * childHeight)));
-    if (widget.randomize) {
-      if (reCalculate)
-        calculateRandomizedLayout(
-            cols: widget.cols,
-            rows: widget.rows,
-            children: widget.children,
-            qCols: widget.qCols,
-            qRows: widget.qRows,
-            qChildren: widget.qChildren,
-            childrenMap: _children,
-            size: size);
-    } else {
-      calculateVerticalLayout(
+    if (reCalculate ||
+        widget.calculateLayout != BentoBox.calculateRandomizedLayout) {
+      widget.calculateLayout(
           cols: widget.cols,
           rows: widget.rows,
           children: widget.children,
@@ -98,57 +189,6 @@ class _BentoBoxState extends State<BentoBox> {
           childrenMap: _children,
           size: size);
     }
-  }
-
-  static calculateVerticalLayout(
-      {int cols,
-      int rows,
-      List<Widget> children,
-      int qCols,
-      int qRows,
-      List<Widget> qChildren,
-      Map<Key, _ChildDetail> childrenMap,
-      Size size}) {
-    final allRows = rows + qRows;
-    final allCols = max(cols, qCols);
-    final childWidth = size.width / allCols;
-    final childHeight = size.height / allRows;
-
-    int i = 0;
-    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
-          child: c,
-          offset: Offset(((allCols - qCols) / 2 + (i % qCols)) * childWidth,
-              (i++ ~/ qCols) * childHeight),
-        ));
-    i = 0;
-    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
-          child: c,
-          offset: Offset(((allCols - cols) / 2 + (i % cols)) * childWidth,
-              (qRows + (i++ ~/ cols)) * childHeight),
-        ));
-  }
-
-  static calculateRandomizedLayout(
-      {int cols,
-      int rows,
-      List<Widget> children,
-      int qCols,
-      int qRows,
-      List<Widget> qChildren,
-      Map<Key, _ChildDetail> childrenMap,
-      Size size}) {
-    final childWidth = size.width / cols;
-    final childHeight = size.height / rows;
-
-    Random random = Random();
-    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
-        child: c,
-        offset: Offset(random.nextDouble() * size.width,
-            random.nextDouble() * size.height)));
-    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
-        child: c,
-        offset: Offset(max(0, random.nextDouble() * size.width - childWidth),
-            max(0, random.nextDouble() * size.height - childHeight))));
   }
 
   @override
@@ -244,6 +284,7 @@ class _BentoBoxState extends State<BentoBox> {
     return widget.dragConfig == DragConfig.fixed
         ? buildChild(childSize, c.child)
         : Draggable(
+            axis: widget.axis,
             child: buildChild(childSize, c.child),
             childWhenDragging:
                 widget.dragConfig == DragConfig.draggableMultiPack
