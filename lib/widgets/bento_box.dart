@@ -68,8 +68,11 @@ class _BentoBoxState extends State<BentoBox> {
 
   void calculateLayout(bool reCalculate) {
     int k = 0;
-    rows = widget.rows + widget.qRows;
-    cols = max(widget.cols, widget.qCols);
+    // rows = widget.rows + widget.qRows;
+    // cols = max(widget.cols, widget.qCols);
+    /// uncomment below line to get size in horizontal layout
+    rows = max(widget.rows, widget.qRows);
+    cols = widget.cols + widget.qCols;
     final childWidth = size.width / cols;
     final childHeight = size.height / rows;
 
@@ -90,7 +93,7 @@ class _BentoBoxState extends State<BentoBox> {
             childrenMap: _children,
             size: size);
     } else {
-      calculateVerticalLayout(
+      calculateHorizontalLayout(
           cols: widget.cols,
           rows: widget.rows,
           children: widget.children,
@@ -128,6 +131,38 @@ class _BentoBoxState extends State<BentoBox> {
           offset: Offset(((allCols - cols) / 2 + (i % cols)) * childWidth,
               (qRows + (i++ ~/ cols)) * childHeight),
         ));
+  }
+
+  static calculateHorizontalLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, _ChildDetail> childrenMap,
+      Size size}) {
+    // final allRows = rows + qRows;
+    // final allCols = max(cols, qCols);
+    final allRows = max(rows, qRows);
+    final allCols = cols + qCols;
+    final childWidth = size.width / allCols;
+    final childHeight = size.height / allRows;
+
+    int i = 0;
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset((i ~/ qRows) * childWidth,
+              ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight),
+        ));
+    i = 0;
+    (qChildren ?? []).forEach((c) => print('$c, <>'));
+    children.forEach((c) => childrenMap[c.key] = _ChildDetail(
+          child: c,
+          offset: Offset((qCols + (i ~/ qRows)) * childWidth,
+              ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight),
+        ));
+    (children ?? []).forEach((c) => print('$c, <<>>'));
   }
 
   static calculateRandomizedLayout(
