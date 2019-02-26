@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
+import 'package:jamaica/widgets/drop_box.dart';
 
 class _ChoiceDetail {
   String choice;
@@ -63,18 +64,13 @@ class _MatchWithImageGameState extends State<MatchWithImageGame> {
                 key: Key(img),
               ) as Widget)
           .toList()
-            ..addAll(answerDetails.map((a) => DragTarget<String>(
+            ..addAll(answerDetails.map((a) => DropBox(
                   key: Key((i++).toString()),
-                  builder: (context, candidateData, rejectedData) => a.appear
+                  child: a.appear
                       ? CuteButton(
                           child: Center(child: Text(a.choice)),
                         )
-                      : Container(
-                          decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(16.0))),
-                        ),
+                      : null,
                   onWillAccept: (data) => data == a.choice,
                   onAccept: (data) => setState(() {
                         a.appear = true;
