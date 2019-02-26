@@ -246,7 +246,7 @@ class _BentoBoxState extends State<BentoBox> {
     return widget.dragConfig == DragConfig.fixed
         ? buildChild(childSize, c.child)
         : Draggable(
-            axis: widget.axisHorizontal,
+            axis: widget.axis,
             child: buildChild(childSize, c.child),
             childWhenDragging:
                 widget.dragConfig == DragConfig.draggableMultiPack
