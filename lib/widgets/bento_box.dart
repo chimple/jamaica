@@ -19,7 +19,7 @@ class BentoBox extends StatefulWidget {
   final int qCols;
   final int qRows;
   final bool randomize;
-  final axis;
+  final Axis axis;
   final DragConfig dragConfig;
 
   const BentoBox({
