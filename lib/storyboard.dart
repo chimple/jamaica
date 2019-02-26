@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamaica/screens/story_screen.dart';
 import 'package:jamaica/storyboards/collected_item_story.dart';
 import 'package:jamaica/storyboards/games/counting_game_story.dart';
 import 'package:jamaica/storyboards/games/dice_game_story.dart';
@@ -23,6 +24,7 @@ import 'package:jamaica/storyboards/widgets/dot_number_story.dart';
 import 'package:jamaica/storyboards/games/game_level_story.dart';
 import 'package:jamaica/storyboards/games/score_screen_story.dart';
 import 'package:jamaica/storyboards/theme_map_story.dart';
+import 'package:jamaica/storyboards/widgets/story_board.dart';
 import 'package:jamaica/storyboards/widgets/store_screen_story.dart';
 import 'package:storyboard/storyboard.dart';
 
@@ -51,6 +53,7 @@ void main() {
     GameLevelStory(),
     ScoreScreenStory(),
     ThemeMapStory(),
+    StoryBoard(),
     AudioWidgetStory()
   ]));
 }
