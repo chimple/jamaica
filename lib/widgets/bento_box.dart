@@ -10,6 +10,17 @@ enum DragConfig {
   draggableMultiPack
 }
 
+typedef CalculateLayout = void Function({
+  int cols,
+  int rows,
+  List<Widget> children,
+  int qCols,
+  int qRows,
+  List<Widget> qChildren,
+  Map<Key, _ChildDetail> childrenMap,
+  Size size,
+});
+
 class BentoBox extends StatefulWidget {
   final List<Widget> children;
   final List<Widget> qChildren;
@@ -18,7 +29,7 @@ class BentoBox extends StatefulWidget {
   final int rows;
   final int qCols;
   final int qRows;
-  final bool randomize;
+  final CalculateLayout calculateLayout;
   final Axis axis;
   final DragConfig dragConfig;
 
@@ -27,7 +38,7 @@ class BentoBox extends StatefulWidget {
     this.cols,
     this.rows,
     this.children,
-    this.randomize = false,
+    this.calculateLayout = calculateVerticalLayout,
     this.axis,
     this.dragConfig = DragConfig.fixed,
     this.frontChildren,
@@ -38,72 +49,6 @@ class BentoBox extends StatefulWidget {
 
   @override
   _BentoBoxState createState() => _BentoBoxState();
-}
-
-class _ChildDetail {
-  final Widget child;
-  Offset offset;
-  bool moveImmediately;
-
-  _ChildDetail({this.child, this.offset, this.moveImmediately = false});
-
-  @override
-  String toString() =>
-      '_ChildDetail(child: $child, offset: $offset, moveImmediately: $moveImmediately)';
-}
-
-class _BentoBoxState extends State<BentoBox> {
-  Map<Key, _ChildDetail> _children;
-  Size size;
-  int rows;
-  int cols;
-
-  @override
-  void initState() {
-    super.initState();
-    _children = {};
-    size = Size(1024.0, 1024.0); //Nominal size
-    calculateLayout(true);
-  }
-
-  void calculateLayout(bool reCalculate) {
-    int k = 0;
-    // rows = widget.rows + widget.qRows;
-    // cols = max(widget.cols, widget.qCols);
-    /// uncomment below line to get size in horizontal layout
-    rows = max(widget.rows, widget.qRows);
-    cols = widget.cols + widget.qCols;
-    final childWidth = size.width / cols;
-    final childHeight = size.height / rows;
-
-    (widget.frontChildren ?? []).forEach((c) => _children[c.key] = _ChildDetail(
-        child: c,
-        offset: Offset(
-            ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
-            (rows - 1) / 2 * childHeight)));
-    if (widget.randomize) {
-      if (reCalculate)
-        calculateRandomizedLayout(
-            cols: widget.cols,
-            rows: widget.rows,
-            children: widget.children,
-            qCols: widget.qCols,
-            qRows: widget.qRows,
-            qChildren: widget.qChildren,
-            childrenMap: _children,
-            size: size);
-    } else {
-      calculateHorizontalLayout(
-          cols: widget.cols,
-          rows: widget.rows,
-          children: widget.children,
-          qCols: widget.qCols,
-          qRows: widget.qRows,
-          qChildren: widget.qChildren,
-          childrenMap: _children,
-          size: size);
-    }
-  }
 
   static calculateVerticalLayout(
       {int cols,
@@ -186,6 +131,64 @@ class _BentoBoxState extends State<BentoBox> {
         child: c,
         offset: Offset(max(0, random.nextDouble() * size.width - childWidth),
             max(0, random.nextDouble() * size.height - childHeight))));
+  }
+}
+
+class _ChildDetail {
+  final Widget child;
+  Offset offset;
+  bool moveImmediately;
+
+  _ChildDetail({this.child, this.offset, this.moveImmediately = false});
+
+  @override
+  String toString() =>
+      '_ChildDetail(child: $child, offset: $offset, moveImmediately: $moveImmediately)';
+}
+
+class _BentoBoxState extends State<BentoBox> {
+  Map<Key, _ChildDetail> _children;
+  Size size;
+  int rows;
+  int cols;
+
+  @override
+  void initState() {
+    super.initState();
+    _children = {};
+    size = Size(1024.0, 1024.0); //Nominal size
+    calculateLayout(true);
+  }
+
+  void calculateLayout(bool reCalculate) {
+    int k = 0;
+    if (widget.calculateLayout == BentoBox.calculateHorizontalLayout) {
+      rows = max(widget.rows, widget.qRows);
+      cols = widget.cols + widget.qCols;
+    } else {
+      rows = widget.rows + widget.qRows;
+      cols = max(widget.cols, widget.qCols);
+    }
+    final childWidth = size.width / cols;
+    final childHeight = size.height / rows;
+
+    (widget.frontChildren ?? []).forEach((c) => _children[c.key] = _ChildDetail(
+        child: c,
+        offset: Offset(
+            ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
+            (rows - 1) / 2 * childHeight)));
+    if (reCalculate ||
+        widget.calculateLayout != BentoBox.calculateRandomizedLayout) {
+      widget.calculateLayout(
+          cols: widget.cols,
+          rows: widget.rows,
+          children: widget.children,
+          qCols: widget.qCols,
+          qRows: widget.qRows,
+          qChildren: widget.qChildren,
+          childrenMap: _children,
+          size: size);
+    }
   }
 
   @override
