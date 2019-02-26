@@ -38,6 +38,7 @@ class _SequenceAlphabetGameState extends State<SequenceAlphabetGame> {
   @override
   Widget build(BuildContext context) {
     return BentoBox(
+      axisHorizontal: true,
       dragConfig: DragConfig.draggableBounceBack,
       cols: choiceDetails.length,
       rows: 1,
