@@ -18,11 +18,11 @@ import 'package:jamaica/storyboards/games/sequence_alphabet_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
+import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
 import 'package:jamaica/storyboards/widgets/dot_number_story.dart';
 import 'package:jamaica/storyboards/games/game_level_story.dart';
 import 'package:jamaica/storyboards/games/score_screen_story.dart';
-import 'package:jamaica/storyboards/user_progress_story.dart';
 import 'package:jamaica/storyboards/theme_map_story.dart';
 import 'package:jamaica/storyboards/widgets/story_board.dart';
 import 'package:jamaica/storyboards/widgets/store_screen_story.dart';
@@ -49,7 +49,7 @@ void main() {
     StoreScreenStory(),
     CollectedItemStory(),
     DotNumberStory(),
-    UserProgressStory(),
+    UserProgressScreenStory(),
     GameLevelStory(),
     ScoreScreenStory(),
     ThemeMapStory(),

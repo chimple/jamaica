@@ -19,6 +19,7 @@ class BentoBox extends StatefulWidget {
   final int qCols;
   final int qRows;
   final bool randomize;
+  final Axis axis;
   final DragConfig dragConfig;
 
   const BentoBox({
@@ -27,6 +28,7 @@ class BentoBox extends StatefulWidget {
     this.rows,
     this.children,
     this.randomize = false,
+    this.axis,
     this.dragConfig = DragConfig.fixed,
     this.frontChildren,
     this.qChildren,
@@ -244,6 +246,7 @@ class _BentoBoxState extends State<BentoBox> {
     return widget.dragConfig == DragConfig.fixed
         ? buildChild(childSize, c.child)
         : Draggable(
+            axis: widget.axis,
             child: buildChild(childSize, c.child),
             childWhenDragging:
                 widget.dragConfig == DragConfig.draggableMultiPack

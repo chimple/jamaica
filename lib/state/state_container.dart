@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
+import 'package:jamaica/models/game_status.dart';
 import 'package:jamaica/models/story_config.dart';
 import 'package:jamaica/models/user_profile.dart';
 
