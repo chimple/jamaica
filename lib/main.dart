@@ -6,6 +6,7 @@ import 'package:jamaica/screens/map_screen.dart';
 import 'package:jamaica/screens/profile_screen.dart';
 import 'package:jamaica/screens/home_screen.dart';
 import 'package:jamaica/screens/store_screen.dart';
+import 'package:jamaica/screens/story_screen.dart';
 import 'package:jamaica/state/state_container.dart';
 
 void main() => runApp(StateContainer(child: MyApp()));
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/map': (BuildContext context) => MapScreen(),
         '/games': (BuildContext context) => GamesScreen(),
         '/store': (BuildContext context) => StoreScreen(),
+        '/story': (BuildContext context) => StoryScreen(),
       },
     );
   }

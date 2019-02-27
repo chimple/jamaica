@@ -46,7 +46,7 @@ class _MatchTheShapeGameState extends State<MatchTheShapeGame> {
   @override
   Widget build(BuildContext context) {
     return BentoBox(
-      randomize: true,
+      calculateLayout: BentoBox.calculateRandomizedLayout,
       dragConfig: DragConfig.draggableNoBounceBack,
       rows: 3,
       cols: widget.first.length,

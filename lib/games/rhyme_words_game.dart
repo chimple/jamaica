@@ -41,17 +41,27 @@ class _RhymeWordsGameState extends State<RhymeWordsGame> {
   Widget build(BuildContext context) {
     int i = 0;
     return BentoBox(
+      axis: Axis.vertical,
+      calculateLayout: BentoBox.calculateHorizontalLayout,
       dragConfig: DragConfig.draggableBounceBack,
-      qCols: widget.questions.length,
-      qRows: 1,
+      qCols: 2,
+      qRows: widget.questions.length,
       qChildren: widget.questions
           .map((q) => CuteButton(
                 key: Key(q),
                 child: Center(child: Text(q)),
-              ))
-          .toList(growable: false),
-      cols: choiceDetails.length,
-      rows: 1,
+              )
+              as Widget )
+          .toList()
+          ..addAll(widget.questions
+          .map((q) => Image.asset(
+          'assets/accessories/join.png',
+          key: UniqueKey(),
+              ) as Widget)
+
+          ),
+      cols: 1,
+      rows: choiceDetails.length,
       children: choiceDetails
           .map((c) => DragTarget<String>(
               key: Key(c.choice),
