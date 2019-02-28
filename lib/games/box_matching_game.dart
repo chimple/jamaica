@@ -77,6 +77,7 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                                               MainAxisAlignment.end,
                                           children: addToBox[a.index]
                                               .map((f) => Container(
+                                                  padding: EdgeInsets.all(3.0),
                                                   height:
                                                       constraints.maxHeight *
                                                           .3,
@@ -116,7 +117,7 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                   .toList(growable: false),
             )),
         Flexible(
-          flex: 2,
+          flex: 3,
           child: BentoBox(
             calculateLayout: BentoBox.calculateRandomizedLayout,
             dragConfig: DragConfig.draggableBounceBack,
@@ -124,10 +125,17 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
             cols: 5,
             children: choiceDetails
                 .map((c) => c.appear
-                    ? CuteButton(
+                    ? LayoutBuilder(
                         key: Key("${((k++).toString() + c.choice)}"),
-                        child: Center(child: Text(c.choice)),
-                      )
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                          return Container(
+                              height: constraints.maxHeight * .6,
+                              width: constraints.maxWidth * .8,
+                              child: CuteButton(
+                                child: Center(child: Text(c.choice)),
+                              ));
+                        })
                     : Container(
                         key: Key("${(k++).toString()}"),
                       ))
