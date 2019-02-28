@@ -62,18 +62,17 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                         builder: (context, candidateData, rejectedData) =>
                             LayoutBuilder(builder: (BuildContext context,
                                 BoxConstraints constraints) {
-                              return a.appear
-                                  ? Container(
-                                      height: constraints.maxHeight,
-                                      width: constraints.maxWidth,
-                                      decoration: new BoxDecoration(
-                                        color: Colors.orange,
-                                        border: new Border.all(
-                                            color: Colors.black, width: 2.0),
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                      child: Column(
+                              return Container(
+                                  height: constraints.maxHeight,
+                                  width: constraints.maxWidth,
+                                  decoration: new BoxDecoration(
+                                    color: Colors.blue,
+                                    border: new Border.all(
+                                        color: Colors.black, width: 2.0),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: a.appear
+                                      ? Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: addToBox[a.index]
@@ -87,18 +86,8 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                                                     child: Center(
                                                         child: Text(a.choice)),
                                                   )))
-                                              .toList(growable: false)))
-                                  : Container(
-                                      height: constraints.maxHeight,
-                                      width: constraints.maxWidth,
-                                      decoration: new BoxDecoration(
-                                        color: Colors.orange,
-                                        border: new Border.all(
-                                            color: Colors.black, width: 2.0),
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                    );
+                                              .toList(growable: false))
+                                      : Container());
                             }),
                         onWillAccept: (data) {
                           return data[1] == a.choice;
