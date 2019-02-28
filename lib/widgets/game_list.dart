@@ -8,7 +8,7 @@ import 'package:jamaica/models/game_config.dart';
 import 'package:jamaica/models/game_status.dart';
 import 'package:jamaica/screens/game_level.dart';
 
-enum ButtonStatus { active, disabled }
+enum _ButtonStatus { active, disabled }
 
 class GameList extends StatefulWidget {
   final Map<String, List<GameConfig>> games;
@@ -22,24 +22,24 @@ class GameList extends StatefulWidget {
 }
 
 class GameListState extends State<GameList> {
-  String _gameToOpen = '';
-  GameConfig _gameConfig;
-  bool _isComplete = false;
+  String gameToOpen = '';
+  GameConfig gameConfig;
+  bool isComplete = false;
 
   void _onTap(GameConfig gameConfig) {
     setState(() {
-      _gameToOpen = gameConfig.name;
-      _gameConfig = gameConfig;
+      gameToOpen = gameConfig.name;
+      this.gameConfig = gameConfig;
     });
   }
 
   void _flareCallback(String animationNme) {
     setState(() {
-      _isComplete = true;
+      isComplete = true;
     });
 
     List gamelevel = [];
-    for (int i = 1; i <= _gameConfig.levels; i++) {
+    for (int i = 1; i <= gameConfig.levels; i++) {
       gamelevel.add(i);
     }
 
@@ -47,13 +47,13 @@ class GameListState extends State<GameList> {
         context: context,
         builder: (BuildContext context) {
           return GameLevel(
-            gameName: _gameToOpen,
+            gameName: gameToOpen,
             levelList: gamelevel,
-            gameImage: _gameConfig.image,
+            gameImage: gameConfig.image,
           );
         }).then((onValue) => setState(() {
-          _gameToOpen = '';
-          _isComplete = false;
+          gameToOpen = '';
+          isComplete = false;
         }));
   }
 
@@ -68,7 +68,7 @@ class GameListState extends State<GameList> {
           FlareActor("assets/map/map_background2.flr",
               alignment: Alignment.center,
               fit: _isPortrait ? BoxFit.fitHeight : BoxFit.fitWidth,
-              isPaused: _isComplete,
+              isPaused: isComplete,
               animation: "bird"),
           ListView.builder(
               shrinkWrap: true,
@@ -118,10 +118,10 @@ class GameListState extends State<GameList> {
                                     onTap: _onTap,
                                     flareCallback: _flareCallback,
                                     animationFlag:
-                                        t.name == _gameToOpen ? true : false,
-                                    buttonStatus: _gameToOpen != ''
-                                        ? ButtonStatus.disabled
-                                        : ButtonStatus.active,
+                                        t.name == gameToOpen ? true : false,
+                                    buttonStatus: gameToOpen != ''
+                                        ? _ButtonStatus.disabled
+                                        : _ButtonStatus.active,
                                   ))
                               .toList(growable: false),
                         ),
@@ -138,7 +138,7 @@ class GameButton extends StatelessWidget {
   final void Function(GameConfig) onTap;
   final bool animationFlag;
   final void Function(String) flareCallback;
-  final ButtonStatus buttonStatus;
+  final _ButtonStatus buttonStatus;
 
   const GameButton(this.gameConfig,
       {Key key,
@@ -159,7 +159,7 @@ class GameButton extends StatelessWidget {
       ),
       margin: EdgeInsets.symmetric(horizontal: size.width * .02),
       child: new InkWell(
-        onTap: buttonStatus == ButtonStatus.active
+        onTap: buttonStatus == _ButtonStatus.active
             ? () => onTap(gameConfig)
             : null,
         key: new Key(gameConfig.name),
