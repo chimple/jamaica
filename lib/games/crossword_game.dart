@@ -1,0 +1,161 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:jamaica/widgets/bento_box.dart';
+import 'package:jamaica/widgets/cute_button.dart';
+import 'package:jamaica/widgets/drop_box.dart';
+import 'package:tuple/tuple.dart';
+
+class _ChoiceDetail {
+  String choice;
+  Reaction reaction;
+  bool appear;
+  String image;
+
+  _ChoiceDetail(
+      {this.choice,
+      this.appear = true,
+      this.image = '',
+      this.reaction = Reaction.success});
+  @override
+  String toString() =>
+      '_ChoiceDetail(choice: $choice, appear: $appear, image: $image, reaction: $reaction)';
+}
+
+class CrosswordGame extends StatefulWidget {
+  final List<Tuple3<String, int, int>> images;
+  final List<List<String>> data;
+
+  const CrosswordGame({
+    Key key,
+    this.images,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  _CrosswordGameState createState() => _CrosswordGameState();
+}
+
+class _CrosswordGameState extends State<CrosswordGame> {
+  List<_ChoiceDetail> choiceDetails = [];
+  List<_ChoiceDetail> crossword = [];
+  List<String> choices = [];
+  List<int> letterIndex = [];
+  List<int> imageIndex = [];
+
+  var random = new Random();
+  int rows;
+  int cols;
+
+  @override
+  void initState() {
+    super.initState();
+    cols = widget.data.length;
+    rows = widget.data[0].length;
+    List<String> _letters = [];
+
+    widget.data.forEach((e) {
+      e.forEach((v) {
+        _letters.add(v);
+      });
+    });
+
+    for (var n = 0; n < widget.images.length; n++) {
+      imageIndex.add(widget.images[n].item2 * rows + widget.images[n].item3);
+    }
+    var len = imageIndex.length + 1;
+    if (len > 14) {
+      len = 14;
+    }
+    var rng = new Random();
+    var f = 0;
+    for (var t = 0; t < _letters.length; t++) {
+      f = 0;
+      for (var j = 0; j < imageIndex.length; j++) {
+        if (t == imageIndex[j]) {
+          f = 1;
+        }
+      }
+      if (_letters[t] != null && f != 1) {
+        if (rng.nextInt(2) == 1) {
+          choices.add(_letters[t]);
+          letterIndex.add(t);
+        }
+      }
+      if (t == _letters.length - 1) {
+        if (choices.length != len) {
+          t = 0;
+          choices = [];
+          letterIndex = [];
+        }
+      }
+    }
+    choices.shuffle();
+
+    choiceDetails =
+        choices.map((c) => _ChoiceDetail(choice: c)).toList(growable: false);
+
+    for (int p = 0, n = 0, k = 0; p < _letters.length; p++) {
+      crossword.add(_ChoiceDetail(
+          choice: _letters[p],
+          appear: n < letterIndex.length
+              ? letterIndex[n] == p ? false : true
+              : true,
+          image: k < imageIndex.length
+              ? imageIndex[k] == p ? widget.images[k].item1 : ''
+              : ''));
+      if (k < imageIndex.length) if (imageIndex[k] == p) k++;
+      if (n < letterIndex.length) if (letterIndex[n] == p) n++;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int i = 50, k = 0;
+    return BentoBox(
+      rows: 1,
+      cols: choiceDetails.length,
+      children: choiceDetails
+          .map((c) => c.appear
+              ? CuteButton(
+                  key: Key((k++).toString()),
+                  child: Center(child: Text(c.choice)),
+                )
+              : Container(key: Key((k++).toString())))
+          .toList(growable: false),
+      qRows: rows,
+      qCols: cols,
+      qChildren: crossword
+          .map((f) => f.choice == null
+              ? Container(
+                  key: Key((i++).toString()),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[350],
+                      borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                )
+              : Stack(
+                  key: Key((i++).toString()),
+                  children: [
+                    f.image != '' ? Image.asset(f.image) : Container(),
+                    !f.appear
+                        ? DropBox(
+                            child: CuteButton(),
+                            onWillAccept: (data) =>
+                                choiceDetails[int.parse(data)].choice ==
+                                f.choice,
+                            onAccept: (data) => setState(() {
+                                  f.appear = true;
+
+                                  choiceDetails[int.parse(data)].appear = false;
+                                }),
+                          )
+                        : f.image != ''
+                            ? Center(child: Text(f.choice))
+                            : CuteButton(child: Center(child: Text(f.choice)))
+                  ],
+                ))
+          .toList(growable: false),
+      dragConfig: DragConfig.draggableBounceBack,
+    );
+  }
+}
