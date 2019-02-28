@@ -31,7 +31,7 @@ class MatchTheBoxGame extends StatefulWidget {
 class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
   List<_ChoiceDetail> choiceDetails;
   List<_ChoiceDetail> answerDetails;
-  List<List<int>> addToBox = [[], [], [], []];
+  List<List<String>> addToBox = [[], [], [], []];
   @override
   void initState() {
     super.initState();
@@ -48,7 +48,7 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
 
   @override
   Widget build(BuildContext context) {
-    int i = 0, k = 0;
+    int k = 0;
     return Column(
       children: <Widget>[
         Flexible(
@@ -59,46 +59,54 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
               children: answerDetails
                   .map((a) => DragTarget<String>(
                         key: Key(a.choice),
-                        builder: (context, candidateData, rejectedData) => a
-                                .appear
-                            ? Container(
-                                height: 150.0,
-                                width: 100.0,
-                                decoration: new BoxDecoration(
-                                  color: Colors.orange,
-                                  border: new Border.all(
-                                      color: Colors.black, width: 2.0),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: addToBox[a.index]
-                                        .map((f) => Container(
-                                            height: 40.0,
-                                            width: 50.0,
-                                            child: CuteButton(
-                                              child:
-                                                  Center(child: Text(a.choice)),
-                                            )))
-                                        .toList(growable: false)))
-                            : Container(
-                                height: 150.0,
-                                width: 100.0,
-                                decoration: new BoxDecoration(
-                                  color: Colors.orange,
-                                  border: new Border.all(
-                                      color: Colors.black, width: 2.0),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                              ),
+                        builder: (context, candidateData, rejectedData) =>
+                            LayoutBuilder(builder: (BuildContext context,
+                                BoxConstraints constraints) {
+                              return a.appear
+                                  ? Container(
+                                      height: constraints.maxHeight,
+                                      width: constraints.maxWidth,
+                                      decoration: new BoxDecoration(
+                                        color: Colors.orange,
+                                        border: new Border.all(
+                                            color: Colors.black, width: 2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: addToBox[a.index]
+                                              .map((f) => Container(
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          .3,
+                                                  width:
+                                                      constraints.maxWidth * .5,
+                                                  child: CuteButton(
+                                                    child: Center(
+                                                        child: Text(a.choice)),
+                                                  )))
+                                              .toList(growable: false)))
+                                  : Container(
+                                      height: constraints.maxHeight,
+                                      width: constraints.maxWidth,
+                                      decoration: new BoxDecoration(
+                                        color: Colors.orange,
+                                        border: new Border.all(
+                                            color: Colors.black, width: 2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                    );
+                            }),
                         onWillAccept: (data) {
-                          print("mkkkk  .. ${data[1]}....${a.choice}");
                           return data[1] == a.choice;
                         },
                         onAccept: (data) => setState(() {
                               int index = int.parse(data[0]);
                               print("${data[0]}......${choiceDetails[index]}");
-                              addToBox[a.index].add(1);
+                              addToBox[a.index].add(a.choice);
                               a.appear = true;
                               choiceDetails[index].appear = false;
                             }),
@@ -119,9 +127,9 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                   .toList(growable: false),
             )),
         Flexible(
-          flex: 3,
+          flex: 2,
           child: BentoBox(
-            randomize: true,
+            calculateLayout: BentoBox.calculateRandomizedLayout,
             dragConfig: DragConfig.draggableBounceBack,
             rows: 2,
             cols: 5,
