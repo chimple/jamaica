@@ -113,8 +113,8 @@ class _CrosswordGameState extends State<CrosswordGame> {
   Widget build(BuildContext context) {
     int i = 50, k = 0;
     return BentoBox(
-      rows: 1,
-      cols: choiceDetails.length,
+      rows: cols>choiceDetails.length?1:2,
+      cols: cols>choiceDetails.length?choiceDetails.length:cols-1,
       children: choiceDetails
           .map((c) => c.appear
               ? CuteButton(
