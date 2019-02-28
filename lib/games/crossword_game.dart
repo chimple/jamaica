@@ -52,11 +52,11 @@ class _CrosswordGameState extends State<CrosswordGame> {
     super.initState();
     cols = widget.data.length;
     rows = widget.data[0].length;
-    List<String> _letters = [];
+    List<String> letters = [];
 
     widget.data.forEach((e) {
       e.forEach((v) {
-        _letters.add(v);
+        letters.add(v);
       });
     });
 
@@ -69,20 +69,20 @@ class _CrosswordGameState extends State<CrosswordGame> {
     }
     var rng = new Random();
     var f = 0;
-    for (var t = 0; t < _letters.length; t++) {
+    for (var t = 0; t < letters.length; t++) {
       f = 0;
       for (var j = 0; j < imageIndex.length; j++) {
         if (t == imageIndex[j]) {
           f = 1;
         }
       }
-      if (_letters[t] != null && f != 1) {
+      if (letters[t] != null && f != 1) {
         if (rng.nextInt(2) == 1) {
-          choices.add(_letters[t]);
+          choices.add(letters[t]);
           letterIndex.add(t);
         }
       }
-      if (t == _letters.length - 1) {
+      if (t == letters.length - 1) {
         if (choices.length != len) {
           t = 0;
           choices = [];
@@ -95,9 +95,9 @@ class _CrosswordGameState extends State<CrosswordGame> {
     choiceDetails =
         choices.map((c) => _ChoiceDetail(choice: c)).toList(growable: false);
 
-    for (int p = 0, n = 0, k = 0; p < _letters.length; p++) {
+    for (int p = 0, n = 0, k = 0; p < letters.length; p++) {
       crossword.add(_ChoiceDetail(
-          choice: _letters[p],
+          choice: letters[p],
           appear: n < letterIndex.length
               ? letterIndex[n] == p ? false : true
               : true,
