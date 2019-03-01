@@ -69,7 +69,7 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                                     color: Colors.blue,
                                     border: new Border.all(
                                         color: Colors.black, width: 2.0),
-                                    borderRadius: BorderRadius.circular(20.0),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: a.appear
                                       ? Column(
@@ -105,9 +105,8 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
         ),
         Flexible(
             flex: 1,
-            child: BentoBox(
-              rows: 1,
-              cols: widget.answers.length,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: widget.answers
                   .map((t) => Text(
                         t,
@@ -117,7 +116,7 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                   .toList(growable: false),
             )),
         Flexible(
-          flex: 3,
+          flex: 2,
           child: BentoBox(
             calculateLayout: BentoBox.calculateRandomizedLayout,
             dragConfig: DragConfig.draggableBounceBack,
