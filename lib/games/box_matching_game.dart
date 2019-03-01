@@ -31,7 +31,7 @@ class MatchTheBoxGame extends StatefulWidget {
 class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
   List<_ChoiceDetail> choiceDetails;
   List<_ChoiceDetail> answerDetails;
-  List<List<String>> addToBox = [[], [], [], []];
+  List<List<String>> addToBox = [];
   @override
   void initState() {
     super.initState();
@@ -44,6 +44,9 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
     answerDetails = widget.answers
         .map((a) => _ChoiceDetail(choice: a, appear: false, index: j++))
         .toList(growable: false);
+    for (int k = 0; k < answerDetails.length; k++) {
+      addToBox.add([]);
+    }
   }
 
   @override
@@ -91,11 +94,12 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
                                       : Container());
                             }),
                         onWillAccept: (data) {
-                          return data[1] == a.choice;
+                          return data[0] == a.choice;
                         },
                         onAccept: (data) => setState(() {
-                              int index = int.parse(data[0]);
-                              print("${data[0]}......${choiceDetails[index]}");
+                              int index = int.parse(data.substring(1));
+                              print(
+                                  "${data.substring(1)}......${choiceDetails[index]}");
                               addToBox[a.index].add(a.choice);
                               a.appear = true;
                               choiceDetails[index].appear = false;
@@ -125,7 +129,7 @@ class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
             children: choiceDetails
                 .map((c) => c.appear
                     ? LayoutBuilder(
-                        key: Key("${((k++).toString() + c.choice)}"),
+                        key: Key("${(c.choice + (k++).toString())}"),
                         builder:
                             (BuildContext context, BoxConstraints constraints) {
                           return Container(
