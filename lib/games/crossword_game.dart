@@ -111,7 +111,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
 
   @override
   Widget build(BuildContext context) {
-    int i = 50, k = 0;
+    int i = 0, k = 0;
     return BentoBox(
       rows: cols>choiceDetails.length?1:2,
       cols: cols>choiceDetails.length?choiceDetails.length:cols-1,
@@ -128,13 +128,13 @@ class _CrosswordGameState extends State<CrosswordGame> {
       qChildren: crossword
           .map((f) => f.choice == null
               ? Container(
-                  key: Key((i++).toString()),
+                  key: Key('A'+(i++).toString()),
                   decoration: BoxDecoration(
                       color: Colors.grey[350],
                       borderRadius: BorderRadius.all(Radius.circular(16.0))),
                 )
               : Stack(
-                  key: Key((i++).toString()),
+                  key: Key('A'+(i++).toString()),
                   children: [
                     f.image != '' ? Image.asset(f.image) : Container(),
                     !f.appear
