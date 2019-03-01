@@ -35,28 +35,28 @@ class GameListStory extends FullScreenStory {
                     ..image = 'alphabet.png'
                     ..levels = 10),
                 ],
-                'Writing Games': [
-                  GameConfig((b) => b
-                    ..name = 'Match the shape'
-                    ..image = 'match_the_shape.png'
-                    ..levels = 10),
-                  GameConfig((b) => b
-                    ..name = 'Domino Math'
-                    ..image = 'domino_math.png'
-                    ..levels = 10),
-                  GameConfig((b) => b
-                    ..name = 'Memory match'
-                    ..image = 'memory_match.png'
-                    ..levels = 10),
-                  GameConfig((b) => b
-                    ..name = 'Match the shape'
-                    ..image = 'match_the_shape.png'
-                    ..levels = 10),
-                  GameConfig((b) => b
-                    ..name = 'Domino Math'
-                    ..image = 'domino_math.png'
-                    ..levels = 10),
-                ],
+                // 'Writing Games': [
+                //   GameConfig((b) => b
+                //     ..name = 'Match the shape'
+                //     ..image = 'match_the_shape.png'
+                //     ..levels = 10),
+                //   GameConfig((b) => b
+                //     ..name = 'Domino Math'
+                //     ..image = 'domino_math.png'
+                //     ..levels = 10),
+                //   GameConfig((b) => b
+                //     ..name = 'Memory match'
+                //     ..image = 'memory_match.png'
+                //     ..levels = 10),
+                //   GameConfig((b) => b
+                //     ..name = 'Match the shape'
+                //     ..image = 'match_the_shape.png'
+                //     ..levels = 10),
+                //   GameConfig((b) => b
+                //     ..name = 'Domino Math'
+                //     ..image = 'domino_math.png'
+                //     ..levels = 10),
+                // ],
               },
             ),
           ),
