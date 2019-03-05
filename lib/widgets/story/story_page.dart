@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/story_config.dart';
-import 'package:jamaica/widgets/story/custom_editable_text.dart';
+import 'package:jamaica/widgets/story/display_story_content.dart';
 
 class StoryPage extends StatelessWidget {
   final List<Page> pages;
-  StoryPage({this.pages});
+
+  StoryPage({Key key, this.pages}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +34,8 @@ class StoryPage extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 15, right: 10, top: 20),
                     child: SingleChildScrollView(
-                      child: CustomEditableText(
-                        controller: TextEditingController(
-                          text: pages[index].text,
-                        ),
-                        cursorColor: Colors.green,
-                        selectionColor: Colors.red,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                            wordSpacing: 4.0,
-                            color: Colors.black,
-                            letterSpacing: 2.0),
+                      child: DisplayStoryContent(
+                        listofWords: pages[index].text.split(" "),
                       ),
                     ),
                   ),
