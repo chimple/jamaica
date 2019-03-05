@@ -19,6 +19,7 @@ class _ChoiceDetail {
       '_ChoiceDetail(choice: $choice, type: $type, solved: $solved, reaction: $reaction)';
 }
 
+ 
 enum _Type { choice, question }
 
 class JumbledWordsGame extends StatefulWidget {
@@ -49,7 +50,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
     List<Widget> frontChildren;
     if (thisSolved) {
       frontChildren = choiceDetails
-          .where((c) => c.solved)
+          .where((c) => c.solved == true)
           .map((c) => CuteButton(
                 key: Key(c.choice),
                 child: Center(child: Text(c.choice)),
