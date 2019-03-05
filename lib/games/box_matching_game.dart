@@ -14,21 +14,21 @@ class _ChoiceDetail {
       '_ChoiceDetail(choice: $choice, appear: $appear,index: $index, )';
 }
 
-class MatchTheBoxGame extends StatefulWidget {
+class BoxMatchingGame extends StatefulWidget {
   final List<String> choices;
   final List<String> answers;
 
-  const MatchTheBoxGame({
+  const BoxMatchingGame({
     Key key,
     this.choices,
     this.answers,
   }) : super(key: key);
 
   @override
-  _MatchTheBoxGameState createState() => _MatchTheBoxGameState();
+  _BoxMatchingGameState createState() => _BoxMatchingGameState();
 }
 
-class _MatchTheBoxGameState extends State<MatchTheBoxGame> {
+class _BoxMatchingGameState extends State<BoxMatchingGame> {
   List<_ChoiceDetail> choiceDetails;
   List<_ChoiceDetail> answerDetails;
   List<List<String>> addToBox = [];
