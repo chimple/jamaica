@@ -7,7 +7,7 @@ class DropBox extends StatelessWidget {
   final DragTargetWillAccept<String> onWillAccept;
   final DragTargetLeave<String> onLeave;
   const DropBox({
-    @required Key key,
+    Key key,
     @required this.child,
     this.onAccept,
     this.onLeave,

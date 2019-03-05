@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/story_config.dart';
+import 'package:jamaica/widgets/story/display_story_content.dart';
 
 class StoryPage extends StatelessWidget {
   final List<Page> pages;
-  StoryPage({this.pages});
+
+  StoryPage({Key key, this.pages}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +34,8 @@ class StoryPage extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 15, right: 10, top: 20),
                     child: SingleChildScrollView(
-                      child: Text(
-                        pages[index].text,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 21,
-                            wordSpacing: 4.0,
-                            letterSpacing: 2.0),
+                      child: DisplayStoryContent(
+                        listofWords: pages[index].text.split(" "),
                       ),
                     ),
                   ),
