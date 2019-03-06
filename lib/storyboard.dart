@@ -20,6 +20,7 @@ import 'package:jamaica/storyboards/games/sequence_alphabet_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
+import 'package:jamaica/storyboards/games/true_false_game_story.dart';
 import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
 import 'package:jamaica/storyboards/widgets/chat_bot_story.dart';
@@ -47,6 +48,7 @@ void main() {
     FindWordGameStory(),
     MatchWithImageGameStory(),
     RhymeWordsGameStory(),
+    TrueFalseGameStory(),
     SequenceAlphabetGameStory(),
     JumbledWordsGameStory(),
     BoxMatchingGameStory(),
