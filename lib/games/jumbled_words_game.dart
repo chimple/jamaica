@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
@@ -19,7 +21,6 @@ class _ChoiceDetail {
       '_ChoiceDetail(choice: $choice, type: $type, solved: $solved, reaction: $reaction)';
 }
 
- 
 enum _Type { choice, question }
 
 class JumbledWordsGame extends StatefulWidget {
@@ -91,7 +92,44 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
                   child: Center(child: Text(c.choice)),
                 ))
           .toList(growable: false),
-          calculateLayout: BentoBox.calculateCustomizedLayout,
+      calculateLayout: calculateCustomizedLayout,
     );
+  }
+
+  static calculateCustomizedLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, BentoChildDetail> childrenMap,
+      Size size}) {
+    final allRows = rows + qRows;
+    final allCols = max(cols, qCols);
+    final childWidth = size.width / allCols;
+    final childHeight = size.height / allRows;
+    print(
+        "this my new width ${size.width} and new height ${size.height} and child width is $childWidth and $childHeight and rows $allRows colmun $allCols");
+    int i = 0;
+
+    Offset center = Offset((qCols + (i ~/ qRows)) * (childWidth) * 1.5,
+        ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight);
+    i = 0;
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
+          child: c,
+          offset: center,
+        ));
+
+    double j = 0;
+    double k = 2 * pi / children.length;
+    children.forEach((f) {
+      childrenMap[f.key] = BentoChildDetail(
+        child: f,
+        offset: Offset((center.dx + childWidth * 1.2 * (cos(j).toInt())),
+            (center.dy + childHeight * .5 * (sin(j).toInt()))),
+      );
+      j = j + k;
+    });
   }
 }
