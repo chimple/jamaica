@@ -47,6 +47,7 @@ class DisplayStoryContent extends StatelessWidget {
   Widget _textDescriptionDialog(
       BuildContext context, String text, String textDesciption) {
     text = text.replaceAll(new RegExp(r'[^\w\s]+'), '');
+    MediaQueryData mediaQuery = MediaQuery.of(context);
     return new Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -62,7 +63,7 @@ class DisplayStoryContent extends StatelessWidget {
               alignment: AlignmentDirectional.topEnd,
               child: new IconButton(
                   icon: new Icon(Icons.volume_up),
-                  iconSize: 70.0,
+                  iconSize: mediaQuery.size.height * 0.07,
                   color: Colors.black,
                   onPressed: () {}),
             ),
@@ -70,17 +71,23 @@ class DisplayStoryContent extends StatelessWidget {
               children: <Widget>[
                 Text(
                   text,
-                  style: TextStyle(fontSize: 30.0, color: Colors.green),
+                  style: TextStyle(
+                      fontSize: mediaQuery.size.height * 0.05,
+                      color: Colors.green),
                 ),
-                Image.asset(
-                  'assets/stories/images/$text.jpg',
-                  height: 200.0,
-                ),
+                Image.asset('assets/stories/images/$text.jpg',
+                    height: mediaQuery.orientation == Orientation.portrait
+                        ? mediaQuery.size.height * 0.2
+                        : mediaQuery.size.height * 0.3),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
                     textDesciption + '$text',
-                    style: TextStyle(fontSize: 20.0, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: mediaQuery.orientation == Orientation.portrait
+                            ? mediaQuery.size.height * 0.02
+                            : mediaQuery.size.height * 0.03,
+                        color: Colors.black),
                   ),
                 )
               ],
