@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jamaica/screens/story_screen.dart';
 import 'package:jamaica/storyboards/collected_item_story.dart';
 import 'package:jamaica/storyboards/games/counting_game_story.dart';
+import 'package:jamaica/storyboards/games/crossword_game_story.dart';
 import 'package:jamaica/storyboards/games/dice_game_story.dart';
 import 'package:jamaica/storyboards/games/find_word_game_story.dart';
 import 'package:jamaica/storyboards/games/finger_game_story.dart';
@@ -21,6 +22,7 @@ import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
 import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
+import 'package:jamaica/storyboards/widgets/chat_bot_story.dart';
 import 'package:jamaica/storyboards/widgets/dot_number_story.dart';
 import 'package:jamaica/storyboards/games/game_level_story.dart';
 import 'package:jamaica/storyboards/games/score_screen_story.dart';
@@ -31,6 +33,7 @@ import 'package:storyboard/storyboard.dart';
 
 void main() {
   runApp(StoryboardApp([
+    CrosswordGameStory(),
     SequenceTheNumberGameStory(),
     MatchTheShapeGameStory(),
     MemoryGameStory(),
@@ -56,6 +59,7 @@ void main() {
     ScoreScreenStory(),
     ThemeMapStory(),
     StoryBoard(),
-    AudioWidgetStory()
+    AudioWidgetStory(),
+    ChatBotStory(),
   ]));
 }
