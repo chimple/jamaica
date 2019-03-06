@@ -91,6 +91,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
                   child: Center(child: Text(c.choice)),
                 ))
           .toList(growable: false),
+          calculateLayout: BentoBox.calculateCustomizedLayout,
     );
   }
 }
