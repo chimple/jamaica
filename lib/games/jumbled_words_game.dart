@@ -103,7 +103,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
       int qCols,
       int qRows,
       List<Widget> qChildren,
-      Map<Key, ChildDetail> childrenMap,
+      Map<Key, BentoChildDetail> childrenMap,
       Size size}) {
     final allRows = rows + qRows;
     final allCols = max(cols, qCols);
@@ -116,7 +116,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
     Offset center = Offset((qCols + (i ~/ qRows)) * (childWidth) * 1.5,
         ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight);
     i = 0;
-    (qChildren ?? []).forEach((c) => childrenMap[c.key] = ChildDetail(
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
           offset: center,
         ));
@@ -124,7 +124,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
     double j = 0;
     double k = 2 * pi / children.length;
     children.forEach((f) {
-      childrenMap[f.key] = ChildDetail(
+      childrenMap[f.key] = BentoChildDetail(
         child: f,
         offset: Offset((center.dx + childWidth * 1.2 * (cos(j).toInt())),
             (center.dy + childHeight * .5 * (sin(j).toInt()))),

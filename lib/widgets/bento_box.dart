@@ -17,7 +17,7 @@ typedef CalculateLayout = void Function({
   int qCols,
   int qRows,
   List<Widget> qChildren,
-  Map<Key, ChildDetail> childrenMap,
+  Map<Key, BentoChildDetail> childrenMap,
   Size size,
 });
 
@@ -57,7 +57,7 @@ class BentoBox extends StatefulWidget {
       int qCols,
       int qRows,
       List<Widget> qChildren,
-      Map<Key, ChildDetail> childrenMap,
+      Map<Key, BentoChildDetail> childrenMap,
       Size size}) {
     final allRows = rows + qRows;
     final allCols = max(cols, qCols);
@@ -66,13 +66,13 @@ class BentoBox extends StatefulWidget {
     print(
         " this my new width ${size.width} and new height ${size.height} and child width is $childWidth and $childHeight");
     int i = 0;
-    (qChildren ?? []).forEach((c) => childrenMap[c.key] = ChildDetail(
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
           offset: Offset(((allCols - qCols) / 2 + (i % qCols)) * childWidth,
               (i++ ~/ qCols) * childHeight),
         ));
     i = 0;
-    children.forEach((c) => childrenMap[c.key] = ChildDetail(
+    children.forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
           offset: Offset(((allCols - cols) / 2 + (i % cols)) * childWidth,
               (qRows + (i++ ~/ cols)) * childHeight),
@@ -86,7 +86,7 @@ class BentoBox extends StatefulWidget {
       int qCols,
       int qRows,
       List<Widget> qChildren,
-      Map<Key, ChildDetail> childrenMap,
+      Map<Key, BentoChildDetail> childrenMap,
       Size size}) {
     // final allRows = rows + qRows;
     // final allCols = max(cols, qCols);
@@ -96,14 +96,14 @@ class BentoBox extends StatefulWidget {
     final childHeight = size.height / allRows;
     int i = 0;
 
-    (qChildren ?? []).forEach((c) => childrenMap[c.key] = ChildDetail(
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
           offset: Offset((i ~/ qRows) * childWidth,
               ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight),
         ));
     i = 0;
     (qChildren ?? []).forEach((c) => print('$c, <>'));
-    children.forEach((c) => childrenMap[c.key] = ChildDetail(
+    children.forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
           offset: Offset((qCols + (i ~/ qRows)) * childWidth,
               ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight),
@@ -118,29 +118,29 @@ class BentoBox extends StatefulWidget {
       int qCols,
       int qRows,
       List<Widget> qChildren,
-      Map<Key, ChildDetail> childrenMap,
+      Map<Key, BentoChildDetail> childrenMap,
       Size size}) {
     final childWidth = size.width / cols;
     final childHeight = size.height / rows;
 
     Random random = Random();
-    (qChildren ?? []).forEach((c) => childrenMap[c.key] = ChildDetail(
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
         child: c,
         offset: Offset(random.nextDouble() * size.width,
             random.nextDouble() * size.height)));
-    children.forEach((c) => childrenMap[c.key] = ChildDetail(
+    children.forEach((c) => childrenMap[c.key] = BentoChildDetail(
         child: c,
         offset: Offset(max(0, random.nextDouble() * size.width - childWidth),
             max(0, random.nextDouble() * size.height - childHeight))));
   }
 }
 
-class ChildDetail {
+class BentoChildDetail {
   final Widget child;
   Offset offset;
   bool moveImmediately;
 
-  ChildDetail({this.child, this.offset, this.moveImmediately = false});
+  BentoChildDetail({this.child, this.offset, this.moveImmediately = false});
 
   @override
   String toString() =>
@@ -148,7 +148,7 @@ class ChildDetail {
 }
 
 class _BentoBoxState extends State<BentoBox> {
-  Map<Key, ChildDetail> _children;
+  Map<Key, BentoChildDetail> _children;
   Size size;
   int rows;
   int cols;
@@ -173,11 +173,12 @@ class _BentoBoxState extends State<BentoBox> {
     final childWidth = size.width / cols;
     final childHeight = size.height / rows;
 
-    (widget.frontChildren ?? []).forEach((c) => _children[c.key] = ChildDetail(
-        child: c,
-        offset: Offset(
-            ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
-            (rows - 1) / 2 * childHeight)));
+    (widget.frontChildren ?? []).forEach((c) => _children[c.key] =
+        BentoChildDetail(
+            child: c,
+            offset: Offset(
+                ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
+                (rows - 1) / 2 * childHeight)));
     if (reCalculate ||
         widget.calculateLayout != BentoBox.calculateRandomizedLayout) {
       widget.calculateLayout(
@@ -284,7 +285,7 @@ class _BentoBoxState extends State<BentoBox> {
     });
   }
 
-  Widget wrapWithDraggable(Size childSize, ChildDetail c) {
+  Widget wrapWithDraggable(Size childSize, BentoChildDetail c) {
     return widget.dragConfig == DragConfig.fixed
         ? buildChild(childSize, c.child)
         : Draggable(
