@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jamaica/screens/story_screen.dart';
 import 'package:jamaica/storyboards/collected_item_story.dart';
 import 'package:jamaica/storyboards/games/counting_game_story.dart';
+import 'package:jamaica/storyboards/games/crossword_game_story.dart';
 import 'package:jamaica/storyboards/games/dice_game_story.dart';
 import 'package:jamaica/storyboards/games/find_word_game_story.dart';
 import 'package:jamaica/storyboards/games/finger_game_story.dart';
@@ -31,6 +32,7 @@ import 'package:storyboard/storyboard.dart';
 
 void main() {
   runApp(StoryboardApp([
+    CrosswordGameStory(),
     SequenceTheNumberGameStory(),
     MatchTheShapeGameStory(),
     MemoryGameStory(),
