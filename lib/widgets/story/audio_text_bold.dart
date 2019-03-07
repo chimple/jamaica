@@ -58,17 +58,9 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   Future pause() async {
-    await audioPlayer.pause().then((s) {
-      setState(() {});
-    });
-    print('temp.length ${temp.length}');
-    print('temp :: $temp');
-    print('start ::$start');
-    print('middle:: $middle');
-    print('end:: $end');
-    setState(() {
-      isPause = true;
-    });
+    await audioPlayer.pause().then((s) {});
+
+    setState(() => isPause = true);
     widget.pageSliding();
   }
 
@@ -149,7 +141,7 @@ class _TextAudioState extends State<AudioTextBold> {
           // for (String t in w) end = end + t + " ";
           end = w.join(" ");
         });
-      if (isPause) break;
+      if (audioPlayer.state == AudioPlayerState.PAUSED) break;
     }
   }
 
@@ -292,7 +284,6 @@ class _TextAudioState extends State<AudioTextBold> {
                     _currentPageNumber = widget.pageNumber;
                   }
                 : () {
-                    print('resume and pause');
                     if (audioPlayer.state == AudioPlayerState.PAUSED) {
                       resume();
                       setState(() {
