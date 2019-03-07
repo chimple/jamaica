@@ -10,13 +10,8 @@ class TrueFalseGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: TrueFalseGame(
-              questions: [
-                'Pin',
-              ],
-              answers: [
-                'Win',
-              ],
-              choices: ['Right', 'Wrong'],
+              question: 'Pin',
+              answer: 'Win',
               right_or_wrong: false,
             ),
           ),

@@ -14,17 +14,12 @@ class _ChoiceDetail {
 }
 
 class TrueFalseGame extends StatefulWidget {
-  final List<String> questions;
-  final List<String> answers;
-  final List<String> choices;
+  final String question;
+  final String answer;
   final bool right_or_wrong;
 
   const TrueFalseGame(
-      {Key key,
-      this.questions,
-      this.answers,
-      this.choices,
-      this.right_or_wrong})
+      {Key key, this.question, this.answer, this.right_or_wrong})
       : super(key: key);
 
   @override
@@ -32,56 +27,63 @@ class TrueFalseGame extends StatefulWidget {
 }
 
 class _RhymeWordsGameState extends State<TrueFalseGame> {
-  List<_ChoiceDetail> choiceDetails;
+  // List<_ChoiceDetail> choiceDetails;
 
   @override
   void initState() {
     super.initState();
-    int i = 0;
-    choiceDetails = widget.choices
-        .map((a) => _ChoiceDetail(choice: a, index: ++i))
-        .toList(growable: false);
   }
 
   @override
   Widget build(BuildContext context) {
     return BentoBox(
       axis: Axis.vertical,
-      qCols: widget.questions.length,
+      qCols: 1,
       qRows: 2,
-      qChildren: widget.questions
-          .map((q) => CuteButton(
-                key: Key(q),
-                child: Center(child: Text(q)),
-              ) as Widget)
-          .toList()
-            ..addAll(widget.answers.map((q) => CuteButton(
-                  key: Key('$q 1'),
-                  child: Center(child: Text(q)),
-                ) as Widget)),
-      cols: choiceDetails.length,
+      qChildren: <Widget>[
+        CuteButton(
+          key: Key(widget.question),
+          child: Center(child: Text(widget.question)),
+        ),
+        CuteButton(
+          key: Key(widget.answer),
+          child: Center(child: Text(widget.answer)),
+        )
+      ],
+      cols: 2,
       rows: 1,
-      children: choiceDetails
-          .map((c) => CuteButton(
-                key: Key(c.choice),
-                reaction: c.reaction,
-                child: Center(
-                    child: Icon(
-                  c.choice == "Right" ? Icons.check : Icons.close,
-                  color: c.choice == "Right" ? Colors.green : Colors.red,
-                )),
-                onPressed: () {
-                  if (widget.right_or_wrong && c.choice == "Right") {
-                    c.reaction = Reaction.success;
-                  }
-                  if (!widget.right_or_wrong && c.choice == "Wrong") {
-                    c.reaction = Reaction.success;
-                  } else {
-                    c.reaction = Reaction.failure;
-                  }
-                },
-              ))
-          .toList(growable: false),
+      children: <Widget>[
+        CuteButton(
+          key: Key('Right'),
+          child: Center(
+              child: Icon(
+            Icons.check,
+            color: Colors.green,
+          )),
+          onPressed: () {
+            if (widget.right_or_wrong) {
+              return Reaction.success;
+            } else {
+              return Reaction.failure;
+            }
+          },
+        ),
+        CuteButton(
+          key: Key('Wrong'),
+          child: Center(
+              child: Icon(
+            Icons.close,
+            color: Colors.red,
+          )),
+          onPressed: () {
+            if (!widget.right_or_wrong) {
+              return Reaction.success;
+            } else {
+              return Reaction.failure;
+            }
+          },
+        )
+      ],
     );
   }
 }
