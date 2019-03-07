@@ -1,19 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 
 typedef Reaction OnPressed();
 
-enum Reaction { success, failure }
+enum Reaction { enter, success, failure }
 
-enum _Slot {
-  top,
-  bottom,
-  animation,
-  dummy,
-}
+final Map<Reaction, String> _reactionMap = {
+  Reaction.enter: 'enter',
+  Reaction.success: 'happy',
+  Reaction.failure: 'sad',
+};
 
 class CuteButton extends StatefulWidget {
-  final bool pressed;
   final Widget child;
   final OnPressed onPressed;
   final Reaction reaction;
@@ -21,7 +21,6 @@ class CuteButton extends StatefulWidget {
   const CuteButton({
     Key key,
     this.child,
-    this.pressed = false,
     this.onPressed,
     this.reaction,
   }) : super(key: key);
@@ -35,7 +34,7 @@ class CuteButton extends StatefulWidget {
 enum _ButtonStatus { up, down, upToDown, downToUp }
 
 class CuteButtonState extends State<CuteButton> {
-  _ButtonStatus buttonStatus;
+  _ButtonStatus buttonStatus = _ButtonStatus.down;
   Reaction reaction;
 
   @override
@@ -47,134 +46,87 @@ class CuteButtonState extends State<CuteButton> {
   @override
   void didUpdateWidget(CuteButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _initData();
+    print('old: ${oldWidget.reaction} new: ${widget.reaction}');
+    if (oldWidget.reaction != widget.reaction) _initData();
   }
 
   void _initData() {
-    if (buttonStatus == null ||
-        buttonStatus == _ButtonStatus.up ||
-        buttonStatus == _ButtonStatus.down) {
-      buttonStatus = widget.pressed ? _ButtonStatus.down : _ButtonStatus.up;
-    } else if (widget.pressed) {
-      buttonStatus = _ButtonStatus.upToDown;
-    } else {
-      buttonStatus = _ButtonStatus.downToUp;
+    print('initData');
+    if (reaction == null && widget.reaction != null) {
+      reaction = widget.reaction;
+      if (buttonStatus == _ButtonStatus.down) {
+        buttonStatus = _ButtonStatus.downToUp;
+      }
     }
-    if (reaction == null && widget.reaction != null) reaction = widget.reaction;
   }
 
   @override
   Widget build(BuildContext context) {
-    final buttonChild = CustomMultiChildLayout(
-      children: <Widget>[
-        LayoutId(
-          id: _Slot.bottom,
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          ),
-        ),
-        LayoutId(
-          id: _Slot.top,
-          child: Container(
-            child: widget.child,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          ),
-        ),
-        LayoutId(
-          id: _Slot.animation,
-          child: reaction != null && buttonStatus == _ButtonStatus.up
-              ? FlareActor(
-                  "assets/character/button.flr",
-                  alignment: Alignment.center,
-                  fit: BoxFit.contain,
-                  animation: reaction == Reaction.success ? 'correct' : 'wrong',
-                  callback: (s) {
-                    print(s);
-                    setState(() => reaction = null);
+    print('buttonStatus: $buttonStatus');
+    if (buttonStatus == _ButtonStatus.downToUp) {
+      Future.delayed(const Duration(milliseconds: 250), () {
+        setState(() {
+          buttonStatus = _ButtonStatus.up;
+        });
+      });
+    } else if (buttonStatus == _ButtonStatus.upToDown) {
+      Future.delayed(const Duration(milliseconds: 250), () {
+        setState(() {
+          buttonStatus = _ButtonStatus.down;
+          reaction = null;
+        });
+      });
+    } else if (buttonStatus == _ButtonStatus.up) {
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        setState(() {
+          buttonStatus = _ButtonStatus.upToDown;
+        });
+      });
+    }
+    return LayoutBuilder(builder: (context, constraints) {
+      return RaisedButton(
+        onPressed:
+            (widget.onPressed == null || buttonStatus != _ButtonStatus.down)
+                ? null
+                : () {
+                    setState(() {
+                      buttonStatus = _ButtonStatus.downToUp;
+                      reaction = widget.onPressed();
+                    });
                   },
-                )
-              : Container(),
-        )
-      ],
-      delegate: OneOverOther(buttonStatus == _ButtonStatus.up ? false : true),
-    );
-    return widget.onPressed == null
-        ? buttonChild
-        : GestureDetector(
-            onTap: () {
-              print('onTap');
-            },
-            onTapDown: (t) {
-              print('onTapDown');
-              Future.delayed(const Duration(milliseconds: 250), () {
-                if (buttonStatus == _ButtonStatus.downToUp) {
-                  setState(() {
-                    buttonStatus = _ButtonStatus.up;
-                  });
-                } else {
-                  buttonStatus = _ButtonStatus.down;
-                }
-              });
-              setState(() {
-                buttonStatus = _ButtonStatus.upToDown;
-              });
-            },
-            onTapUp: (t) {
-              print('onTapUp');
-              if (widget.onPressed != null) {
-                setState(() => reaction = widget.onPressed());
-              }
-              if (buttonStatus == _ButtonStatus.upToDown) {
-                buttonStatus = _ButtonStatus.downToUp;
-              } else {
-                setState(() {
-                  buttonStatus = _ButtonStatus.up;
-                });
-              }
-            },
-            onTapCancel: () => setState(() => buttonStatus = _ButtonStatus.up),
-            child: buttonChild,
-          );
-  }
-}
-
-class OneOverOther extends MultiChildLayoutDelegate {
-  final bool closed;
-
-  OneOverOther(this.closed);
-
-  @override
-  void performLayout(Size size) {
-    final slotSize = Size(size.width, size.height * 0.9);
-    final bottomOffset = Offset(0.0, 0.1 * size.height);
-    if (hasChild(_Slot.bottom)) {
-      layoutChild(_Slot.bottom, BoxConstraints.tight(slotSize));
-      positionChild(_Slot.bottom, bottomOffset);
-    }
-    if (hasChild(_Slot.top)) {
-      layoutChild(_Slot.top, BoxConstraints.tight(slotSize));
-      if (closed) {
-        positionChild(_Slot.top, bottomOffset);
-      } else {
-        positionChild(_Slot.top, Offset.zero);
-      }
-    }
-    if (hasChild(_Slot.animation)) {
-      layoutChild(_Slot.animation,
-          BoxConstraints.tight(Size(size.width, size.height * 0.1)));
-      positionChild(_Slot.animation, Offset(0.0, 0.9 * size.height));
-    }
-  }
-
-  @override
-  bool shouldRelayout(MultiChildLayoutDelegate oldDelegate) {
-    if (oldDelegate is OneOverOther && oldDelegate.closed != closed) {
-      return true;
-    }
-    return false;
+        color: Colors.blue,
+        disabledColor: Colors.blue,
+        textColor: Colors.white,
+        disabledTextColor: Colors.white,
+        shape: new RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(const Radius.circular(16.0))),
+        child: Stack(
+          children: <Widget>[
+            buttonStatus != _ButtonStatus.up ? widget.child : Container(),
+            AnimatedPositioned(
+              top: (buttonStatus == _ButtonStatus.up ||
+                      buttonStatus == _ButtonStatus.downToUp)
+                  ? 0.0
+                  : constraints.maxHeight,
+              left: 0.0,
+              right: 0.0,
+              bottom: (buttonStatus == _ButtonStatus.up ||
+                      buttonStatus == _ButtonStatus.downToUp)
+                  ? 0.0
+                  : -constraints.maxHeight,
+              duration: Duration(milliseconds: 250),
+              child: FlareActor(
+                "assets/character/button.flr",
+                alignment: Alignment.center,
+                fit: BoxFit.contain,
+                animation: buttonStatus == _ButtonStatus.up
+                    ? _reactionMap[reaction]
+                    : 'dummy',
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }

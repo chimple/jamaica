@@ -10,7 +10,7 @@ class _ChoiceDetail {
   _ChoiceDetail({
     this.number,
     this.type = _Type.choice,
-    this.reaction = Reaction.success,
+    this.reaction = Reaction.enter,
   });
   @override
   String toString() =>
@@ -56,6 +56,7 @@ class _OrderBySizeGameState extends State<OrderBySizeGame> {
           .map((c) => c.type == _Type.choice
               ? CuteButton(
                   key: Key(c.number.toString()),
+                  reaction: c.reaction,
                   child: Center(child: Text(c.number.toString())),
                 )
               : Container())
@@ -76,11 +77,17 @@ class _OrderBySizeGameState extends State<OrderBySizeGame> {
                     return data == a.number.toString();
                   },
                   onAccept: (data) => WidgetsBinding.instance
-                      .addPostFrameCallback(
-                          (_) => setState(() => a.type = _Type.answer)),
+                      .addPostFrameCallback((_) => setState(() {
+                            a.type = _Type.answer;
+                            choiceDetails.forEach((c) => c.reaction =
+                                c.number == a.number
+                                    ? Reaction.success
+                                    : Reaction.enter);
+                          })),
                 )
               : CuteButton(
                   key: Key(a.number.toString()),
+                  reaction: a.reaction,
                   child: Center(child: Text(a.number.toString())),
                 ))
           .toList(growable: false),
