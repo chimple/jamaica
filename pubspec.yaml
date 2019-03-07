@@ -68,6 +68,7 @@ flutter:
     - assets/stories/story.json
     - assets/stories/images/
     - assets/audio/
+    - assets/stories/story_audio/
 
 
   # To add assets to your application, add an assets section, like this:
