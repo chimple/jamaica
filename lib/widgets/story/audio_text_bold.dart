@@ -34,11 +34,7 @@ class _TextAudioState extends State<AudioTextBold> {
       boldTextComplete = false,
       isPause = true,
       isAudioFileAvailableOrNot = false;
-  String _currentPageNumber = "",
-      start = "",
-      middle = "",
-      end = "",
-      endLine = '';
+  String start = "", middle = "", end = "", endLine = '';
   List<String> _audioFiles = [], listOfLines, words;
   final _regex = RegExp('[a-zA-Z0-9]');
   final _regex1 = RegExp('[!?,|]');
@@ -68,7 +64,6 @@ class _TextAudioState extends State<AudioTextBold> {
     await audioPlayer.resume();
     widget.pageSliding();
     looping(temp, temp.length);
-    setState(() {});
   }
 
   play(String url) async {
@@ -281,7 +276,6 @@ class _TextAudioState extends State<AudioTextBold> {
                     print('playing ');
                     if (isAudioFileAvailableOrNot) showSnackbar();
                     loadAudio(widget.fullText, widget.audioFile);
-                    _currentPageNumber = widget.pageNumber;
                   }
                 : () {
                     if (audioPlayer.state == AudioPlayerState.PAUSED) {
