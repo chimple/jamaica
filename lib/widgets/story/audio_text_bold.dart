@@ -54,19 +54,25 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   Future pause() async {
+    print('pause');
     await audioPlayer.pause().then((s) {});
-
+    print(listOfWords);
     setState(() => isPause = true);
     widget.pageSliding();
   }
 
   Future resume() async {
+    print('resume');
     await audioPlayer.resume();
+    setState(() {
+      isPause = false;
+    });
     widget.pageSliding();
     looping(temp, temp.length);
   }
 
   play(String url) async {
+    print('play');
     endLine = '';
     try {
       await audioCache.play('$url');
@@ -93,37 +99,40 @@ class _TextAudioState extends State<AudioTextBold> {
         isDurationZero = false;
         incr++;
         if (incr == _audioFiles.length) {
-          new Future.delayed(Duration(seconds: 2), () {
+          new Future.delayed(Duration(milliseconds: 1000), () {
             onComplete();
           });
         }
-        audioPlayer.stop().then((s) async {
-          _duration = 0;
-          isDurationZero = false;
-          await new Future.delayed(Duration(milliseconds: 1500));
+
+        _duration = 0;
+        isDurationZero = false;
+        new Future.delayed(Duration(milliseconds: 900), () {
           try {
-            if (isPlaying && mounted) play(_audioFiles[incr]);
+            if (!isPause && mounted) play(_audioFiles[incr]);
           } catch (e) {
             print(e);
           }
-          print(incr);
         });
+
+        print(incr);
       }
     };
   }
 
+  List<String> listOfWords = [];
   void looper(String text, int time) async {
-    List<String> words = text.split(" ");
+    listOfWords = text.split(" ");
     numOfChar = text.length;
     charTime = (time ~/ numOfChar);
-    looping(words, words.length);
+    looping(listOfWords, listOfWords.length);
   }
 
   void looping(List<String> w, int l) async {
     String space = " ";
     for (int i = 0; i < l; i++) {
-      int time = middle.length * charTime;
-      await Future.delayed(Duration(milliseconds: isPause ? 0 : time));
+      // int time = middle.length * charTime;
+      // print('time:: $time');
+
       if (mounted && !isPause)
         setState(() {
           start = start + middle;
@@ -136,6 +145,8 @@ class _TextAudioState extends State<AudioTextBold> {
           // for (String t in w) end = end + t + " ";
           end = w.join(" ");
         });
+      await Future.delayed(
+          Duration(milliseconds: (isPause) ? 0 : middle.length * charTime));
       if (audioPlayer.state == AudioPlayerState.PAUSED) break;
     }
   }
@@ -172,7 +183,7 @@ class _TextAudioState extends State<AudioTextBold> {
           isAudioFileAvailableOrNot = false;
         });
         widget.pageSliding();
-      }, onError: () {});
+      }, onError: (e) {});
     } catch (e) {
       print('No auid File found $e');
       print(e);
@@ -233,35 +244,30 @@ class _TextAudioState extends State<AudioTextBold> {
                           new TextSpan(
                               text: start,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25,
-                                  color: Colors.black,
-                                  wordSpacing: 4.0,
-                                  letterSpacing: 3.0)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 23,
+                                color: Colors.black,
+                              )),
                           new TextSpan(
                               text: middle,
                               style: new TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25,
-                                  color: Colors.red,
-                                  wordSpacing: 4.0,
-                                  letterSpacing: 3.0)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 23,
+                                color: Colors.red,
+                              )),
                           new TextSpan(
                               text: end,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: 25,
-                                  wordSpacing: 4.0,
-                                  letterSpacing: 3.0)),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 23,
+                              )),
                           new TextSpan(
                               text: endLine,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
-                                fontSize: 25,
-                                wordSpacing: 4.0,
-                                letterSpacing: 3.0,
+                                fontSize: 23,
                               )),
                         ],
                       ),
@@ -280,11 +286,12 @@ class _TextAudioState extends State<AudioTextBold> {
                 : () {
                     if (audioPlayer.state == AudioPlayerState.PAUSED) {
                       resume();
-                      setState(() {
-                        isPause = false;
-                      });
                     } else if (audioPlayer.state == AudioPlayerState.PLAYING)
                       pause();
+                    else if (listOfWords.isEmpty) {
+                      play(_audioFiles[incr]);
+                      setState(() => isPause = false);
+                    }
                   },
             child: Container(
               child: isPause ? Icon(Icons.play_arrow) : Icon(Icons.pause),

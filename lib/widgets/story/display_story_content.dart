@@ -34,11 +34,10 @@ class DisplayStoryContent extends StatelessWidget {
           },
           child: Text(d + " ",
               style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  wordSpacing: 4.0,
-                  letterSpacing: 2.0)),
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 23,
+              )),
         );
       }).toList(),
     );
