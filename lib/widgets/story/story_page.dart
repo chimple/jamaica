@@ -34,7 +34,7 @@ class StoryPageState extends State<StoryPage> {
                   flex: 6,
                   child: Card(
                     child: Image.asset(
-                      widget.pages[index].imagePath,
+                      'assets/stories/images/${widget.pages[index].imagePath}',
                       fit: BoxFit.cover,
                     ),
                   ),
