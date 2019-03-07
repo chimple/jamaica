@@ -24,6 +24,45 @@ class CrosswordGameStory extends FullScreenStory {
               ],
             ),
           ),
+        ),
+        Scaffold(
+          body: SafeArea(
+            child: CrosswordGame(
+              data: [
+                ['T', 'E', 'X', 'T'],
+                [null, null, 'M', null],
+                ['J', 'O', 'I', 'N'],
+                [null, null, 'C', null],
+              ],
+              images: [
+                Tuple3('assets/accessories/join.png', 2, 0),
+                Tuple3('assets/accessories/text.png', 0, 0),
+                Tuple3('assets/accessories/mic.png', 1, 2),
+              ],
+            ),
+          ),
+        ),
+        Scaffold(
+          body: SafeArea(
+            child: CrosswordGame(
+              data: [
+                [null, 'A', null, 'T', null, 'G'],
+                ['M', 'P', null, 'E', null, 'R'],
+                ['I', 'P', null, 'X', null, 'A'],
+                ['C', 'L', 'O', 'T', 'H', 'I'],
+                [null, 'E', 'J', 'O', 'I', 'N'],
+                [null, null, null, null, null, 'S'],
+              ],
+              images: [
+                Tuple3('assets/accessories/apple.png', 0, 1),
+                Tuple3('assets/accessories/text.png', 0, 3),
+                Tuple3('assets/accessories/grains.png', 0, 5),
+                Tuple3('assets/accessories/clothes.png', 3, 0),
+                Tuple3('assets/accessories/mic.png', 1, 0),
+                Tuple3('assets/accessories/join.png', 4, 2),
+              ],
+            ),
+          ),
         )
       ];
 }
