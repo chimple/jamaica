@@ -4,6 +4,7 @@ import 'package:jamaica/storyboards/collected_item_story.dart';
 import 'package:jamaica/storyboards/games/counting_game_story.dart';
 import 'package:jamaica/storyboards/games/crossword_game_story.dart';
 import 'package:jamaica/storyboards/games/dice_game_story.dart';
+import 'package:jamaica/storyboards/games/fill_in_the_blanks_story.dart';
 import 'package:jamaica/storyboards/games/find_word_game_story.dart';
 import 'package:jamaica/storyboards/games/finger_game_story.dart';
 import 'package:jamaica/storyboards/games/game_list_story.dart';
@@ -34,6 +35,7 @@ import 'package:storyboard/storyboard.dart';
 void main() {
   runApp(StoryboardApp([
     CrosswordGameStory(),
+    FillInTheBlanksGameStory(),
     SequenceTheNumberGameStory(),
     MatchTheShapeGameStory(),
     MemoryGameStory(),
