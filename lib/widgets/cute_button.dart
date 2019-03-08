@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:jamaica/widgets/bento_box.dart';
 
 typedef Reaction OnPressed();
+typedef void OnDragEnd(DraggableDetails d);
 
 enum Reaction { enter, success, failure }
 
@@ -13,27 +15,45 @@ final Map<Reaction, String> _reactionMap = {
   Reaction.failure: 'sad',
 };
 
-class CuteButton extends StatefulWidget {
+class CuteButton extends StatelessWidget {
   final Widget child;
   final OnPressed onPressed;
   final Reaction reaction;
 
-  const CuteButton({
+  const CuteButton({Key key, this.onPressed, this.reaction, this.child})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class CuteButtonWrapper extends StatefulWidget {
+  final CuteButton child;
+  final OnDragEnd onDragEnd;
+  final Axis axis;
+  final DragConfig dragConfig;
+  final Size size;
+
+  const CuteButtonWrapper({
     Key key,
     this.child,
-    this.onPressed,
-    this.reaction,
+    this.onDragEnd,
+    this.axis,
+    this.dragConfig = DragConfig.fixed,
+    this.size,
   }) : super(key: key);
 
   @override
-  CuteButtonState createState() {
-    return new CuteButtonState();
+  CuteButtonWrapperState createState() {
+    return new CuteButtonWrapperState();
   }
 }
 
 enum _ButtonStatus { up, down, upToDown, downToUp }
 
-class CuteButtonState extends State<CuteButton> {
+class CuteButtonWrapperState extends State<CuteButtonWrapper> {
   _ButtonStatus buttonStatus = _ButtonStatus.down;
   Reaction reaction;
 
@@ -43,20 +63,11 @@ class CuteButtonState extends State<CuteButton> {
     _initData();
   }
 
-  @override
-  void didUpdateWidget(CuteButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print('old: ${oldWidget.reaction} new: ${widget.reaction}');
-    if (oldWidget.reaction != widget.reaction) _initData();
-  }
-
   void _initData() {
     print('initData');
-    if (reaction == null && widget.reaction != null) {
-      reaction = widget.reaction;
-      if (buttonStatus == _ButtonStatus.down) {
-        buttonStatus = _ButtonStatus.downToUp;
-      }
+    reaction = widget.child.reaction;
+    if (buttonStatus == _ButtonStatus.down) {
+      buttonStatus = _ButtonStatus.downToUp;
     }
   }
 
@@ -65,68 +76,103 @@ class CuteButtonState extends State<CuteButton> {
     print('buttonStatus: $buttonStatus');
     if (buttonStatus == _ButtonStatus.downToUp) {
       Future.delayed(const Duration(milliseconds: 250), () {
-        setState(() {
-          buttonStatus = _ButtonStatus.up;
-        });
+        if (mounted)
+          setState(() {
+            buttonStatus = _ButtonStatus.up;
+          });
       });
     } else if (buttonStatus == _ButtonStatus.upToDown) {
       Future.delayed(const Duration(milliseconds: 250), () {
-        setState(() {
-          buttonStatus = _ButtonStatus.down;
-          reaction = null;
-        });
+        if (mounted)
+          setState(() {
+            buttonStatus = _ButtonStatus.down;
+            reaction = null;
+          });
       });
     } else if (buttonStatus == _ButtonStatus.up) {
       Future.delayed(const Duration(milliseconds: 2000), () {
-        setState(() {
-          buttonStatus = _ButtonStatus.upToDown;
-        });
+        if (mounted)
+          setState(() {
+            buttonStatus = _ButtonStatus.upToDown;
+          });
       });
     }
-    return LayoutBuilder(builder: (context, constraints) {
-      return RaisedButton(
-        onPressed:
-            (widget.onPressed == null || buttonStatus != _ButtonStatus.down)
+    return widget.dragConfig == DragConfig.fixed
+        ? buildButton(context)
+        : Draggable(
+            axis: widget.axis,
+            child: buildButton(context),
+            childWhenDragging:
+                widget.dragConfig == DragConfig.draggableMultiPack
+                    ? null
+                    : Container(),
+            feedback: buildButton(context),
+            data: (widget.key as ValueKey<String>).value,
+            onDragEnd: (d) {
+              print('onDragEnd');
+              widget.onDragEnd(d);
+              setState(() {
+                buttonStatus = _ButtonStatus.downToUp;
+                reaction = d.wasAccepted ? Reaction.success : Reaction.failure;
+              });
+            });
+  }
+
+  Widget buildButton(BuildContext context) {
+    return SizedBox(
+      width: widget.size.width,
+      height: widget.size.height,
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 1.0,
+          child: RaisedButton(
+            onPressed: (widget.child.onPressed == null ||
+                    buttonStatus != _ButtonStatus.down)
                 ? null
                 : () {
                     setState(() {
                       buttonStatus = _ButtonStatus.downToUp;
-                      reaction = widget.onPressed();
+                      reaction = widget.child.onPressed();
                     });
                   },
-        color: Colors.blue,
-        disabledColor: Colors.blue,
-        textColor: Colors.white,
-        disabledTextColor: Colors.white,
-        shape: new RoundedRectangleBorder(
-            borderRadius: const BorderRadius.all(const Radius.circular(16.0))),
-        child: Stack(
-          children: <Widget>[
-            buttonStatus != _ButtonStatus.up ? widget.child : Container(),
-            AnimatedPositioned(
-              top: (buttonStatus == _ButtonStatus.up ||
-                      buttonStatus == _ButtonStatus.downToUp)
-                  ? 0.0
-                  : constraints.maxHeight,
-              left: 0.0,
-              right: 0.0,
-              bottom: (buttonStatus == _ButtonStatus.up ||
-                      buttonStatus == _ButtonStatus.downToUp)
-                  ? 0.0
-                  : -constraints.maxHeight,
-              duration: Duration(milliseconds: 250),
-              child: FlareActor(
-                "assets/character/button.flr",
-                alignment: Alignment.center,
-                fit: BoxFit.contain,
-                animation: buttonStatus == _ButtonStatus.up
-                    ? _reactionMap[reaction]
-                    : 'dummy',
-              ),
-            )
-          ],
+            color: Colors.blue,
+            disabledColor: Colors.blue,
+            textColor: Colors.white,
+            disabledTextColor: Colors.white,
+            shape: new RoundedRectangleBorder(
+                borderRadius:
+                    const BorderRadius.all(const Radius.circular(16.0))),
+            child: Stack(
+              children: <Widget>[
+                buttonStatus != _ButtonStatus.up
+                    ? widget.child.child
+                    : Container(),
+                AnimatedPositioned(
+                  top: (buttonStatus == _ButtonStatus.up ||
+                          buttonStatus == _ButtonStatus.downToUp)
+                      ? 0.0
+                      : widget.size.height,
+                  left: 0.0,
+                  right: 0.0,
+                  bottom: (buttonStatus == _ButtonStatus.up ||
+                          buttonStatus == _ButtonStatus.downToUp)
+                      ? 0.0
+                      : -widget.size.height,
+                  duration: Duration(milliseconds: 250),
+                  child: FlareActor(
+                    "assets/character/button.flr",
+                    alignment: Alignment.center,
+                    fit: BoxFit.contain,
+                    animation: buttonStatus == _ButtonStatus.up
+                        ? _reactionMap[reaction]
+                        : 'dummy',
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      );
-    });
+      ),
+    );
   }
 }

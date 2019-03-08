@@ -60,51 +60,56 @@ class _BoxMatchingGameState extends State<BoxMatchingGame> {
               rows: 1,
               cols: answerDetails.length,
               children: answerDetails
-                  .map((a) => DragTarget<String>(
+                  .map(
+                    (a) => CuteButton(
                         key: Key(a.choice),
-                        builder: (context, candidateData, rejectedData) =>
-                            LayoutBuilder(builder: (BuildContext context,
-                                BoxConstraints constraints) {
-                              return Container(
-                                  height: constraints.maxHeight,
-                                  width: constraints.maxWidth,
-                                  decoration: new BoxDecoration(
-                                    color: Colors.blue,
-                                    border: new Border.all(
-                                        color: Colors.black, width: 2.0),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: a.appear
-                                      ? Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: addToBox[a.index]
-                                              .map((f) => Container(
-                                                  padding: EdgeInsets.all(3.0),
-                                                  height:
-                                                      constraints.maxHeight *
+                        child: DragTarget<String>(
+                          builder: (context, candidateData, rejectedData) =>
+                              LayoutBuilder(builder: (BuildContext context,
+                                  BoxConstraints constraints) {
+                                return Container(
+                                    height: constraints.maxHeight,
+                                    width: constraints.maxWidth,
+                                    decoration: new BoxDecoration(
+                                      color: Colors.blue,
+                                      border: new Border.all(
+                                          color: Colors.black, width: 2.0),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: a.appear
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: addToBox[a.index]
+                                                .map((f) => Container(
+                                                      padding:
+                                                          EdgeInsets.all(3.0),
+                                                      height: constraints
+                                                              .maxHeight *
                                                           .3,
-                                                  width:
-                                                      constraints.maxWidth * .5,
-                                                  child: CuteButton(
-                                                    child: Center(
-                                                        child: Text(a.choice)),
-                                                  )))
-                                              .toList(growable: false))
-                                      : Container());
-                            }),
-                        onWillAccept: (data) {
-                          return data[0] == a.choice;
-                        },
-                        onAccept: (data) => setState(() {
-                              int index = int.parse(data.substring(1));
-                              print(
-                                  "${data.substring(1)}......${choiceDetails[index]}");
-                              addToBox[a.index].add(a.choice);
-                              a.appear = true;
-                              choiceDetails[index].appear = false;
-                            }),
-                      ) as Widget)
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .5,
+                                                      child: Center(
+                                                          child:
+                                                              Text(a.choice)),
+                                                    ))
+                                                .toList(growable: false))
+                                        : Container());
+                              }),
+                          onWillAccept: (data) {
+                            return data[0] == a.choice;
+                          },
+                          onAccept: (data) => setState(() {
+                                int index = int.parse(data.substring(1));
+                                print(
+                                    "${data.substring(1)}......${choiceDetails[index]}");
+                                addToBox[a.index].add(a.choice);
+                                a.appear = true;
+                                choiceDetails[index].appear = false;
+                              }),
+                        ) as Widget),
+                  )
                   .toList()),
         ),
         Flexible(
@@ -128,17 +133,17 @@ class _BoxMatchingGameState extends State<BoxMatchingGame> {
             cols: 5,
             children: choiceDetails
                 .map((c) => c.appear
-                    ? LayoutBuilder(
+                    ? CuteButton(
                         key: Key("${(c.choice + (k++).toString())}"),
-                        builder:
+                        child: LayoutBuilder(builder:
                             (BuildContext context, BoxConstraints constraints) {
                           return Container(
-                              height: constraints.maxHeight * .6,
-                              width: constraints.maxWidth * .8,
-                              child: CuteButton(
-                                child: Center(child: Text(c.choice)),
-                              ));
-                        })
+                            height: constraints.maxHeight * .6,
+                            width: constraints.maxWidth * .8,
+                            child: Center(child: Text(c.choice)),
+                          );
+                        }),
+                      )
                     : Container(
                         key: Key("${(k++).toString()}"),
                       ))

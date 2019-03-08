@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/audio_widget.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:storyboard/storyboard.dart';
+import 'package:jamaica/widgets/bento_box.dart';
 
 class CuteButtonStory extends FullScreenStory {
   @override
@@ -14,9 +15,9 @@ class CuteButtonStory extends FullScreenStory {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    SizedBox(
-                      width: 128,
-                      height: 128,
+                    CuteButtonWrapper(
+                      key: Key('Success Success'),
+                      size: Size(128.0, 128.0),
                       child: CuteButton(
                         child: Center(child: Text('Success Success')),
                         reaction: Reaction.success,
@@ -26,9 +27,9 @@ class CuteButtonStory extends FullScreenStory {
                         },
                       ),
                     ),
-                    SizedBox(
-                      width: 128,
-                      height: 128,
+                    CuteButtonWrapper(
+                      key: Key('Success Failure'),
+                      size: Size(128.0, 128.0),
                       child: CuteButton(
                         child: Center(child: Text('Success Failure')),
                         reaction: Reaction.success,
@@ -43,9 +44,9 @@ class CuteButtonStory extends FullScreenStory {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    SizedBox(
-                      width: 128,
-                      height: 128,
+                    CuteButtonWrapper(
+                      key: Key('Failure Failure'),
+                      size: Size(128.0, 128.0),
                       child: CuteButton(
                         child: Center(child: Text('Failure Failure')),
                         reaction: Reaction.failure,
@@ -55,9 +56,9 @@ class CuteButtonStory extends FullScreenStory {
                         },
                       ),
                     ),
-                    SizedBox(
-                      width: 128,
-                      height: 128,
+                    CuteButtonWrapper(
+                      key: Key('Failure Success'),
+                      size: Size(128.0, 128.0),
                       child: CuteButton(
                         child: Center(child: Text('Failure Success')),
                         reaction: Reaction.failure,
@@ -76,16 +77,14 @@ class CuteButtonStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
               child: Center(
-            child: SizedBox(
-              width: 256,
-              height: 256,
+            child: CuteButtonWrapper(
+              key: Key('Success'),
+              size: Size(128.0, 128.0),
+              dragConfig: DragConfig.draggableBounceBack,
+              onDragEnd: (d) => print(d),
               child: CuteButton(
                 child: Center(child: Text('Success')),
                 reaction: Reaction.success,
-                onPressed: () {
-                  print('Success Pressed');
-                  return Reaction.success;
-                },
               ),
             ),
           )),
