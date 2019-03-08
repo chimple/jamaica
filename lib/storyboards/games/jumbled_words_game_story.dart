@@ -10,6 +10,14 @@ class JumbledWordsGameStory extends FullScreenStory {
           body: SafeArea(
             child: JumbledWordsGame(
               answer: 'A',
+              choices: ['A', 'B', 'C', 'D','E','F','H'],
+            ),
+          ),
+        ),
+         Scaffold(
+          body: SafeArea(
+            child: JumbledWordsGame(
+              answer: 'A',
               choices: ['A', 'B', 'C', 'D'],
             ),
           ),
