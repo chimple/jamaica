@@ -183,9 +183,11 @@ class _TextAudioState extends State<AudioTextBold> {
           isAudioFileAvailableOrNot = false;
         });
         widget.pageSliding();
-      }, onError: (e) {});
+      }, onError: (e) {
+        print(e);
+      });
     } catch (e) {
-      print('No auid File found $e');
+      print('No auido file found $e');
       print(e);
       setState(() {
         isPlaying = false;
