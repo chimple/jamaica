@@ -64,7 +64,6 @@ class CuteButtonWrapperState extends State<CuteButtonWrapper> {
   }
 
   void _initData() {
-    print('initData');
     reaction = widget.child.reaction;
     if (buttonStatus == _ButtonStatus.down) {
       buttonStatus = _ButtonStatus.downToUp;
@@ -73,7 +72,6 @@ class CuteButtonWrapperState extends State<CuteButtonWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    print('buttonStatus: $buttonStatus');
     if (buttonStatus == _ButtonStatus.downToUp) {
       Future.delayed(const Duration(milliseconds: 250), () {
         if (mounted)
@@ -109,7 +107,6 @@ class CuteButtonWrapperState extends State<CuteButtonWrapper> {
             feedback: buildButton(context),
             data: (widget.key as ValueKey<String>).value,
             onDragEnd: (d) {
-              print('onDragEnd');
               widget.onDragEnd(d);
               setState(() {
                 buttonStatus = _ButtonStatus.downToUp;

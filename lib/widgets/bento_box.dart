@@ -63,8 +63,6 @@ class BentoBox extends StatefulWidget {
     final allCols = max(cols, qCols);
     final childWidth = size.width / allCols;
     final childHeight = size.height / allRows;
-    print(
-        " this my new width ${size.width} and new height ${size.height} and child width is $childWidth and $childHeight");
     int i = 0;
     (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
@@ -242,7 +240,6 @@ class _BentoBoxState extends State<BentoBox> {
     return LayoutBuilder(builder: (context, constraints) {
       var i = 0;
       final biggest = constraints.biggest;
-      print("this is my biggest $biggest");
       List<Widget> widgets = [Container()];
       Size childSize = Size(biggest.width / cols, biggest.height / rows);
 
@@ -270,7 +267,6 @@ class _BentoBoxState extends State<BentoBox> {
       widgets.addAll(widget.children.map((child) {
         final c = _children[child.key];
         if (c == null) {
-          print('null ${child.key}');
           return Positioned(
             child: Container(),
           );
@@ -315,40 +311,6 @@ class _BentoBoxState extends State<BentoBox> {
       );
     });
   }
-
-//  Widget wrapWithDraggable(Size childSize, BentoChildDetail c) {
-//    return widget.dragConfig == DragConfig.fixed
-//        ? buildChild(childSize, c)
-//        : Draggable(
-//            axis: widget.axis,
-//            child: buildChild(childSize, c),
-//            childWhenDragging:
-//                widget.dragConfig == DragConfig.draggableMultiPack
-//                    ? null
-//                    : Container(),
-//            feedback: buildChild(childSize, c),
-//            data: (c.child.key as ValueKey<String>).value,
-//            onDragEnd: (d) {
-//              print("c was accepted: ${d.wasAccepted}");
-//              setState(() {
-//                if (!d.wasAccepted &&
-//                    widget.dragConfig == DragConfig.draggableBounceBack) {
-//                  final currentOffset = Offset(c.offset.dx, c.offset.dy);
-//                  WidgetsBinding.instance
-//                      .addPostFrameCallback((_) => setState(() {
-//                            c.offset = currentOffset;
-//                            c.moveImmediately = false;
-//                          }));
-//                }
-//                if (widget.dragConfig != DragConfig.draggableMultiPack) {
-//                  c.offset = (context.findRenderObject() as RenderBox)
-//                      .globalToLocal(d.offset);
-//                  c.moveImmediately = true;
-//                }
-//              });
-//            },
-//          );
-//  }
 
   void onDragEnd(DraggableDetails d, BentoChildDetail c) {
     setState(() {
