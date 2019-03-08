@@ -111,6 +111,35 @@ class BentoBox extends StatefulWidget {
     (children ?? []).forEach((c) => print('$c, <<>>'));
   }
 
+  static calculateOrderlyRandomizedLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, BentoChildDetail> childrenMap,
+      Size size}) {
+    final childWidth = size.width / cols;
+    final childHeight = size.height / rows;
+
+    Random random = Random();
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
+        child: c,
+        offset: Offset(random.nextDouble() * size.width,
+            random.nextDouble() * size.height)));
+    List<Offset> offsets = new List<Offset>();
+    for (double i = 0; i <= size.width - childWidth; i += childWidth) {
+      for (double j = 0; j <= size.height - childHeight; j += childHeight / 3)
+        offsets.add(Offset(i, j));
+    }
+    for (final x in children) {
+      var index = random.nextInt(offsets.length);
+      childrenMap[x.key] = BentoChildDetail(child: x, offset: offsets[index]);
+      offsets.removeAt(index);
+    }
+  }
+
   static calculateRandomizedLayout(
       {int cols,
       int rows,
@@ -180,7 +209,9 @@ class _BentoBoxState extends State<BentoBox> {
                 ((cols - widget.frontChildren.length) / 2 + k++) * childWidth,
                 (rows - 1) / 2 * childHeight)));
     if (reCalculate ||
-        widget.calculateLayout != BentoBox.calculateRandomizedLayout) {
+        (widget.calculateLayout != BentoBox.calculateRandomizedLayout &&
+            widget.calculateLayout !=
+                BentoBox.calculateOrderlyRandomizedLayout)) {
       widget.calculateLayout(
           cols: widget.cols,
           rows: widget.rows,

@@ -127,7 +127,7 @@ class _BoxMatchingGameState extends State<BoxMatchingGame> {
         Flexible(
           flex: 2,
           child: BentoBox(
-            calculateLayout: BentoBox.calculateRandomizedLayout,
+            calculateLayout: BentoBox.calculateOrderlyRandomizedLayout,
             dragConfig: DragConfig.draggableBounceBack,
             rows: 2,
             cols: 5,
