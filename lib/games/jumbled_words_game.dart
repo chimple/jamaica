@@ -82,7 +82,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
                         })),
               )
             ],
-      rows: 1,
+      rows: 4,
       cols: choiceDetails.length,
       children: choiceDetails
           .map((c) => c.solved
@@ -109,25 +109,27 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
     final allCols = max(cols, qCols);
     final childWidth = size.width / allCols;
     final childHeight = size.height / allRows;
+    final centerWidth = size.width /(qRows * 3) ;
+    final centerHeight = size.height/(qRows * 3);
     print(
         "this my new width ${size.width} and new height ${size.height} and child width is $childWidth and $childHeight and rows $allRows colmun $allCols");
     int i = 0;
 
-    Offset center = Offset((qCols + (i ~/ qRows)) * (childWidth) * 1.5,
-        ((allRows - qRows) / 2 + (i++ % qRows)) * childHeight);
-    i = 0;
+    Offset center = Offset(centerWidth , centerHeight);
+        i = 0;
     (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
           offset: center,
         ));
-
+print("the circle Size $center and rows $qRows");
     double j = 0;
-    double k = 2 * pi / children.length;
     children.forEach((f) {
+      double k = (2* pi / children.length);
+      print("this is my children length ${children.length}");
       childrenMap[f.key] = BentoChildDetail(
         child: f,
-        offset: Offset((center.dx + childWidth * 1.2 * (cos(j).toInt())),
-            (center.dy + childHeight * .5 * (sin(j).toInt()))),
+        offset: Offset((center.dx + childWidth * (cos(j))),
+            (center.dy + childHeight * (sin(j)))),
       );
       j = j + k;
     });

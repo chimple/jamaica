@@ -29,7 +29,8 @@ Page _$PageFromJson(Map<String, dynamic> json) {
   return Page(
       text: json['text'] as String,
       imagePath: json['imagePath'] as String,
-      pageNumber: json['pageNumber'] as String);
+      pageNumber: json['pageNumber'] as String,
+      audioPath: json['audioPath'] as String);
 }
 
 Map<String, dynamic> _$PageToJson(Page instance) {
@@ -44,5 +45,6 @@ Map<String, dynamic> _$PageToJson(Page instance) {
   writeNotNull('pageNumber', instance.pageNumber);
   writeNotNull('imagePath', instance.imagePath);
   writeNotNull('text', instance.text);
+  writeNotNull('audioPath', instance.audioPath);
   return val;
 }
