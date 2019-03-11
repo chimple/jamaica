@@ -7,7 +7,7 @@ class _ChoiceDetail {
   int number;
   Reaction reaction;
 
-  _ChoiceDetail({this.number, this.reaction = Reaction.success});
+  _ChoiceDetail({this.number, this.reaction = Reaction.enter});
   @override
   String toString() => '_ChoiceDetail(choice: $number, reaction: $reaction)';
 }
@@ -58,6 +58,7 @@ class _FingerGameState extends State<FingerGame> {
                         number: c.number,
                         showNumber: true,
                       ),
+                      reaction: c.reaction,
                       onPressed: () {
                         setState(() => c.reaction = (c.number == widget.answer)
                             ? Reaction.success

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
@@ -49,7 +51,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
     List<Widget> frontChildren;
     if (thisSolved) {
       frontChildren = choiceDetails
-          .where((c) => c.solved)
+          .where((c) => c.solved == true)
           .map((c) => CuteButton(
                 key: Key(c.choice),
                 child: Center(child: Text(c.choice)),
@@ -80,7 +82,7 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
                         })),
               )
             ],
-      rows: 1,
+      rows: 4,
       cols: choiceDetails.length,
       children: choiceDetails
           .map((c) => c.solved
@@ -90,6 +92,46 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
                   child: Center(child: Text(c.choice)),
                 ))
           .toList(growable: false),
+      calculateLayout: calculateCustomizedLayout,
     );
+  }
+
+  static calculateCustomizedLayout(
+      {int cols,
+      int rows,
+      List<Widget> children,
+      int qCols,
+      int qRows,
+      List<Widget> qChildren,
+      Map<Key, BentoChildDetail> childrenMap,
+      Size size}) {
+    final allRows = rows + qRows;
+    final allCols = max(cols, qCols);
+    final childWidth = size.width / allCols;
+    final childHeight = size.height / allRows;
+    final centerWidth = size.width /(qRows * 3) ;
+    final centerHeight = size.height/(qRows * 3);
+    print(
+        "this my new width ${size.width} and new height ${size.height} and child width is $childWidth and $childHeight and rows $allRows colmun $allCols");
+    int i = 0;
+
+    Offset center = Offset(centerWidth , centerHeight);
+        i = 0;
+    (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
+          child: c,
+          offset: center,
+        ));
+print("the circle Size $center and rows $qRows");
+    double j = 0;
+    children.forEach((f) {
+      double k = (2* pi / children.length);
+      print("this is my children length ${children.length}");
+      childrenMap[f.key] = BentoChildDetail(
+        child: f,
+        offset: Offset((center.dx + childWidth * (cos(j))),
+            (center.dy + childHeight * (sin(j)))),
+      );
+      j = j + k;
+    });
   }
 }

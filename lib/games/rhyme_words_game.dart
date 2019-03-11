@@ -41,43 +41,52 @@ class _RhymeWordsGameState extends State<RhymeWordsGame> {
   Widget build(BuildContext context) {
     int i = 0;
     return BentoBox(
+      axis: Axis.vertical,
+      calculateLayout: BentoBox.calculateHorizontalLayout,
       dragConfig: DragConfig.draggableBounceBack,
-      qCols: 1,
+      qCols: 2,
       qRows: widget.questions.length,
       qChildren: widget.questions
           .map((q) => CuteButton(
                 key: Key(q),
                 child: Center(child: Text(q)),
-              ))
-          .toList(growable: false),
+              ) as Widget)
+          .toList()
+            ..addAll(widget.questions.map((q) => Image.asset(
+                  'assets/accessories/join.png',
+                  key: UniqueKey(),
+                ) as Widget)),
       cols: 1,
       rows: choiceDetails.length,
       children: choiceDetails
-          .map((c) => DragTarget<String>(
-              key: Key(c.choice),
-              builder: (context, candidateData, rejectedData) => CuteButton(
-                    child: Center(child: Text(c.choice)),
-                  ),
-              onWillAccept: (data) {
-                int currentIndex =
-                    choiceDetails.indexWhere((ch) => ch.choice == c.choice);
-                int dataIndex = widget.answers.indexWhere((a) => a == data);
-                return dataIndex == currentIndex;
-              },
-              onAccept: (data) => WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => setState(() {
-                          print(data);
-                          int currentIndex = choiceDetails
-                              .indexWhere((ch) => ch.choice == c.choice);
-                          int dataIndex =
-                              choiceDetails.indexWhere((a) => a.choice == data);
-                          print('$currentIndex $dataIndex');
-                          final current = choiceDetails[currentIndex];
-                          choiceDetails[currentIndex] =
-                              choiceDetails[dataIndex];
-                          choiceDetails[dataIndex] = current;
-                        }),
-                  )))
+          .map((c) => CuteButton(
+                key: Key(c.choice),
+                child: DragTarget<String>(
+                  builder: (context, candidateData, rejectedData) =>
+                      Center(child: Text(c.choice)),
+                  onWillAccept: (data) {
+                    int currentIndex =
+                        choiceDetails.indexWhere((ch) => ch.choice == c.choice);
+                    int dataIndex = widget.answers.indexWhere((a) => a == data);
+                    return dataIndex == currentIndex;
+                  },
+                  onAccept: (data) =>
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => setState(() {
+                              print(data);
+                              int currentIndex = choiceDetails
+                                  .indexWhere((ch) => ch.choice == c.choice);
+                              int dataIndex = choiceDetails
+                                  .indexWhere((a) => a.choice == data);
+                              print('$currentIndex $dataIndex');
+                              final current = choiceDetails[currentIndex];
+                              choiceDetails[currentIndex] =
+                                  choiceDetails[dataIndex];
+                              choiceDetails[dataIndex] = current;
+                            }),
+                      ),
+                ),
+              ))
           .toList(growable: false),
     );
   }
