@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/animated_scale.dart';
 import 'package:jamaica/widgets/bento_box.dart';
@@ -52,27 +54,28 @@ class _MatchTheShapeGameState extends State<MatchTheShapeGame> {
       cols: widget.first.length,
       children: choiceDetails
           .map((c) => c.escape == _Escape.no
-              ? DragTarget<String>(
+              ? CuteButton(
+                  onPressed: () => Reaction.success,
                   key: Key('${c.choice}_${c.type}'),
-                  builder: (context, candidateData, rejectedData) => CuteButton(
-                        child: Center(
+                  child: DragTarget<String>(
+                    builder: (context, candidateData, rejectedData) => Center(
                           child: Text(c.choice),
                         ),
-                        onPressed: () => Reaction.success,
-                      ),
-                  onWillAccept: (data) => data.split('_').first == c.choice,
-                  onAccept: (data) => setState(() {
-                        choiceDetails
-                            .where((choice) => c.choice == choice.choice)
-                            .forEach((choice) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) =>
-                              setState(() => choice.escape = _Escape.escaping));
-                          Future.delayed(
-                              Duration(milliseconds: 1000),
-                              () => setState(
-                                  () => choice.escape = _Escape.escaped));
-                        });
-                      }),
+                    onWillAccept: (data) => data.split('_').first == c.choice,
+                    onAccept: (data) => setState(() {
+                          choiceDetails
+                              .where((choice) => c.choice == choice.choice)
+                              .forEach((choice) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) =>
+                                setState(
+                                    () => choice.escape = _Escape.escaping));
+                            Future.delayed(
+                                Duration(milliseconds: 1000),
+                                () => setState(
+                                    () => choice.escape = _Escape.escaped));
+                          });
+                        }),
+                  ),
                 )
               : Container())
           .toList(growable: false),
