@@ -7,30 +7,20 @@ class FillInTheBlanksGameStory extends FullScreenStory {
   @override
   List<Widget> get storyContent => [
         Scaffold(
-          body: SafeArea(
-            child: FillInTheBlanksGame(
-              data: [
-                Tuple2('Z', 'O'),
-                Tuple2('', 'Z'),
-                Tuple2('Z', 'F'),
-                Tuple2('', 'Z'),
-                Tuple2('Z', 'F'),
-              ],
-            ),
-          ),
-        ),
+            body: SafeArea(
+                child: FillInTheBlanksGame(
+                    data: Tuple2(' Mount Everest is the highest 1_ in the 2_ .',
+                        ['mountain', 'earth', 'chair', 'ball'])))),
         Scaffold(
-          body: SafeArea(
-            child: FillInTheBlanksGame(
-              data: [
-                Tuple2('', 'O'),
-                Tuple2('', 'O'),
-                Tuple2('O', 'P'),
-                Tuple2('O', 'S'),
-                Tuple2('', 'O'),
-              ],
-            ),
-          ),
-        )
+            body: SafeArea(
+                child: FillInTheBlanksGame(
+                    data: Tuple2(
+                        ' The fact is Mount Everest is the highest 1_ in the earth followed by K2,located in the Himalayas.',
+                        ['mountain', 'earth', 'chair', 'ball'])))),
+        Scaffold(
+            body: SafeArea(
+                child: FillInTheBlanksGame(
+                    data: Tuple2('Lion is the king of the 1_ .',
+                        ['jungle', 'earth', 'chair', 'ball']))))
       ];
 }

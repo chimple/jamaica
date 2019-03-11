@@ -17,7 +17,7 @@ class _QuestionDetail {
 }
 
 class FillInTheBlanksGame extends StatefulWidget {
-  final List<Tuple2<String, String>> data;
+  final Tuple2<String, List<String>> data;
 
   const FillInTheBlanksGame({Key key, this.data}) : super(key: key);
 
@@ -28,52 +28,84 @@ class FillInTheBlanksGame extends StatefulWidget {
 class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   List<_QuestionDetail> questionDetails = [];
   List<String> dragBoxData = [];
+  List<String> questionWords = [];
+  List<int> index = [];
 
   @override
   void initState() {
     super.initState();
-    dragBoxData = widget.data.map((f) => f.item2).toList(growable: false)
+    questionWords.addAll(widget.data.item1.trim().split(' '));
+    int i = 1;
+    while (questionWords.contains('$i' + '_')) {
+      index.add(questionWords.indexOf('$i' + '_'));
+      i++;
+    }
+    dragBoxData = widget.data.item2.map((f) => f).toList(growable: false)
       ..shuffle();
-    for (int p = 0; p < widget.data.length; p++) {
+    for (int p = 0, i = 1; p < questionWords.length; p++) {
       questionDetails.add(_QuestionDetail(
-        choice: widget.data[p].item1 == ''
-            ? widget.data[p].item2
-            : widget.data[p].item1,
-        appear: widget.data[p].item1 == '' ? false : true,
+        choice: questionWords[p] == '$i' + '_'
+            ? widget.data.item2[i - 1]
+            : questionWords[p],
+        appear: questionWords[p] == '$i' + '_' ? false : true,
       ));
+      if (questionWords[p] == '$i' + '_') i++;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     int i = 0;
-    return BentoBox(
-      rows: 1,
-      cols: widget.data.length,
-      children: dragBoxData
-          .map((c) => CuteButton(
-                key: Key(c + (i++).toString()),
-                child: Center(child: Text(c)),
-              ))
-          .toList(growable: false),
-      qRows: 1,
-      qCols: widget.data.length,
-      qChildren: questionDetails
-          .map((f) => f.appear
-              ? CuteButton(
-                  key: Key((i++).toString()),
-                  child: Center(child: Text(f.choice)),
-                )
-              : DropBox(
-                  key: Key((i++).toString()),
-                  child: CuteButton(
-                    child: Center(child: Text('_')),
+    return Column(
+      children: <Widget>[
+        Expanded(
+            flex: 3,
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Wrap(
+                    runSpacing: 18,
+                    spacing: 12,
+                    children: questionDetails
+                        .map((f) => f.appear
+                            ? Text(
+                                f.choice,
+                                textScaleFactor: width < 460 ? 1.8 : 2.5,
+                                overflow: TextOverflow.ellipsis,
+                                //  style: TextStyle(fontWeight: FontWeight.w500),
+                              )
+                            : DropBox(
+                                key: Key((i++).toString()),
+                                child: Text(
+                                  ' _________ ',
+                                  textScaleFactor: width < 460 ? 1.8 : 2.5,
+                                ),
+                                onWillAccept: (data) =>
+                                    data.substring(1) == f.choice,
+                                onAccept: (data) => setState(() {
+                                      f.reaction = Reaction.success;
+                                      f.appear = true;
+                                    }),
+                              ))
+                        .toList(growable: false),
                   ),
-                  onWillAccept: (data) => data.substring(0, 1) == f.choice,
-                  onAccept: (data) => setState(() => f.appear = true),
-                ))
-          .toList(growable: false),
-      dragConfig: DragConfig.draggableMultiPack,
+                ))),
+        Expanded(
+          flex: 2,
+          child: BentoBox(
+            rows: 1,
+            cols: dragBoxData.length,
+            children: dragBoxData
+                .map((c) => CuteButton(
+                      key: Key((i++).toString() + c),
+                      child: Center(child: Text(c)),
+                    ))
+                .toList(growable: false),
+            dragConfig: DragConfig.draggableBounceBack,
+          ),
+        ),
+      ],
     );
   }
 }
