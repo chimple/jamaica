@@ -19,7 +19,7 @@ class DotNumber extends StatelessWidget {
             child: Text(
           number.toString(),
           style: TextStyle(
-            color: Colors.blue,
+            color: Colors.white,
           ),
         )),
       ));
@@ -47,7 +47,7 @@ class DotNumber extends StatelessWidget {
                             decoration: i < number
                                 ? ShapeDecoration(
                                     shape: CircleBorder(),
-                                    color: Colors.blue,
+                                    color: Colors.white,
                                   )
                                 : null,
                           ),
@@ -67,7 +67,7 @@ class DotNumber extends StatelessWidget {
                             decoration: i < number - 5
                                 ? ShapeDecoration(
                                     shape: CircleBorder(),
-                                    color: Colors.blue,
+                                    color: Colors.white,
                                   )
                                 : null,
                           ),

@@ -23,7 +23,7 @@ class StoryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              storyConfig.coverImagePath,
+              'assets/stories/images/${storyConfig.coverImagePath}',
               fit: BoxFit.cover,
             ),
             Text(

@@ -64,21 +64,21 @@ class _MatchWithImageGameState extends State<MatchWithImageGame> {
                 key: Key(img),
               ) as Widget)
           .toList()
-            ..addAll(answerDetails.map((a) => DropBox(
-                  key: Key((i++).toString()),
-                  child: a.appear
-                      ? CuteButton(
-                          child: Center(child: Text(a.choice)),
-                        )
-                      : null,
-                  onWillAccept: (data) => data == a.choice,
-                  onAccept: (data) => setState(() {
-                        a.appear = true;
-                        choiceDetails
-                            .firstWhere((c) => c.choice == a.choice)
-                            .appear = false;
-                      }),
-                ))),
+            ..addAll(answerDetails.map((a) => a.appear
+                ? CuteButton(
+                    key: Key((i++).toString()),
+                    child: Center(child: Text(a.choice)),
+                  )
+                : DropBox(
+                    key: Key((i++).toString()),
+                    onWillAccept: (data) => data == a.choice,
+                    onAccept: (data) => setState(() {
+                          a.appear = true;
+                          choiceDetails
+                              .firstWhere((c) => c.choice == a.choice)
+                              .appear = false;
+                        }),
+                  ))),
       dragConfig: DragConfig.draggableBounceBack,
     );
   }

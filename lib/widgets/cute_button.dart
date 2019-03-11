@@ -1,41 +1,60 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:jamaica/widgets/bento_box.dart';
 
 typedef Reaction OnPressed();
+typedef void OnDragEnd(DraggableDetails d);
 
-enum Reaction { success, failure }
+enum Reaction { enter, success, failure }
 
-enum _Slot {
-  top,
-  bottom,
-  animation,
-  dummy,
-}
+final Map<Reaction, String> _reactionMap = {
+  Reaction.enter: 'enter',
+  Reaction.success: 'happy',
+  Reaction.failure: 'sad',
+};
 
-class CuteButton extends StatefulWidget {
-  final bool pressed;
+class CuteButton extends StatelessWidget {
   final Widget child;
   final OnPressed onPressed;
   final Reaction reaction;
 
-  const CuteButton({
+  const CuteButton({Key key, this.onPressed, this.reaction, this.child})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class CuteButtonWrapper extends StatefulWidget {
+  final CuteButton child;
+  final OnDragEnd onDragEnd;
+  final Axis axis;
+  final DragConfig dragConfig;
+  final Size size;
+
+  const CuteButtonWrapper({
     Key key,
     this.child,
-    this.pressed = false,
-    this.onPressed,
-    this.reaction,
+    this.onDragEnd,
+    this.axis,
+    this.dragConfig = DragConfig.fixed,
+    this.size,
   }) : super(key: key);
 
   @override
-  CuteButtonState createState() {
-    return new CuteButtonState();
+  CuteButtonWrapperState createState() {
+    return new CuteButtonWrapperState();
   }
 }
 
 enum _ButtonStatus { up, down, upToDown, downToUp }
 
-class CuteButtonState extends State<CuteButton> {
-  _ButtonStatus buttonStatus;
+class CuteButtonWrapperState extends State<CuteButtonWrapper> {
+  _ButtonStatus buttonStatus = _ButtonStatus.down;
   Reaction reaction;
 
   @override
@@ -44,137 +63,113 @@ class CuteButtonState extends State<CuteButton> {
     _initData();
   }
 
-  @override
-  void didUpdateWidget(CuteButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _initData();
-  }
-
   void _initData() {
-    if (buttonStatus == null ||
-        buttonStatus == _ButtonStatus.up ||
-        buttonStatus == _ButtonStatus.down) {
-      buttonStatus = widget.pressed ? _ButtonStatus.down : _ButtonStatus.up;
-    } else if (widget.pressed) {
-      buttonStatus = _ButtonStatus.upToDown;
-    } else {
+    reaction = widget.child.reaction;
+    if (buttonStatus == _ButtonStatus.down) {
       buttonStatus = _ButtonStatus.downToUp;
     }
-    if (reaction == null && widget.reaction != null) reaction = widget.reaction;
   }
 
   @override
   Widget build(BuildContext context) {
-    final buttonChild = CustomMultiChildLayout(
-      children: <Widget>[
-        LayoutId(
-          id: _Slot.bottom,
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          ),
-        ),
-        LayoutId(
-          id: _Slot.top,
-          child: Container(
-            child: widget.child,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          ),
-        ),
-        LayoutId(
-          id: _Slot.animation,
-          child: reaction != null && buttonStatus == _ButtonStatus.up
-              ? FlareActor(
-                  "assets/character/button.flr",
-                  alignment: Alignment.center,
-                  fit: BoxFit.contain,
-                  animation: reaction == Reaction.success ? 'correct' : 'wrong',
-                  callback: (s) {
-                    print(s);
-                    setState(() => reaction = null);
-                  },
-                )
-              : Container(),
-        )
-      ],
-      delegate: OneOverOther(buttonStatus == _ButtonStatus.up ? false : true),
-    );
-    return widget.onPressed == null
-        ? buttonChild
-        : GestureDetector(
-            onTap: () {
-              print('onTap');
-            },
-            onTapDown: (t) {
-              print('onTapDown');
-              Future.delayed(const Duration(milliseconds: 250), () {
-                if (buttonStatus == _ButtonStatus.downToUp) {
-                  setState(() {
-                    buttonStatus = _ButtonStatus.up;
-                  });
-                } else {
-                  buttonStatus = _ButtonStatus.down;
-                }
-              });
+    if (buttonStatus == _ButtonStatus.downToUp) {
+      Future.delayed(const Duration(milliseconds: 250), () {
+        if (mounted)
+          setState(() {
+            buttonStatus = _ButtonStatus.up;
+          });
+      });
+    } else if (buttonStatus == _ButtonStatus.upToDown) {
+      Future.delayed(const Duration(milliseconds: 250), () {
+        if (mounted)
+          setState(() {
+            buttonStatus = _ButtonStatus.down;
+            reaction = null;
+          });
+      });
+    } else if (buttonStatus == _ButtonStatus.up) {
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        if (mounted)
+          setState(() {
+            buttonStatus = _ButtonStatus.upToDown;
+          });
+      });
+    }
+    return widget.dragConfig == DragConfig.fixed
+        ? buildButton(context)
+        : Draggable(
+            axis: widget.axis,
+            child: buildButton(context),
+            childWhenDragging:
+                widget.dragConfig == DragConfig.draggableMultiPack
+                    ? null
+                    : Container(),
+            feedback: buildButton(context),
+            data: (widget.key as ValueKey<String>).value,
+            onDragEnd: (d) {
+              widget.onDragEnd(d);
               setState(() {
-                buttonStatus = _ButtonStatus.upToDown;
-              });
-            },
-            onTapUp: (t) {
-              print('onTapUp');
-              if (widget.onPressed != null) {
-                setState(() => reaction = widget.onPressed());
-              }
-              if (buttonStatus == _ButtonStatus.upToDown) {
                 buttonStatus = _ButtonStatus.downToUp;
-              } else {
-                setState(() {
-                  buttonStatus = _ButtonStatus.up;
-                });
-              }
-            },
-            onTapCancel: () => setState(() => buttonStatus = _ButtonStatus.up),
-            child: buttonChild,
-          );
-  }
-}
-
-class OneOverOther extends MultiChildLayoutDelegate {
-  final bool closed;
-
-  OneOverOther(this.closed);
-
-  @override
-  void performLayout(Size size) {
-    final slotSize = Size(size.width, size.height * 0.9);
-    final bottomOffset = Offset(0.0, 0.1 * size.height);
-    if (hasChild(_Slot.bottom)) {
-      layoutChild(_Slot.bottom, BoxConstraints.tight(slotSize));
-      positionChild(_Slot.bottom, bottomOffset);
-    }
-    if (hasChild(_Slot.top)) {
-      layoutChild(_Slot.top, BoxConstraints.tight(slotSize));
-      if (closed) {
-        positionChild(_Slot.top, bottomOffset);
-      } else {
-        positionChild(_Slot.top, Offset.zero);
-      }
-    }
-    if (hasChild(_Slot.animation)) {
-      layoutChild(_Slot.animation,
-          BoxConstraints.tight(Size(size.width, size.height * 0.1)));
-      positionChild(_Slot.animation, Offset(0.0, 0.9 * size.height));
-    }
+                reaction = d.wasAccepted ? Reaction.success : Reaction.failure;
+              });
+            });
   }
 
-  @override
-  bool shouldRelayout(MultiChildLayoutDelegate oldDelegate) {
-    if (oldDelegate is OneOverOther && oldDelegate.closed != closed) {
-      return true;
-    }
-    return false;
+  Widget buildButton(BuildContext context) {
+    return SizedBox(
+      width: widget.size.width,
+      height: widget.size.height,
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 1.0,
+          child: RaisedButton(
+            onPressed: (widget.child.onPressed == null ||
+                    buttonStatus != _ButtonStatus.down)
+                ? null
+                : () {
+                    setState(() {
+                      buttonStatus = _ButtonStatus.downToUp;
+                      reaction = widget.child.onPressed();
+                    });
+                  },
+            color: Colors.blue,
+            disabledColor: Colors.blue,
+            textColor: Colors.white,
+            disabledTextColor: Colors.white,
+            shape: new RoundedRectangleBorder(
+                borderRadius:
+                    const BorderRadius.all(const Radius.circular(16.0))),
+            child: Stack(
+              children: <Widget>[
+                buttonStatus != _ButtonStatus.up
+                    ? widget.child.child
+                    : Container(),
+                AnimatedPositioned(
+                  top: (buttonStatus == _ButtonStatus.up ||
+                          buttonStatus == _ButtonStatus.downToUp)
+                      ? 0.0
+                      : widget.size.height,
+                  left: 0.0,
+                  right: 0.0,
+                  bottom: (buttonStatus == _ButtonStatus.up ||
+                          buttonStatus == _ButtonStatus.downToUp)
+                      ? 0.0
+                      : -widget.size.height,
+                  duration: Duration(milliseconds: 250),
+                  child: FlareActor(
+                    "assets/character/button.flr",
+                    alignment: Alignment.center,
+                    fit: BoxFit.contain,
+                    animation: buttonStatus == _ButtonStatus.up
+                        ? _reactionMap[reaction]
+                        : 'dummy',
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
