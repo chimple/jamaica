@@ -35,6 +35,8 @@ dependencies:
     git:
       https://github.com/chimple/fluttery.git
   flutter_circular_chart: ^0.1.0
+  data:
+    path: ../data
 
 dev_dependencies:
   build_runner: ^1.0.0
