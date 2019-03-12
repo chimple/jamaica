@@ -5,6 +5,7 @@ import 'package:jamaica/storyboards/games/bingo_game_story.dart';
 import 'package:jamaica/storyboards/games/counting_game_story.dart';
 import 'package:jamaica/storyboards/games/crossword_game_story.dart';
 import 'package:jamaica/storyboards/games/dice_game_story.dart';
+import 'package:jamaica/storyboards/games/fill_in_the_blanks_story.dart';
 import 'package:jamaica/storyboards/games/find_word_game_story.dart';
 import 'package:jamaica/storyboards/games/finger_game_story.dart';
 import 'package:jamaica/storyboards/games/game_list_story.dart';
@@ -21,6 +22,7 @@ import 'package:jamaica/storyboards/games/sequence_alphabet_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
+import 'package:jamaica/storyboards/games/true_false_game_story.dart';
 import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
 import 'package:jamaica/storyboards/widgets/bento_box_story.dart';
@@ -36,6 +38,11 @@ import 'package:storyboard/storyboard.dart';
 
 void main() {
   runApp(StoryboardApp([
+    CrosswordGameStory(),
+    FillInTheBlanksGameStory(),
+    SequenceTheNumberGameStory(),
+    MatchTheShapeGameStory(),
+    MemoryGameStory(),
     AudioWidgetStory(),
     BasicCountingGameStory(),
     BentoBoxStory(),
@@ -60,7 +67,7 @@ void main() {
     OrderBySizeGameStory(),
     RecognizeNumberGameStory(),
     RhymeWordsGameStory(),
-    ScoreScreenStory(),
+    TrueFalseGameStory(),
     SequenceAlphabetGameStory(),
     SequenceTheNumberGameStory(),
     StoreScreenStory(),

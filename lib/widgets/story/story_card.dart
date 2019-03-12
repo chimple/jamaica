@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jamaica/models/story_config.dart';
+import 'package:data/data.dart';
 import 'package:jamaica/widgets/story/story_page.dart';
 
 class StoryCard extends StatelessWidget {

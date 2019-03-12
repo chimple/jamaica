@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/standard_json_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jamaica/models/story_config.dart';
-import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/story/story_card.dart';
+import 'package:data/data.dart';
 
 class StoryList extends StatefulWidget {
   @override
@@ -16,13 +17,11 @@ class StoryList extends StatefulWidget {
 
 class StoryListState extends State<StoryList> {
   bool _isLoading = true;
+  BuiltList<StoryConfig> _stories;
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((s) {
-      if (StateContainer.of(context).state.userProfile.storyList.isEmpty)
-        _loadStory().then((s) {});
-    });
+    _loadStory();
   }
 
   Future<String> _loadStoryAsset() async {
@@ -31,21 +30,21 @@ class StoryListState extends State<StoryList> {
 
   Future _loadStory() async {
     print('load data::');
-    String jsonString = await _loadStoryAsset();
-    var jsonResponse = (json.decode(jsonString) as List);
-    var list = jsonResponse
-        .map<StoryConfig>((data) => StoryConfig.fromJson(data))
-        .toList();
-    StateContainer.of(context).loadStoryData(list);
+    final standardSerializers =
+        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+
+    final jsonString = await _loadStoryAsset();
+    final json = jsonDecode(jsonString);
+    Stories s = standardSerializers.deserialize(json);
     setState(() {
       _isLoading = false;
+      _stories = s.stories;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading &&
-        StateContainer.of(context).state.userProfile.storyList == null) {
+    if (_isLoading) {
       return Container(
         child: Center(
           child: SizedBox(
@@ -56,16 +55,14 @@ class StoryListState extends State<StoryList> {
         ),
       );
     } else {
-      final stateContainer =
-          StateContainer.of(context).state.userProfile.storyList;
       return new Container(
         child: GridView.builder(
           gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (context, index) {
-            return StoryCard(storyConfig: stateContainer[index]);
+            return StoryCard(storyConfig: _stories[index]);
           },
-          itemCount: stateContainer.length,
+          itemCount: _stories.length,
         ),
       );
     }

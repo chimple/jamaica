@@ -1,10 +1,10 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/models/story_config.dart';
+import 'package:data/data.dart';
 import 'package:jamaica/widgets/story/audio_text_bold.dart';
-import 'package:jamaica/widgets/story/display_story_content.dart';
 
 class StoryPage extends StatefulWidget {
-  final List<Page> pages;
+  final BuiltList<Page> pages;
 
   StoryPage({Key key, this.pages}) : super(key: key);
 
