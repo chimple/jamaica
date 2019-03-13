@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:jamaica/widgets/dot_number.dart';
@@ -23,9 +25,11 @@ class _ChoiceDetail {
 
 class CountingGame extends StatefulWidget {
   final int answer;
-  final List<int> choices;
+  final BuiltList<int> choices;
+  final OnGameOver onGameOver;
 
-  const CountingGame({Key key, this.answer, this.choices}) : super(key: key);
+  const CountingGame({Key key, this.answer, this.choices, this.onGameOver})
+      : super(key: key);
 
   @override
   _CountingGameState createState() => _CountingGameState();

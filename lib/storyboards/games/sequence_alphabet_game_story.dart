@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/sequence_alphabet_game.dart';
@@ -9,7 +10,7 @@ class SequenceAlphabetGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: SequenceAlphabetGame(
-              answers: ['A', 'P', 'P', 'L', 'E'],
+              answers: BuiltList<String>(['A', 'P', 'P', 'L', 'E']),
             ),
           ),
         ),
