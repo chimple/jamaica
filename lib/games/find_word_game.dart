@@ -1,4 +1,6 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -13,10 +15,12 @@ class _ChoiceDetail {
 
 class FindWordGame extends StatefulWidget {
   final String image;
-  final List<String> answer;
-  final List<String> choices;
+  final BuiltList<String> answer;
+  final BuiltList<String> choices;
+  final OnGameOver onGameOver;
 
-  const FindWordGame({Key key, this.image, this.answer, this.choices})
+  const FindWordGame(
+      {Key key, this.image, this.answer, this.choices, this.onGameOver})
       : super(key: key);
 
   @override

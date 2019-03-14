@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -25,9 +27,10 @@ enum _Type { choice, question }
 
 class JumbledWordsGame extends StatefulWidget {
   final String answer;
-  final List<String> choices;
+  final BuiltList<String> choices;
+  final OnGameOver onGameOver;
 
-  const JumbledWordsGame({Key key, this.answer, this.choices})
+  const JumbledWordsGame({Key key, this.answer, this.choices, this.onGameOver})
       : super(key: key);
 
   @override
@@ -109,22 +112,22 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
     final allCols = max(cols, qCols);
     final childWidth = size.width / allCols;
     final childHeight = size.height / allRows;
-    final centerWidth = size.width /(qRows * 3) ;
-    final centerHeight = size.height/(qRows * 3);
+    final centerWidth = size.width / (qRows * 3);
+    final centerHeight = size.height / (qRows * 3);
     print(
         "this my new width ${size.width} and new height ${size.height} and child width is $childWidth and $childHeight and rows $allRows colmun $allCols");
     int i = 0;
 
-    Offset center = Offset(centerWidth , centerHeight);
-        i = 0;
+    Offset center = Offset(centerWidth, centerHeight);
+    i = 0;
     (qChildren ?? []).forEach((c) => childrenMap[c.key] = BentoChildDetail(
           child: c,
           offset: center,
         ));
-print("the circle Size $center and rows $qRows");
+    print("the circle Size $center and rows $qRows");
     double j = 0;
     children.forEach((f) {
-      double k = (2* pi / children.length);
+      double k = (2 * pi / children.length);
       print("this is my children length ${children.length}");
       childrenMap[f.key] = BentoChildDetail(
         child: f,
