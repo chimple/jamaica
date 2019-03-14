@@ -101,7 +101,10 @@ class _CountingGameState extends State<CountingGame> {
                           print(data);
                           return data == a.number.toString();
                         },
-                        onAccept: (data) => setState(() => a.solved = true),
+                        onAccept: (data) {
+                          setState(() => a.solved = true);
+                          widget.onGameOver(1);
+                        },
                       ))
                 .toList(growable: false),
           ),
