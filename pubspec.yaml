@@ -31,6 +31,10 @@ dependencies:
     git: https://github.com/chimple/storyboard
   flutter_svg: ^0.10.3
   audioplayers: ^0.8.2
+  fluttery:
+    git:
+      https://github.com/chimple/fluttery.git
+  flutter_circular_chart: ^0.1.0
   data:
     path: ../data
 

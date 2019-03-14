@@ -23,6 +23,7 @@ import 'package:jamaica/storyboards/games/sequence_alphabet_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
+import 'package:jamaica/storyboards/games/spin_wheel_game_story.dart';
 import 'package:jamaica/storyboards/games/true_false_game_story.dart';
 import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
@@ -50,7 +51,6 @@ void main() {
     CollectedItemStory(),
     CountingGameStory(),
     CrosswordGameStory(),
-    CrosswordGameStory(),
     CuteButtonStory(),
     DiceGameStory(),
     DotNumberStory(),
@@ -62,10 +62,8 @@ void main() {
     GameListStory(),
     JumbledWordsGameStory(),
     MatchTheShapeGameStory(),
-    MatchTheShapeGameStory(),
     MatchWithImageGameStory(),
     MathOpGameStory(),
-    MemoryGameStory(),
     MemoryGameStory(),
     OrderBySizeGameStory(),
     OrderItGameStory(),
@@ -73,8 +71,8 @@ void main() {
     RhymeWordsGameStory(),
     SequenceAlphabetGameStory(),
     SequenceTheNumberGameStory(),
-    SequenceTheNumberGameStory(),
     SlideUpRouteStory(),
+    SpinWheelGameStory(),
     StoreScreenStory(),
     StoryBoard(),
     ThemeMapStory(),
