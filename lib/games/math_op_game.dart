@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:jamaica/widgets/dot_number.dart';
@@ -24,8 +25,10 @@ class MathOpGame extends StatefulWidget {
   final int second;
   final String op;
   final int answer;
+  final OnGameOver onGameOver;
 
-  const MathOpGame({Key key, this.first, this.second, this.op, this.answer})
+  const MathOpGame(
+      {Key key, this.first, this.second, this.op, this.answer, this.onGameOver})
       : super(key: key);
 
   @override

@@ -1,6 +1,4 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -15,18 +13,16 @@ class _ChoiceDetail {
       '_ChoiceDetail(choice: $choice, reaction: $reaction, index: $index)';
 }
 
-class SequenceAlphabetGame extends StatefulWidget {
-  final BuiltList<String> answers;
-  final OnGameOver onGameOver;
+class OrderItGame extends StatefulWidget {
+  final List<String> answers;
 
-  const SequenceAlphabetGame({Key key, this.answers, this.onGameOver})
-      : super(key: key);
+  const OrderItGame({Key key, this.answers}) : super(key: key);
 
   @override
-  _SequenceAlphabetGameState createState() => _SequenceAlphabetGameState();
+  _OrderItGameState createState() => _OrderItGameState();
 }
 
-class _SequenceAlphabetGameState extends State<SequenceAlphabetGame> {
+class _OrderItGameState extends State<OrderItGame> {
   List<_ChoiceDetail> choiceDetails;
 
   @override
@@ -42,10 +38,11 @@ class _SequenceAlphabetGameState extends State<SequenceAlphabetGame> {
   @override
   Widget build(BuildContext context) {
     return BentoBox(
-      axis: Axis.horizontal,
+      calculateLayout: BentoBox.calculateVerticalLayout,
+      axis: Axis.vertical,
       dragConfig: DragConfig.draggableBounceBack,
-      cols: choiceDetails.length,
-      rows: 1,
+      cols: 1,
+      rows: choiceDetails.length,
       children: choiceDetails
           .map((c) => CuteButton(
                 key: Key(c.index.toString()),

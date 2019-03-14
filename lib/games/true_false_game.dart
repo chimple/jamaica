@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -17,9 +18,14 @@ class TrueFalseGame extends StatefulWidget {
   final String question;
   final String answer;
   final bool right_or_wrong;
+  final OnGameOver onGameOver;
 
   const TrueFalseGame(
-      {Key key, this.question, this.answer, this.right_or_wrong})
+      {Key key,
+      this.question,
+      this.answer,
+      this.right_or_wrong,
+      this.onGameOver})
       : super(key: key);
 
   @override

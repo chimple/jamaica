@@ -1,4 +1,6 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -20,10 +22,11 @@ class _ChoiceDetail {
 enum _Type { choice, answer }
 
 class OrderBySizeGame extends StatefulWidget {
-  final List<int> answers;
-  final List<int> choices;
+  final BuiltList<int> answers;
+  final BuiltList<int> choices;
+  final OnGameOver onGameOver;
 
-  const OrderBySizeGame({Key key, this.answers, this.choices})
+  const OrderBySizeGame({Key key, this.answers, this.choices, this.onGameOver})
       : super(key: key);
 
   @override

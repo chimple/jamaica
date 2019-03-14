@@ -1,4 +1,6 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:jamaica/widgets/drop_box.dart';
@@ -16,11 +18,13 @@ class _ChoiceDetail {
 }
 
 class MatchWithImageGame extends StatefulWidget {
-  final List<String> images;
-  final List<String> answers;
-  final List<String> choices;
+  final BuiltList<String> images;
+  final BuiltList<String> answers;
+  final BuiltList<String> choices;
+  final OnGameOver onGameOver;
 
-  const MatchWithImageGame({Key key, this.images, this.answers, this.choices})
+  const MatchWithImageGame(
+      {Key key, this.images, this.answers, this.choices, this.onGameOver})
       : super(key: key);
 
   @override
