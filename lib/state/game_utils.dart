@@ -23,7 +23,7 @@ import 'package:jamaica/games/true_false_game.dart';
 
 typedef void OnGameOver(int score);
 
-Widget buildGame(GameData gameData, OnGameOver onGameOver) {
+Widget buildGame({GameData gameData, OnGameOver onGameOver}) {
   switch (gameData.gameId) {
     case 'BasicCountingGame':
       final gd = gameData as NumMultiData;
@@ -189,4 +189,5 @@ Widget buildGame(GameData gameData, OnGameOver onGameOver) {
       );
       break;
   }
+  return Container();
 }
