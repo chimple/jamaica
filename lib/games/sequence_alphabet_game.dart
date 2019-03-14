@@ -1,6 +1,4 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -16,11 +14,9 @@ class _ChoiceDetail {
 }
 
 class SequenceAlphabetGame extends StatefulWidget {
-  final BuiltList<String> answers;
-  final OnGameOver onGameOver;
+  final List<String> answers;
 
-  const SequenceAlphabetGame({Key key, this.answers, this.onGameOver})
-      : super(key: key);
+  const SequenceAlphabetGame({Key key, this.answers}) : super(key: key);
 
   @override
   _SequenceAlphabetGameState createState() => _SequenceAlphabetGameState();

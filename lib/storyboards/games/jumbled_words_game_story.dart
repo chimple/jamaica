@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/jumbled_words_game.dart';
@@ -11,15 +10,15 @@ class JumbledWordsGameStory extends FullScreenStory {
           body: SafeArea(
             child: JumbledWordsGame(
               answer: 'A',
-              choices: BuiltList<String>(['A', 'B', 'C', 'D', 'E', 'F', 'H']),
+              choices: ['A', 'B', 'C', 'D','E','F','H'],
             ),
           ),
         ),
-        Scaffold(
+         Scaffold(
           body: SafeArea(
             child: JumbledWordsGame(
               answer: 'A',
-              choices: BuiltList<String>(['A', 'B', 'C', 'D']),
+              choices: ['A', 'B', 'C', 'D'],
             ),
           ),
         ),

@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/finger_game.dart';
@@ -11,18 +10,18 @@ class RhymeWordsGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: RhymeWordsGame(
-              questions: BuiltList<String>([
+              questions: [
                 'Pin',
                 'Pet',
                 'Me',
                 'Bee',
-              ]),
-              answers: BuiltList<String>([
+              ],
+              answers: [
                 'Win',
                 'Wet',
                 'We',
                 'See',
-              ]),
+              ],
             ),
           ),
         ),

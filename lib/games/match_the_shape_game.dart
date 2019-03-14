@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/animated_scale.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
@@ -25,12 +23,10 @@ class _ChoiceDetail {
 enum _Escape { no, escaping, escaped }
 
 class MatchTheShapeGame extends StatefulWidget {
-  final BuiltList<String> first;
-  final BuiltList<String> second;
-  final OnGameOver onGameOver;
+  final List<String> first;
+  final List<String> second;
 
-  const MatchTheShapeGame({Key key, this.first, this.second, this.onGameOver})
-      : super(key: key);
+  const MatchTheShapeGame({Key key, this.first, this.second}) : super(key: key);
 
   @override
   _MatchTheShapeGameState createState() => _MatchTheShapeGameState();

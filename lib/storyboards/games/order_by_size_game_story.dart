@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/order_by_size_game.dart';
@@ -9,10 +8,7 @@ class OrderBySizeGameStory extends FullScreenStory {
   List<Widget> get storyContent => [
         Scaffold(
           body: SafeArea(
-            child: OrderBySizeGame(
-              answers: BuiltList<int>([1, 7]),
-              choices: BuiltList<int>([2, 7, 3, 1]),
-            ),
+            child: OrderBySizeGame(answers: [1, 7], choices: [2, 7, 3, 1]),
           ),
         )
       ];

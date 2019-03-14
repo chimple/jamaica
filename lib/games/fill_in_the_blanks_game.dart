@@ -1,6 +1,4 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:jamaica/widgets/drop_box.dart';
@@ -19,13 +17,9 @@ class _QuestionDetail {
 }
 
 class FillInTheBlanksGame extends StatefulWidget {
-  final String question;
-  final BuiltList<String> answers;
-  final OnGameOver onGameOver;
+  final Tuple2<String, List<String>> data;
 
-  const FillInTheBlanksGame(
-      {Key key, this.onGameOver, this.question, this.answers})
-      : super(key: key);
+  const FillInTheBlanksGame({Key key, this.data}) : super(key: key);
 
   @override
   _FillInTheBlanksGameState createState() => _FillInTheBlanksGameState();
@@ -40,18 +34,18 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   @override
   void initState() {
     super.initState();
-    questionWords.addAll(widget.question.trim().split(' '));
+    questionWords.addAll(widget.data.item1.trim().split(' '));
     int i = 1;
     while (questionWords.contains('$i' + '_')) {
       index.add(questionWords.indexOf('$i' + '_'));
       i++;
     }
-    dragBoxData = widget.answers.map((f) => f).toList(growable: false)
+    dragBoxData = widget.data.item2.map((f) => f).toList(growable: false)
       ..shuffle();
     for (int p = 0, i = 1; p < questionWords.length; p++) {
       questionDetails.add(_QuestionDetail(
         choice: questionWords[p] == '$i' + '_'
-            ? widget.answers[i - 1]
+            ? widget.data.item2[i - 1]
             : questionWords[p],
         appear: questionWords[p] == '$i' + '_' ? false : true,
       ));

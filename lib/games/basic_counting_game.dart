@@ -1,6 +1,4 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/animated_scale.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
@@ -24,10 +22,9 @@ enum _Escape { no, escaping, escaped }
 
 class BasicCountingGame extends StatefulWidget {
   final int answer;
-  final BuiltList<int> choices;
-  final OnGameOver onGameOver;
+  final List<int> choices;
 
-  const BasicCountingGame({Key key, this.answer, this.choices, this.onGameOver})
+  const BasicCountingGame({Key key, this.answer, this.choices})
       : super(key: key);
   @override
   _BasicCountingGameState createState() => _BasicCountingGameState();

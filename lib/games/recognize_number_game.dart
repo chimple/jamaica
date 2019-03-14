@@ -1,6 +1,4 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/audio_widget.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
@@ -17,11 +15,9 @@ class _ChoiceDetail {
 
 class RecognizeNumberGame extends StatefulWidget {
   final int answer;
-  final BuiltList<int> choices;
-  final OnGameOver onGameOver;
+  final List<int> choices;
 
-  const RecognizeNumberGame(
-      {Key key, this.answer, this.choices, this.onGameOver})
+  const RecognizeNumberGame({Key key, this.answer, this.choices})
       : super(key: key);
 
   @override

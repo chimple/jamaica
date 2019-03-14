@@ -1,6 +1,4 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:jamaica/widgets/flip_animator.dart';
@@ -25,12 +23,10 @@ class _ChoiceDetail {
 enum _Status { closed, opened, escaping, escaped }
 
 class MemoryGame extends StatefulWidget {
-  final BuiltList<String> first;
-  final BuiltList<String> second;
-  final OnGameOver onGameOver;
+  final List<String> first;
+  final List<String> second;
 
-  const MemoryGame({Key key, this.first, this.second, this.onGameOver})
-      : super(key: key);
+  const MemoryGame({Key key, this.first, this.second}) : super(key: key);
 
   @override
   _MemoryGameState createState() => _MemoryGameState();

@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/match_the_shape_game.dart';
@@ -10,8 +9,8 @@ class MatchTheShapeGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: MatchTheShapeGame(
-              first: BuiltList<String>(['1', '2', '3', '4']),
-              second: BuiltList<String>(['1', '2', '3', '4']),
+              first: ['1', '2', '3', '4'],
+              second: ['1', '2', '3', '4'],
             ),
           ),
         )

@@ -1,9 +1,8 @@
-import 'package:built_collection/built_collection.dart';
-import 'package:data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/crossword_game.dart';
 import 'package:storyboard/storyboard.dart';
+import 'package:tuple/tuple.dart';
 
 class CrosswordGameStory extends FullScreenStory {
   @override
@@ -11,93 +10,57 @@ class CrosswordGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: CrosswordGame(
-              data: BuiltList<BuiltList<String>>([
-                BuiltList<String>(['E', '', '', '', '']),
-                BuiltList<String>(['A', '', '', '', '']),
-                BuiltList<String>(['T', 'I', 'G', 'E', 'R']),
-                BuiltList<String>(['', '', '', '', 'A']),
-                BuiltList<String>(['', '', '', '', 'T'])
-              ]),
-              images: BuiltList<ImageData>([
-                ImageData((b) => b
-                  ..image = 'assets/accessories/apple.png'
-                  ..x = 0
-                  ..y = 0),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/camera.png'
-                  ..x = 2
-                  ..y = 0),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/fruit.png'
-                  ..x = 2
-                  ..y = 4),
-              ]),
+              data: [
+                ['E', null, null, null, null],
+                ['A', null, null, null, null],
+                ['T', 'I', 'G', 'E', 'R'],
+                [null, null, null, null, 'A'],
+                [null, null, null, null, 'T']
+              ],
+              images: [
+                Tuple3('assets/accessories/apple.png', 0, 0),
+                Tuple3('assets/accessories/camera.png', 2, 0),
+                Tuple3('assets/accessories/fruit.png', 2, 4),
+              ],
             ),
           ),
         ),
         Scaffold(
           body: SafeArea(
             child: CrosswordGame(
-              data: BuiltList<BuiltList<String>>([
-                BuiltList<String>(['T', 'E', 'X', 'T']),
-                BuiltList<String>(['', '', 'M', '']),
-                BuiltList<String>(['J', 'O', 'I', 'N']),
-                BuiltList<String>(['', '', 'C', '']),
-              ]),
-              images: BuiltList<ImageData>([
-                ImageData((b) => b
-                  ..image = 'assets/accessories/join.png'
-                  ..x = 2
-                  ..y = 0),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/text.png'
-                  ..x = 0
-                  ..y = 0),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/mic.png'
-                  ..x = 1
-                  ..y = 2),
-              ]),
+              data: [
+                ['T', 'E', 'X', 'T'],
+                [null, null, 'M', null],
+                ['J', 'O', 'I', 'N'],
+                [null, null, 'C', null],
+              ],
+              images: [
+                Tuple3('assets/accessories/join.png', 2, 0),
+                Tuple3('assets/accessories/text.png', 0, 0),
+                Tuple3('assets/accessories/mic.png', 1, 2),
+              ],
             ),
           ),
         ),
         Scaffold(
           body: SafeArea(
             child: CrosswordGame(
-              data: BuiltList<BuiltList<String>>([
-                BuiltList<String>(['', 'A', '', 'T', '', 'G']),
-                BuiltList<String>(['M', 'P', '', 'E', '', 'R']),
-                BuiltList<String>(['I', 'P', '', 'X', '', 'A']),
-                BuiltList<String>(['C', 'L', 'O', 'T', 'H', 'I']),
-                BuiltList<String>(['', 'E', 'J', 'O', 'I', 'N']),
-                BuiltList<String>(['', '', '', '', '', 'S']),
-              ]),
-              images: BuiltList<ImageData>([
-                ImageData((b) => b
-                  ..image = 'assets/accessories/apple.png'
-                  ..x = 0
-                  ..y = 1),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/text.png'
-                  ..x = 0
-                  ..y = 3),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/grains.png'
-                  ..x = 0
-                  ..y = 5),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/clothes.png'
-                  ..x = 3
-                  ..y = 0),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/mic.png'
-                  ..x = 1
-                  ..y = 0),
-                ImageData((b) => b
-                  ..image = 'assets/accessories/join.png'
-                  ..x = 4
-                  ..y = 2),
-              ]),
+              data: [
+                [null, 'A', null, 'T', null, 'G'],
+                ['M', 'P', null, 'E', null, 'R'],
+                ['I', 'P', null, 'X', null, 'A'],
+                ['C', 'L', 'O', 'T', 'H', 'I'],
+                [null, 'E', 'J', 'O', 'I', 'N'],
+                [null, null, null, null, null, 'S'],
+              ],
+              images: [
+                Tuple3('assets/accessories/apple.png', 0, 1),
+                Tuple3('assets/accessories/text.png', 0, 3),
+                Tuple3('assets/accessories/grains.png', 0, 5),
+                Tuple3('assets/accessories/clothes.png', 3, 0),
+                Tuple3('assets/accessories/mic.png', 1, 0),
+                Tuple3('assets/accessories/join.png', 4, 2),
+              ],
             ),
           ),
         )

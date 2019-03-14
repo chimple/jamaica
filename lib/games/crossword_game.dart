@@ -1,9 +1,6 @@
 import 'dart:math';
 
-import 'package:built_collection/built_collection.dart';
-import 'package:data/data.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:jamaica/widgets/drop_box.dart';
@@ -26,15 +23,13 @@ class _ChoiceDetail {
 }
 
 class CrosswordGame extends StatefulWidget {
-  final BuiltList<ImageData> images;
-  final BuiltList<BuiltList<String>> data;
-  final OnGameOver onGameOver;
+  final List<Tuple3<String, int, int>> images;
+  final List<List<String>> data;
 
   const CrosswordGame({
     Key key,
     this.images,
     this.data,
-    this.onGameOver,
   }) : super(key: key);
 
   @override
@@ -65,7 +60,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
     });
 
     for (var n = 0; n < widget.images.length; n++) {
-      imageIndex.add(widget.images[n].x * rows + widget.images[n].y);
+      imageIndex.add(widget.images[n].item2 * rows + widget.images[n].item3);
     }
     var len = imageIndex.length + 1;
     if (len > 14) {
@@ -80,7 +75,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
           f = 1;
         }
       }
-      if (letters[t] != '' && f != 1) {
+      if (letters[t] != null && f != 1) {
         if (rng.nextInt(2) == 1) {
           choices.add(letters[t]);
           letterIndex.add(t);
@@ -104,7 +99,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
           choice: letters[p],
           appear: letterIndex.contains(p) ? false : true,
           image: imageIndex.contains(p)
-              ? widget.images[imageIndex.indexOf(p)].image
+              ? widget.images[imageIndex.indexOf(p)].item1
               : ''));
     }
   }
@@ -126,7 +121,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
       qRows: rows,
       qCols: cols,
       qChildren: crossword
-          .map((f) => f.choice == ''
+          .map((f) => f.choice == null
               ? Container(
                   key: Key('A' + (i++).toString()),
                   decoration: BoxDecoration(

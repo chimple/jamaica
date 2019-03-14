@@ -1,6 +1,4 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -11,17 +9,12 @@ class _ChoiceDetail {
 }
 
 class SequenceTheNumberGame extends StatefulWidget {
-  final BuiltList<int> sequence;
-  final BuiltList<int> choices;
+  final List<int> sequence;
+  final List<int> choices;
   final int blankPosition;
-  final OnGameOver onGameOver;
 
   const SequenceTheNumberGame(
-      {Key key,
-      this.sequence,
-      this.choices,
-      this.blankPosition,
-      this.onGameOver})
+      {Key key, this.sequence, this.choices, this.blankPosition})
       : super(key: key);
 
   @override
