@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -27,8 +28,9 @@ enum _Type { choice, question }
 
 class BingoGame extends StatefulWidget {
   final Map<String, String> choices;
+  final OnGameOver onGameOver;
 
-  const BingoGame({Key key, this.choices}) : super(key: key);
+  const BingoGame({Key key, this.choices, this.onGameOver}) : super(key: key);
 
   @override
   _BingoGameState createState() => _BingoGameState();
