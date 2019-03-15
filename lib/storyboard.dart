@@ -35,6 +35,8 @@ import 'package:jamaica/storyboards/widgets/dot_number_story.dart';
 import 'package:jamaica/storyboards/games/game_level_story.dart';
 import 'package:jamaica/storyboards/games/score_screen_story.dart';
 import 'package:jamaica/storyboards/theme_map_story.dart';
+import 'package:jamaica/storyboards/widgets/game_story.dart';
+import 'package:jamaica/storyboards/widgets/slide_up_route_story.dart';
 import 'package:jamaica/storyboards/widgets/story_board.dart';
 import 'package:jamaica/storyboards/widgets/store_screen_story.dart';
 import 'package:storyboard/storyboard.dart';
@@ -56,6 +58,7 @@ void main() {
     FillInTheBlanksGameStory(),
     FindWordGameStory(),
     FingerGameStory(),
+    GameStory(),
     GameLevelStory(),
     GameListStory(),
     JumbledWordsGameStory(),
@@ -69,6 +72,10 @@ void main() {
     RhymeWordsGameStory(),
     SequenceAlphabetGameStory(),
     SequenceTheNumberGameStory(),
+<<<<<<< HEAD
+=======
+    SlideUpRouteStory(),
+>>>>>>> parent of f2e74c7... Revert "Merge branch 'master' into nikhil_jamaica"
     SpinWheelGameStory(),
     StoreScreenStory(),
     StoryBoard(),
