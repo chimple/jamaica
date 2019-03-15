@@ -24,6 +24,7 @@ import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
 import 'package:jamaica/storyboards/games/spin_wheel_game_story.dart';
+import 'package:jamaica/storyboards/games/tap_wrong_game_story.dart';
 import 'package:jamaica/storyboards/games/true_false_game_story.dart';
 import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
@@ -40,11 +41,6 @@ import 'package:storyboard/storyboard.dart';
 
 void main() {
   runApp(StoryboardApp([
-    SpinWheelGameStory(),
-    FillInTheBlanksGameStory(),
-    SequenceTheNumberGameStory(),
-    MatchTheShapeGameStory(),
-    MemoryGameStory(),
     AudioWidgetStory(),
     BasicCountingGameStory(),
     BentoBoxStory(),
@@ -57,6 +53,7 @@ void main() {
     CuteButtonStory(),
     DiceGameStory(),
     DotNumberStory(),
+    FillInTheBlanksGameStory(),
     FindWordGameStory(),
     FingerGameStory(),
     GameLevelStory(),
@@ -70,12 +67,14 @@ void main() {
     OrderItGameStory(),
     RecognizeNumberGameStory(),
     RhymeWordsGameStory(),
-    TrueFalseGameStory(),
     SequenceAlphabetGameStory(),
     SequenceTheNumberGameStory(),
+    SpinWheelGameStory(),
     StoreScreenStory(),
     StoryBoard(),
+    TapWrongGameStory(),
     ThemeMapStory(),
+    TrueFalseGameStory(),
     UserProgressScreenStory(),
   ]));
 }
