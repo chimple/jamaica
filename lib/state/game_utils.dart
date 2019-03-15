@@ -23,11 +23,7 @@ import 'package:jamaica/games/true_false_game.dart';
 
 typedef void OnGameOver(int score);
 
-<<<<<<< HEAD
-Widget buildGame(GameData gameData, OnGameOver onGameOver) {
-=======
 Widget buildGame({GameData gameData, OnGameOver onGameOver}) {
->>>>>>> parent of f2e74c7... Revert "Merge branch 'master' into nikhil_jamaica"
   switch (gameData.gameId) {
     case 'BasicCountingGame':
       final gd = gameData as NumMultiData;

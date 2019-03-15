@@ -72,10 +72,7 @@ void main() {
     RhymeWordsGameStory(),
     SequenceAlphabetGameStory(),
     SequenceTheNumberGameStory(),
-<<<<<<< HEAD
-=======
     SlideUpRouteStory(),
->>>>>>> parent of f2e74c7... Revert "Merge branch 'master' into nikhil_jamaica"
     SpinWheelGameStory(),
     StoreScreenStory(),
     StoryBoard(),
