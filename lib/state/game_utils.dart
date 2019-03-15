@@ -189,8 +189,5 @@ Widget buildGame({GameData gameData, OnGameOver onGameOver}) {
       );
       break;
   }
-<<<<<<< HEAD
-=======
   return Container();
->>>>>>> parent of f2e74c7... Revert "Merge branch 'master' into nikhil_jamaica"
 }
