@@ -55,7 +55,7 @@ enum CustomSelectionChangedCause {
   /// Keyboard-triggered selection changes may be caused by the IME as well as
   /// by accessibility tools (e.g. TalkBack on Android).
   keyboard,
-  drag
+  dragStart
 }
 
 /// Signature for the callback that reports when the caret location changes.
@@ -1177,6 +1177,8 @@ class CustomRenderEditable extends RenderBox {
   }
 
   Offset _lastTapDownPosition;
+  Offset _dragStartPosotion;
+  int _baseOffsetOnDragStart, _extendOffsetOnDragEnd;
 
   /// If [ignorePointer] is false (the default) then this method is called by
   /// the internal gesture recognizer's [TapGestureRecognizer.onTapDown]
@@ -1190,11 +1192,10 @@ class CustomRenderEditable extends RenderBox {
 
   _onUpdate(Offset o) {
     _lastTapDownPosition = o - _paintOffset;
-    selectPosition(cause: CustomSelectionChangedCause.drag);
+    selectPosition(cause: CustomSelectionChangedCause.dragStart);
   }
 
   void _handleTapDown(TapDownDetails details) {
-    print('tap down');
     assert(!ignorePointer);
     handleTapDown(details);
   }
@@ -1217,21 +1218,20 @@ class CustomRenderEditable extends RenderBox {
   void _handleOnStart(Offset o) {
     _lastTapDownPosition = o;
     selectPositionStart(o, CustomSelectionChangedCause.tap);
+    selectWord(cause: CustomSelectionChangedCause.dragStart);
   }
 
   selectPositionStart(Offset from, CustomSelectionChangedCause cause) {
     assert(cause != null);
     _layoutText(constraints.maxWidth);
     if (onSelectionChanged != null) {
-      print('paint Offset $_paintOffset');
       final TextPosition fromPosition =
           _textPainter.getPositionForOffset(globalToLocal(from - _paintOffset));
 
-      // print(fromPosition.offset);
       // final TextPosition toPosition = to == null
       //     ? null
       //     : _textPainter.getPositionForOffset(globalToLocal(to - _paintOffset));
-      // print('top possdad $toPosition');
+
       onSelectionStart(
         TextSelection(
           baseOffset: fromPosition.offset,
@@ -1244,7 +1244,10 @@ class CustomRenderEditable extends RenderBox {
     }
   }
 
-  _handleOnEnd() {}
+  _handleOnEnd() {
+    selectExtendOffsetOnDragEnd(
+        cause: CustomSelectionChangedCause.dragEnd, from: _lastTapDownPosition);
+  }
 
   /// If [ignorePointer] is false (the default) then this method is called by
   /// the internal gesture recognizer's [DoubleTapGestureRecognizer.onDoubleTap]
@@ -1295,12 +1298,10 @@ class CustomRenderEditable extends RenderBox {
     if (onSelectionChanged != null) {
       final TextPosition fromPosition =
           _textPainter.getPositionForOffset(globalToLocal(from - _paintOffset));
-
-      print(fromPosition.offset);
       final TextPosition toPosition = to == null
           ? null
           : _textPainter.getPositionForOffset(globalToLocal(to - _paintOffset));
-      // print('top possdad $toPosition');
+
       onSelectionChanged(
         TextSelection(
           baseOffset: fromPosition.offset,
@@ -1318,6 +1319,34 @@ class CustomRenderEditable extends RenderBox {
   /// {@macro flutter.rendering.editable.select}
   void selectWord({@required CustomSelectionChangedCause cause}) {
     selectWordsInRange(from: _lastTapDownPosition, cause: cause);
+  }
+
+  void selectExtendOffsetOnDragEnd(
+      {@required CustomSelectionChangedCause cause,
+      @required Offset from,
+      Offset to}) {
+    assert(cause != null);
+    _layoutText(constraints.maxWidth);
+    if (onSelectionChanged != null) {
+      final TextPosition firstPosition =
+          _textPainter.getPositionForOffset(globalToLocal(from - _paintOffset));
+      final TextSelection firstWord = _selectWordAtOffset(firstPosition);
+      final TextSelection lastWord = to == null
+          ? firstWord
+          : _selectWordAtOffset(_textPainter
+              .getPositionForOffset(globalToLocal(to - _paintOffset)));
+      _extendOffsetOnDragEnd = lastWord.extent.offset;
+
+      onSelectionChanged(
+        TextSelection(
+          baseOffset: _baseOffsetOnDragStart,
+          extentOffset: lastWord.extent.offset,
+          affinity: firstWord.affinity,
+        ),
+        this,
+        cause,
+      );
+    }
   }
 
   /// Selects the set words of a paragraph in a given range of global positions.
@@ -1340,16 +1369,18 @@ class CustomRenderEditable extends RenderBox {
           ? firstWord
           : _selectWordAtOffset(_textPainter
               .getPositionForOffset(globalToLocal(to - _paintOffset)));
-      print('long press $firstWord},  $lastWord');
-      onSelectionChanged(
-        TextSelection(
-          baseOffset: firstWord.base.offset,
-          extentOffset: lastWord.extent.offset,
-          affinity: firstWord.affinity,
-        ),
-        this,
-        cause,
-      );
+      if (cause == CustomSelectionChangedCause.dragStart)
+        _baseOffsetOnDragStart = firstWord.base.offset;
+
+      // onSelectionChanged(
+      //   TextSelection(
+      //     baseOffset: firstWord.base.offset,
+      //     extentOffset: lastWord.extent.offset,
+      //     affinity: firstWord.affinity,
+      //   ),
+      //   this,
+      //   cause,
+      // );
     }
   }
 

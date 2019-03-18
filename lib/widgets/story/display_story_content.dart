@@ -38,14 +38,16 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
   }
 
   void _updateOffset(int extendOffset) {
-    setState(() {
-      _middleSubString =
-          widget.listofWords.join(' ').substring(_baseOffset, extendOffset);
-      _startSubString = widget.listofWords.join(' ').substring(0, _baseOffset);
-      _endSubString = widget.listofWords
-          .join(' ')
-          .substring(extendOffset, widget.listofWords.join(' ').length);
-    });
+    if (_baseOffset < extendOffset)
+      setState(() {
+        _middleSubString =
+            widget.listofWords.join(' ').substring(_baseOffset, extendOffset);
+        _startSubString =
+            widget.listofWords.join(' ').substring(0, _baseOffset);
+        _endSubString = widget.listofWords
+            .join(' ')
+            .substring(extendOffset, widget.listofWords.join(' ').length);
+      });
   }
 
   String _startSubString = '', _middleSubString = '', _endSubString = '';
@@ -127,6 +129,10 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
               autocorrect: true,
               startOffset: (s) => _startOffset(s),
               updateOffset: (o) => _updateOffset(o.extentOffset),
+              draEnd: (t) {
+                _baseOffset = t.base.offset;
+                _updateOffset(t.extent.offset);
+              },
               onLongPress: (s, textSelection) {
                 // showDialog(
                 //   context: context,

@@ -213,6 +213,7 @@ class CustomEditableText extends StatefulWidget {
     this.startOffset,
     this.updateOffset,
     this.onLongPress,
+    this.draEnd,
     TextInputType keyboardType,
     this.textInputAction,
     this.textCapitalization = TextCapitalization.none,
@@ -261,9 +262,10 @@ class CustomEditableText extends StatefulWidget {
 
   /// Controls whether this widget has keyboard focus.
   final FocusNode focusNode;
-  final Function startOffset;
-  final Function updateOffset;
+  final Function(TextSelection) startOffset;
+  final Function(TextSelection) updateOffset;
   final Function(String, TextSelection) onLongPress;
+  final Function(TextSelection) draEnd;
 
   /// {@template flutter.widgets.CustomEditableText.obscureText}
   /// Whether to hide the text being edited (e.g., for passwords).
@@ -956,7 +958,7 @@ class CustomEditableTextState extends State<CustomEditableText>
   void _handleSelectionChanged(TextSelection selection,
       CustomRenderEditable renderObject, CustomSelectionChangedCause cause) {
     widget.controller.selection = selection;
-    if (cause == CustomSelectionChangedCause.drag)
+    if (cause == CustomSelectionChangedCause.dragStart)
       widget.updateOffset(selection);
     else if (cause == CustomSelectionChangedCause.longPress) {
       widget.onLongPress(
@@ -966,7 +968,7 @@ class CustomEditableTextState extends State<CustomEditableText>
           ),
           selection);
     } else if (cause == CustomSelectionChangedCause.dragEnd) {
-      // widget.draEnd();
+      widget.draEnd(selection);
     }
     _hideSelectionOverlayIfNeeded();
     if (widget.selectionControls != null) {
