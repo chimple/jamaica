@@ -137,23 +137,31 @@ class _CrosswordGameState extends State<CrosswordGame> {
                   key: Key('A' + (i++).toString()),
                   children: [
                     f.image != ''
-                        ? Center(child: Image.asset(f.image))
+                        ? Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[350],
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16.0))),
+                            child: Center(child: Image.asset(f.image)))
                         : Container(),
                     !f.appear
                         ? DropBox(
-                            child: CuteButton(),
                             onWillAccept: (data) =>
                                 choiceDetails[int.parse(data)].choice ==
                                 f.choice,
                             onAccept: (data) => setState(() {
                                   f.appear = true;
-
                                   choiceDetails[int.parse(data)].appear = false;
                                 }),
                           )
                         : f.image != ''
                             ? Center(child: Text(f.choice))
-                            : CuteButton(child: Center(child: Text(f.choice)))
+                            : Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[350],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(16.0))),
+                                child: Center(child: Text(f.choice)))
                   ],
                 ))
           .toList(growable: false),
