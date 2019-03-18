@@ -305,9 +305,6 @@ class StoreAccessoryButton extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 4.0),
-        ),
         Text(
           name,
           style: TextStyle(
