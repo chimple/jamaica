@@ -4,8 +4,8 @@ import 'package:built_collection/built_collection.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/loca.dart';
-import 'package:jamaica/models/game_config.dart';
-import 'package:jamaica/models/game_status.dart';
+import 'package:data/models/game_config.dart';
+import 'package:data/models/game_status.dart';
 import 'package:jamaica/screens/game_level.dart';
 
 enum _ButtonStatus { active, disabled }

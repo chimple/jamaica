@@ -1,4 +1,6 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
@@ -14,10 +16,11 @@ class _ChoiceDetail {
 }
 
 class RhymeWordsGame extends StatefulWidget {
-  final List<String> questions;
-  final List<String> answers;
+  final BuiltList<String> questions;
+  final BuiltList<String> answers;
+  final OnGameOver onGameOver;
 
-  const RhymeWordsGame({Key key, this.questions, this.answers})
+  const RhymeWordsGame({Key key, this.questions, this.answers, this.onGameOver})
       : super(key: key);
 
   @override

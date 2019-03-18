@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/recognize_number_game.dart';
@@ -12,7 +13,7 @@ class RecognizeNumberGameStory extends FullScreenStory {
               color: Colors.white,
               child: RecognizeNumberGame(
                 answer: 1,
-                choices: [2, 1, 4, 3],
+                choices: BuiltList<int>([2, 1, 4, 3]),
               ),
             ),
           ),

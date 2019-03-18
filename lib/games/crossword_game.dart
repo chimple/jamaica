@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:built_collection/built_collection.dart';
+import 'package:data/data.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 import 'package:jamaica/widgets/drop_box.dart';
@@ -23,13 +26,15 @@ class _ChoiceDetail {
 }
 
 class CrosswordGame extends StatefulWidget {
-  final List<Tuple3<String, int, int>> images;
-  final List<List<String>> data;
+  final BuiltList<ImageData> images;
+  final BuiltList<BuiltList<String>> data;
+  final OnGameOver onGameOver;
 
   const CrosswordGame({
     Key key,
     this.images,
     this.data,
+    this.onGameOver,
   }) : super(key: key);
 
   @override
@@ -60,7 +65,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
     });
 
     for (var n = 0; n < widget.images.length; n++) {
-      imageIndex.add(widget.images[n].item2 * rows + widget.images[n].item3);
+      imageIndex.add(widget.images[n].x * rows + widget.images[n].y);
     }
     var len = imageIndex.length + 1;
     if (len > 14) {
@@ -75,7 +80,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
           f = 1;
         }
       }
-      if (letters[t] != null && f != 1) {
+      if (letters[t] != '' && f != 1) {
         if (rng.nextInt(2) == 1) {
           choices.add(letters[t]);
           letterIndex.add(t);
@@ -99,7 +104,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
           choice: letters[p],
           appear: letterIndex.contains(p) ? false : true,
           image: imageIndex.contains(p)
-              ? widget.images[imageIndex.indexOf(p)].item1
+              ? widget.images[imageIndex.indexOf(p)].image
               : ''));
     }
   }
@@ -121,7 +126,7 @@ class _CrosswordGameState extends State<CrosswordGame> {
       qRows: rows,
       qCols: cols,
       qChildren: crossword
-          .map((f) => f.choice == null
+          .map((f) => f.choice == ''
               ? Container(
                   key: Key('A' + (i++).toString()),
                   decoration: BoxDecoration(
@@ -132,23 +137,31 @@ class _CrosswordGameState extends State<CrosswordGame> {
                   key: Key('A' + (i++).toString()),
                   children: [
                     f.image != ''
-                        ? Center(child: Image.asset(f.image))
+                        ? Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[350],
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16.0))),
+                            child: Center(child: Image.asset(f.image)))
                         : Container(),
                     !f.appear
                         ? DropBox(
-                            child: CuteButton(),
                             onWillAccept: (data) =>
                                 choiceDetails[int.parse(data)].choice ==
                                 f.choice,
                             onAccept: (data) => setState(() {
                                   f.appear = true;
-
                                   choiceDetails[int.parse(data)].appear = false;
                                 }),
                           )
                         : f.image != ''
                             ? Center(child: Text(f.choice))
-                            : CuteButton(child: Center(child: Text(f.choice)))
+                            : Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[350],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(16.0))),
+                                child: Center(child: Text(f.choice)))
                   ],
                 ))
           .toList(growable: false),
