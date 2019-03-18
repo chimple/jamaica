@@ -25,7 +25,6 @@ class _TextAudioState extends State<AudioTextBold> {
   int position;
   set _duration(int d) => duration = d;
   int get durationText => duration != null ? duration : 0;
-
   static AudioPlayer audioPlayer = new AudioPlayer();
   final AudioCache audioCache =
       new AudioCache(prefix: 'stories/story_audio/', fixedPlayer: audioPlayer);
@@ -158,7 +157,6 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   Future loadAudio(String text, String audio) async {
-    // listOfLines = text.split('.');
     String string = '';
     words = text.split(" ");
     for (int i = 0; i < words.length; i++) {
@@ -172,11 +170,11 @@ class _TextAudioState extends State<AudioTextBold> {
     // for (int i = 0; i < listOfLines.length; i++)
     //   listOfLines[i] = listOfLines[i] + ".";
     String str;
-    // _countDots = '.'.allMatches(text).length + '!'.allMatches(text).length;
+    _countDots = '.'.allMatches(text).length + '!'.allMatches(text).length;
     // bool b = words[words.length - 1].contains(_regex1);
     // print(_countDots);
     // if (b) _countDots = _countDots + 1;
-    for (int i = 1; i <= listOfLines.length; i++) {
+    for (int i = 1; i <= _countDots; i++) {
       str = audio + i.toString();
       _audioFiles.add('$str.m4a');
     }
@@ -282,7 +280,7 @@ class _TextAudioState extends State<AudioTextBold> {
             onTap: !isPlaying
                 ? () {
                     if (isAudioFileAvailableOrNot)
-                      showSnackbar('no audio file');
+                      showSnackbar('No audio file for this story');
                     loadAudio(widget.fullText, widget.audioFile);
                   }
                 : () {
