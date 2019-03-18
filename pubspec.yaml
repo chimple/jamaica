@@ -39,6 +39,10 @@ dev_dependencies:
   json_serializable: ^2.0.0
   flutter_test:
     sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  test:
+    any
 
 
 # For information on the generic Dart part of this file, see the
@@ -68,6 +72,7 @@ flutter:
     - assets/stories/story.json
     - assets/stories/images/
     - assets/audio/
+    - assets/stories/story_audio/
 
 
   # To add assets to your application, add an assets section, like this:

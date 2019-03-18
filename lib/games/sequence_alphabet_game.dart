@@ -43,24 +43,25 @@ class _SequenceAlphabetGameState extends State<SequenceAlphabetGame> {
       cols: choiceDetails.length,
       rows: 1,
       children: choiceDetails
-          .map((c) => DragTarget<String>(
+          .map((c) => CuteButton(
                 key: Key(c.index.toString()),
-                builder: (context, candidateData, rejectedData) => CuteButton(
-                      child: Center(child: Text(c.choice)),
-                    ),
-                onWillAccept: (data) => true,
-                onAccept: (data) {
-                  WidgetsBinding.instance
-                      .addPostFrameCallback((_) => setState(() {
-                            int currentIndex = choiceDetails.indexWhere((ch) =>
-                                ch.index.toString() == c.index.toString());
-                            int droppedIndex = choiceDetails.indexWhere(
-                                (ch) => ch.index.toString() == data);
-                            final droppedChoice = choiceDetails[droppedIndex];
-                            choiceDetails.removeAt(droppedIndex);
-                            choiceDetails.insert(currentIndex, droppedChoice);
-                          }));
-                },
+                child: DragTarget<String>(
+                  builder: (context, candidateData, rejectedData) =>
+                      Center(child: Text(c.choice)),
+                  onWillAccept: (data) => true,
+                  onAccept: (data) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        setState(() {
+                          int currentIndex = choiceDetails.indexWhere((ch) =>
+                              ch.index.toString() == c.index.toString());
+                          int droppedIndex = choiceDetails
+                              .indexWhere((ch) => ch.index.toString() == data);
+                          final droppedChoice = choiceDetails[droppedIndex];
+                          choiceDetails.removeAt(droppedIndex);
+                          choiceDetails.insert(currentIndex, droppedChoice);
+                        }));
+                  },
+                ),
               ))
           .toList(growable: false),
     );

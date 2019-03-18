@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/models/story_config.dart';
+import 'package:jamaica/widgets/story/audio_text_bold.dart';
 import 'package:jamaica/widgets/story/display_story_content.dart';
 
-class StoryPage extends StatelessWidget {
+class StoryPage extends StatefulWidget {
   final List<Page> pages;
 
   StoryPage({Key key, this.pages}) : super(key: key);
 
+  @override
+  StoryPageState createState() {
+    return new StoryPageState();
+  }
+}
+
+class StoryPageState extends State<StoryPage> {
+  bool _isPlaying = false;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -15,35 +24,37 @@ class StoryPage extends StatelessWidget {
       ),
       body: Container(
         child: PageView.builder(
+          physics:
+              _isPlaying ? NeverScrollableScrollPhysics() : ScrollPhysics(),
           itemBuilder: (context, index) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Expanded(
-                  flex: 7,
+                  flex: 6,
                   child: Card(
                     child: Image.asset(
-                      pages[index].imagePath,
+                      'assets/stories/images/${widget.pages[index].imagePath}',
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 10, top: 20),
-                    child: SingleChildScrollView(
-                      child: DisplayStoryContent(
-                        listofWords: pages[index].text.split(" "),
-                      ),
-                    ),
-                  ),
+                  flex: 4,
+                  child: AudioTextBold(
+                      audioFile: widget.pages[index].audioPath,
+                      fullText: widget.pages[index].text,
+                      pageNumber: widget.pages[index].pageNumber,
+                      pageSliding: () {
+                        setState(() {
+                          _isPlaying = !_isPlaying;
+                        });
+                      }),
                 )
               ],
             );
           },
-          itemCount: pages.length,
+          itemCount: widget.pages.length,
         ),
       ),
     );

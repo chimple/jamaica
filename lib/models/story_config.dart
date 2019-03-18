@@ -18,6 +18,7 @@ class Page {
   String pageNumber;
   String imagePath;
   String text;
-  Page({this.text, this.imagePath, this.pageNumber});
+  String audioPath;
+  Page({this.text, this.imagePath, this.pageNumber, this.audioPath});
   factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
 }

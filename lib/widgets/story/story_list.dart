@@ -15,13 +15,13 @@ class StoryList extends StatefulWidget {
 }
 
 class StoryListState extends State<StoryList> {
-  // List<StoryConfig> _storyList = [];
   bool _isLoading = true;
   @override
   void initState() {
     super.initState();
-    _loadStory().then((s) {
-      // _storyList = s;
+    WidgetsBinding.instance.addPostFrameCallback((s) {
+      if (StateContainer.of(context).state.userProfile.storyList.isEmpty)
+        _loadStory().then((s) {});
     });
   }
 
@@ -30,6 +30,7 @@ class StoryListState extends State<StoryList> {
   }
 
   Future _loadStory() async {
+    print('load data::');
     String jsonString = await _loadStoryAsset();
     var jsonResponse = (json.decode(jsonString) as List);
     var list = jsonResponse
@@ -39,7 +40,6 @@ class StoryListState extends State<StoryList> {
     setState(() {
       _isLoading = false;
     });
-    // return list;
   }
 
   @override
