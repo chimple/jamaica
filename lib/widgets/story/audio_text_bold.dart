@@ -190,22 +190,22 @@ class _TextAudioState extends State<AudioTextBold> {
           isAudioFileAvailableOrNot = false;
         });
         widget.pageSliding();
-      }, onError: (e) {});
+      }, onError: (e) {
+        setState(() {
+          isPlaying = false;
+          isPause = true;
+          isAudioFileAvailableOrNot = true;
+        });
+        showSnackbar(e.toString());
+      });
     } catch (e) {
       print(e);
-      setState(() {
-        isPlaying = false;
-        isPause = true;
-        isAudioFileAvailableOrNot = true;
-      });
-      showSnackbar();
     }
   }
 
-  showSnackbar() {
+  showSnackbar(String s) {
     Scaffold.of(context).showSnackBar(SnackBar(
-      content:
-          Container(height: 20, child: Center(child: Text('No Audio file'))),
+      content: Container(height: 20, child: Center(child: Text(s))),
       action: SnackBarAction(
         label: '',
         onPressed: () {},
@@ -281,7 +281,8 @@ class _TextAudioState extends State<AudioTextBold> {
           InkWell(
             onTap: !isPlaying
                 ? () {
-                    if (isAudioFileAvailableOrNot) showSnackbar();
+                    if (isAudioFileAvailableOrNot)
+                      showSnackbar('no audio file');
                     loadAudio(widget.fullText, widget.audioFile);
                   }
                 : () {
