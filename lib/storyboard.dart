@@ -18,12 +18,14 @@ import 'package:jamaica/storyboards/games/memory_game_story.dart';
 import 'package:jamaica/storyboards/games/order_by_size_game_story.dart';
 import 'package:jamaica/storyboards/games/order_it_game_story.dart';
 import 'package:jamaica/storyboards/games/recognize_number_game_story.dart';
+import 'package:jamaica/storyboards/games/reflex_game_story.dart';
 import 'package:jamaica/storyboards/games/rhyme_words_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_alphabet_game_story.dart';
 import 'package:jamaica/storyboards/games/sequence_the_number_game_story.dart';
 
 import 'package:jamaica/storyboards/games/basic_counting_game_story.dart';
 import 'package:jamaica/storyboards/games/spin_wheel_game_story.dart';
+import 'package:jamaica/storyboards/games/tap_wrong_game_story.dart';
 import 'package:jamaica/storyboards/games/true_false_game_story.dart';
 import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
@@ -69,6 +71,7 @@ void main() {
     OrderBySizeGameStory(),
     OrderItGameStory(),
     RecognizeNumberGameStory(),
+    ReflexGameStory(),
     RhymeWordsGameStory(),
     SequenceAlphabetGameStory(),
     SequenceTheNumberGameStory(),
@@ -77,6 +80,7 @@ void main() {
     StoreScreenStory(),
     ScoreStory(),
     StoryBoard(),
+    TapWrongGameStory(),
     ThemeMapStory(),
     TrueFalseGameStory(),
     UserProgressScreenStory(),
