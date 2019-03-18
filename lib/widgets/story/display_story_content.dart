@@ -110,12 +110,9 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
               focusNode: FocusNode(),
               cursorColor: Colors.transparent,
               style: TextStyle(color: Colors.black, fontSize: 23),
-              backgroundCursorColor: Colors.red,
-              enableInteractiveSelection: true,
+              backgroundCursorColor: Colors.transparent,
               maxLines: null,
               dragStartBehavior: DragStartBehavior.start,
-              paintCursorAboveText: true,
-              autocorrect: true,
               startOffset: (s) => _startOffset(s),
               updateOffset: (o) => _updateOffset(o.extentOffset),
               draEnd: (t) {
