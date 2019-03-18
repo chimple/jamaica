@@ -22,6 +22,8 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
   StoryOption storyOption = StoryOption.highlighter;
   int _baseOffset = 0;
   bool highlightOnLongPress = false;
+  String _startSubString = '', _middleSubString = '', _endSubString = '';
+  int highlightIndex = -1;
   void _startOffset(TextSelection t) {
     _baseOffset = t.base.offset;
   }
@@ -39,8 +41,6 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
       });
   }
 
-  String _startSubString = '', _middleSubString = '', _endSubString = '';
-  int highlightIndex = -1;
   @override
   Widget build(BuildContext context) {
     int index = 0;
