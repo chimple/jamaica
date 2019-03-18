@@ -19,19 +19,9 @@ class DisplayStoryContent extends StatefulWidget {
 }
 
 class _DisplayStoryContentState extends State<DisplayStoryContent> {
-  List<int> _highlighterColor = [];
-  static String color = '';
-  bool isDragging = false, isDragging1 = false;
-  int _lastIndex = -1;
-  double initial, distance;
-  StoryOption storyOption;
+  StoryOption storyOption = StoryOption.highlighter;
   int _baseOffset = 0;
   bool highlightOnLongPress = false;
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _startOffset(TextSelection t) {
     _baseOffset = t.base.offset;
   }
@@ -90,7 +80,7 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
       );
     }
 
-    if (storyOption != StoryOption.highlighter)
+    if (storyOption == StoryOption.highlighter)
       return Stack(
         children: <Widget>[
           RichText(
@@ -154,9 +144,12 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
               }),
         ],
       );
-    else
+    else if (storyOption == StoryOption.showDialog)
       return Wrap(
         children: widget.listofWords.map((s) => _build(s, index++)).toList(),
       );
+    else {
+      return Container();
+    }
   }
 }
