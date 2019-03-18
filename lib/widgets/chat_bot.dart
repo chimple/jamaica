@@ -16,10 +16,13 @@ class ChatBot extends StatelessWidget {
     return Column(
       children: <Widget>[
         Flexible(
-          child: FlareActor("assets/character/chimp.flr",
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-              animation: "idle"),
+          child: Hero(
+            tag: 'chimp',
+            child: FlareActor("assets/character/chimp.flr",
+                alignment: Alignment.center,
+                fit: BoxFit.contain,
+                animation: "idle"),
+          ),
         ),
         Text(text),
         Expanded(
