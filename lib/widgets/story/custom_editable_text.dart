@@ -958,7 +958,7 @@ class CustomEditableTextState extends State<CustomEditableText>
   void _handleSelectionChanged(TextSelection selection,
       CustomRenderEditable renderObject, CustomSelectionChangedCause cause) {
     widget.controller.selection = selection;
-    if (cause == CustomSelectionChangedCause.dragStart)
+    if (cause == CustomSelectionChangedCause.dragUpdate)
       widget.updateOffset(selection);
     else if (cause == CustomSelectionChangedCause.longPress) {
       widget.onLongPress(

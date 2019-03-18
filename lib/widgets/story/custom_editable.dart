@@ -36,6 +36,7 @@ enum CustomSelectionChangedCause {
   tap,
   dragEnd,
   longPressUp,
+  dragUpdate,
 
   /// The user tapped twice in quick succession on the text and that caused
   /// the selection (or the location of the cursor) to change.
@@ -1192,7 +1193,7 @@ class CustomRenderEditable extends RenderBox {
 
   _onUpdate(Offset o) {
     _lastTapDownPosition = o - _paintOffset;
-    selectPosition(cause: CustomSelectionChangedCause.dragStart);
+    selectPosition(cause: CustomSelectionChangedCause.dragUpdate);
   }
 
   void _handleTapDown(TapDownDetails details) {
