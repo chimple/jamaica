@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:jamaica/widgets/story/custom_editable_text.dart';
 import 'package:jamaica/widgets/story/dialog_box_screen.dart';
-import 'package:jamaica/widgets/story/selectable_text.dart';
 
 enum StoryOption { showDialog, highlighter, dragText }
 
