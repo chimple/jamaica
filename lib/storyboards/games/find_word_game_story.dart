@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/games/find_word_game.dart';
@@ -10,8 +11,9 @@ class FindWordGameStory extends FullScreenStory {
           body: SafeArea(
             child: FindWordGame(
               image: 'assets/accessories/apple.png',
-              answer: ['A', 'P', 'P', 'L', 'E'],
-              choices: ['A', 'X', 'Y', 'P', 'E', 'B', 'L', 'W'],
+              answer: BuiltList<String>(['A', 'P', 'P', 'L', 'E']),
+              choices:
+                  BuiltList<String>(['A', 'X', 'Y', 'P', 'E', 'B', 'L', 'W']),
             ),
           ),
         ),

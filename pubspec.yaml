@@ -31,6 +31,10 @@ dependencies:
     git: https://github.com/chimple/storyboard
   flutter_svg: ^0.10.3
   audioplayers: ^0.8.2
+  fluttery:
+    git:
+      https://github.com/chimple/fluttery.git
+  flutter_circular_chart: ^0.1.0
   data:
     path: ../data
   nearby:
@@ -62,21 +66,15 @@ flutter:
 
   assets:
     - assets/
-    - assets/coin.flr
     - assets/map/
-    - assets/game/addition.svg
-    - assets/game/background_popup.svg
-    - assets/game/domino_math.svg
-    - assets/game/find_the_size.svg
-    - assets/game/match_the_shape.svg
-    - assets/game/memory_match.svg
-    - assets/game/sequence.svg
+    - assets/game/
     - assets/accessories/
     - assets/character/
-    - assets/stories/story.json
+    - assets/stories/
     - assets/stories/images/
     - assets/audio/
     - assets/stories/story_audio/
+    - assets/score/
 
 
   # To add assets to your application, add an assets section, like this:
