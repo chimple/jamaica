@@ -246,28 +246,24 @@ class _TextAudioState extends State<AudioTextBold> {
                           new TextSpan(
                               text: start,
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
                                 fontSize: 23,
                                 color: Colors.black,
                               )),
                           new TextSpan(
                               text: middle,
                               style: new TextStyle(
-                                fontWeight: FontWeight.bold,
                                 fontSize: 23,
                                 color: Colors.red,
                               )),
                           new TextSpan(
                               text: end,
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
                                 color: Colors.black,
                                 fontSize: 23,
                               )),
                           new TextSpan(
                               text: endLine,
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
                                 color: Colors.black,
                                 fontSize: 23,
                               )),
@@ -275,6 +271,7 @@ class _TextAudioState extends State<AudioTextBold> {
                       ),
                     )
                   : DisplayStoryContent(
+                      pageSliding: widget.pageSliding,
                       listofWords: widget.fullText.split(' ')),
             ),
           ),
@@ -308,15 +305,3 @@ class _TextAudioState extends State<AudioTextBold> {
     );
   }
 }
-
-// class WithoutAudioText extends StatelessWidget {
-//   final String text;
-//   WithoutAudioText({this.text});
-//   @override
-//   Widget build(BuildContext context) {
-//     return RichText(
-//         text: TextSpan(style: Theme.of(context).textTheme.body2, children: [
-//       TextSpan(text: text, style: TextStyle(fontSize: 20, wordSpacing: 2.0))
-//     ]));
-//   }
-// }
