@@ -2,15 +2,18 @@ import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/widgets/story/display_story_content.dart';
+import 'package:jamaica/widgets/story/show_dialog_mode.dart';
+import 'package:jamaica/widgets/story/text_highlighter.dart';
 
 class AudioTextBold extends StatefulWidget {
   final String fullText;
   final Function pageSliding;
   final String audioFile;
   final String pageNumber;
+  final StoryMode storyMode;
   AudioTextBold(
       {Key key,
+      this.storyMode,
       this.fullText,
       this.pageSliding,
       this.audioFile,
@@ -32,13 +35,13 @@ class _TextAudioState extends State<AudioTextBold> {
       boldTextComplete = false,
       isPause = true,
       isAudioFileAvailableOrNot = false;
-  String start = "", middle = "", end = "", endLine = '';
+  String start = "", middle = "", end = "", endLine = '', firstLine = '';
   List<String> _audioFiles = [], listOfLines = [], words;
   final _regex = RegExp('[a-zA-Z0-9]');
   final _regex1 = RegExp('[!?,|]');
-  int numOfChar, charTime, incr = 0, _countDots;
+  int numOfChar, charTime, incr = 0, _count;
   List<String> temp = [];
-
+  StoryMode storyMode = StoryMode.textMode;
   @override
   void dispose() {
     audioCache?.clearCache();
@@ -48,31 +51,49 @@ class _TextAudioState extends State<AudioTextBold> {
 
   Future pause() async {
     print('pause');
-    await audioPlayer.pause().then((s) {});
-    setState(() => isPause = true);
+    await audioPlayer.pause().then((s) {
+      setState(() => isPause = true);
+      _duration = 0;
+      isDurationZero = false;
+    });
     widget.pageSliding();
   }
 
   Future resume() async {
     print('resume');
-    await audioPlayer.resume();
-    setState(() {
-      isPause = false;
+    reset();
+    await audioPlayer.release();
+    play(_audioFiles[incr]).then((s) {
+      setState(() {
+        isPause = false;
+      });
     });
+    print('audio status ${audioPlayer.state}');
     widget.pageSliding();
-    looping(temp, temp.length);
+  }
+
+  void reset() {
+    endLine = '';
+    firstLine = '';
+    for (int i = incr + 1; i < listOfLines.length; i++) {
+      endLine = endLine + listOfLines[i];
+    }
+    print('end line:: $endLine');
+    for (int i = 0; i < incr; i++) {
+      print('start line:: ${listOfLines[i]}');
+      firstLine = firstLine + listOfLines[i];
+    }
+    setState(() {});
   }
 
   play(String url) async {
     print('play');
-    endLine = '';
+    reset();
     try {
       await audioCache.play('$url');
       audioPlayer.durationHandler = (d) {
         _duration = d.inMilliseconds;
         if (durationText > 0 && !isDurationZero) {
-          for (int i = incr + 1; i < listOfLines.length; i++)
-            endLine = endLine + listOfLines[i];
           looper(listOfLines[incr], durationText);
           isDurationZero = true;
         }
@@ -88,12 +109,15 @@ class _TextAudioState extends State<AudioTextBold> {
       if (state == AudioPlayerState.COMPLETED) {
         isDurationZero = false;
         incr++;
+        // lastString = listOfLines[incr];
+        print(incr);
         if (incr == _audioFiles.length) {
           new Future.delayed(Duration(milliseconds: 1000), () {
             onComplete();
           });
         }
 
+        lastAudioFile = _audioFiles[incr];
         _duration = 0;
         isDurationZero = false;
         if (incr != _audioFiles.length)
@@ -108,8 +132,14 @@ class _TextAudioState extends State<AudioTextBold> {
     };
   }
 
-  List<String> listOfWords = [];
+  String lastString, lastAudioFile;
   void looper(String text, int time) async {
+    start = '';
+    middle = '';
+    end = '';
+    print(text);
+    List<String> listOfWords = [];
+    lastString = text;
     listOfWords = text.split(" ");
     numOfChar = text.length;
     charTime = (time ~/ numOfChar);
@@ -118,6 +148,7 @@ class _TextAudioState extends State<AudioTextBold> {
 
   void looping(List<String> w, int l) async {
     String space = " ";
+
     for (int i = 0; i < l - 1; i++) {
       if (mounted && !isPause)
         setState(() {
@@ -163,21 +194,23 @@ class _TextAudioState extends State<AudioTextBold> {
     // for (int i = 0; i < listOfLines.length; i++)
     //   listOfLines[i] = listOfLines[i] + ".";
     String str;
-    _countDots = '.'.allMatches(text).length + '!'.allMatches(text).length;
+    _count = '.'.allMatches(text).length + '!'.allMatches(text).length;
     // bool b = words[words.length - 1].contains(_regex1);
-    // print(_countDots);
-    // if (b) _countDots = _countDots + 1;
-    for (int i = 1; i <= _countDots; i++) {
+    // print(_count);
+    // if (b) _count = _count + 1;
+    for (int i = 1; i <= _count; i++) {
       str = audio + i.toString();
       _audioFiles.add('$str.m4a');
     }
 
     try {
       await audioCache.loadAll(_audioFiles).then((s) {
+        lastAudioFile = _audioFiles[0];
         play(_audioFiles[0]);
         setState(() {
           isPlaying = true;
           isPause = false;
+          storyMode = StoryMode.audioBoldTextMode;
           isAudioFileAvailableOrNot = false;
         });
         widget.pageSliding();
@@ -206,6 +239,7 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   void onComplete() {
+    print('completed');
     setState(() {
       isPlaying = false;
       isPause = true;
@@ -217,6 +251,7 @@ class _TextAudioState extends State<AudioTextBold> {
       duration = 0;
       isDurationZero = false;
       endLine = '';
+      storyMode = StoryMode.showDialogOnLongPressMode;
     });
     widget.pageSliding();
   }
@@ -226,77 +261,110 @@ class _TextAudioState extends State<AudioTextBold> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        // alignment: AlignmentDirectional.bottomCenter,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
             flex: 9,
             child: SingleChildScrollView(
-              controller: ScrollController(),
-              child: isPlaying
-                  ? RichText(
-                      text: new TextSpan(
-                        // style: Theme.of(context).textTheme.body2,
-                        children: <TextSpan>[
-                          new TextSpan(
-                              text: start,
-                              style: TextStyle(
-                                fontSize: 23,
-                                color: Colors.black,
-                              )),
-                          new TextSpan(
-                              text: middle,
-                              style: new TextStyle(
-                                fontSize: 23,
-                                color: Colors.red,
-                              )),
-                          new TextSpan(
-                              text: end,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 23,
-                              )),
-                          new TextSpan(
-                              text: endLine,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 23,
-                              )),
-                        ],
-                      ),
-                    )
-                  : DisplayStoryContent(
-                      pageSliding: widget.pageSliding,
-                      listofWords: widget.fullText.split(' ')),
-            ),
+                controller: ScrollController(), child: _build()),
           ),
-          InkWell(
-            onTap: !isPlaying
-                ? () {
-                    loadAudio(widget.fullText, widget.audioFile);
-                  }
-                : () {
-                    print(audioPlayer.state);
-                    if (audioPlayer.state == AudioPlayerState.PAUSED) {
-                      resume();
-                    } else if (audioPlayer.state == AudioPlayerState.PLAYING)
-                      pause();
-                    else if (listOfWords.isEmpty ||
-                        audioPlayer.state == AudioPlayerState.COMPLETED) {
-                      play(_audioFiles[incr]);
-                      setState(() => isPause = false);
-                    }
-                  },
-            child: Container(
-              child: isPause ? Icon(Icons.play_arrow) : Icon(Icons.pause),
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                  color: Colors.red, borderRadius: BorderRadius.circular(20)),
-            ),
-          )
+          storyMode != StoryMode.textHighlighterMode
+              ? InkWell(
+                  onTap: !isPlaying
+                      ? () {
+                          loadAudio(widget.fullText, widget.audioFile);
+                        }
+                      : () {
+                          print(audioPlayer.state);
+                          if (audioPlayer.state == AudioPlayerState.PAUSED ||
+                              audioPlayer.state == AudioPlayerState.COMPLETED) {
+                            resume();
+                          } else if (audioPlayer.state ==
+                              AudioPlayerState.PLAYING) pause();
+                          // else if (listOfWords.isEmpty ||
+                          //     audioPlayer.state == AudioPlayerState.COMPLETED) {
+                          //   play(_audioFiles[incr]);
+                          //   setState(() => isPause = false);
+                          // }
+                        },
+                  child: Container(
+                    child: isPause ? Icon(Icons.play_arrow) : Icon(Icons.pause),
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                )
+              : Container()
         ],
       ),
+    );
+  }
+
+  Widget _build() {
+    if (storyMode == StoryMode.textMode)
+      return TextMode(
+        text: widget.fullText,
+      );
+    else if (storyMode == StoryMode.audioBoldTextMode) {
+      return RichText(
+        text: new TextSpan(
+          children: <TextSpan>[
+            new TextSpan(
+                text: firstLine,
+                style: TextStyle(
+                  fontSize: 23,
+                  color: Colors.black,
+                )),
+            new TextSpan(
+                text: start,
+                style: TextStyle(
+                  fontSize: 23,
+                  color: Colors.black,
+                )),
+            new TextSpan(
+                text: middle,
+                style: new TextStyle(
+                  fontSize: 23,
+                  color: Colors.red,
+                )),
+            new TextSpan(
+                text: end,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 23,
+                )),
+            new TextSpan(
+                text: endLine,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 23,
+                )),
+          ],
+        ),
+      );
+    } else if (storyMode == StoryMode.textHighlighterMode)
+      return TextHighlighter(
+        text: widget.fullText,
+      );
+    else if (storyMode == StoryMode.showDialogOnLongPressMode)
+      return ShowDialogMode(
+        listofWords: widget.fullText.split(' '),
+      );
+    else
+      return Container();
+  }
+}
+
+class TextMode extends StatelessWidget {
+  final String text;
+  TextMode({this.text});
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+          text: text, style: TextStyle(fontSize: 23, color: Colors.black)),
     );
   }
 }
