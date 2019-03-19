@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:jamaica/widgets/story/custom_editable_text.dart';
 import 'package:jamaica/widgets/story/dialog_box_screen.dart';
 
-enum StoryOption { showDialog, highlighter, dragText }
+enum StoryMode { showDialog, highlighter, dragText }
 
 class DisplayStoryContent extends StatefulWidget {
   final Function pageSliding;
@@ -19,7 +19,7 @@ class DisplayStoryContent extends StatefulWidget {
 }
 
 class _DisplayStoryContentState extends State<DisplayStoryContent> {
-  StoryOption storyOption = StoryOption.highlighter;
+  StoryMode storyMode = StoryMode.highlighter;
   int _baseOffset = 0;
   bool highlightOnLongPress = false;
   String _startSubString = '', _middleSubString = '', _endSubString = '';
@@ -80,7 +80,7 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
       );
     }
 
-    if (storyOption == StoryOption.highlighter)
+    if (storyMode == StoryMode.highlighter)
       return Stack(
         children: <Widget>[
           RichText(
@@ -141,7 +141,7 @@ class _DisplayStoryContentState extends State<DisplayStoryContent> {
               }),
         ],
       );
-    else if (storyOption == StoryOption.showDialog)
+    else if (storyMode == StoryMode.showDialog)
       return Wrap(
         children: widget.listofWords.map((s) => _build(s, index++)).toList(),
       );
