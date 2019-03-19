@@ -37,6 +37,8 @@ dependencies:
   flutter_circular_chart: ^0.1.0
   data:
     path: ../data
+  nearby:
+    path: ..\nearby
 
 dev_dependencies:
   build_runner: ^1.0.0

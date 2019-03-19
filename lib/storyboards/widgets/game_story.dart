@@ -1,4 +1,5 @@
 import 'package:data/data.dart';
+import 'package:data/models/contest_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/widgets/game.dart';
