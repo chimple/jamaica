@@ -37,6 +37,7 @@ import 'package:jamaica/storyboards/games/game_level_story.dart';
 import 'package:jamaica/storyboards/games/score_screen_story.dart';
 import 'package:jamaica/storyboards/theme_map_story.dart';
 import 'package:jamaica/storyboards/widgets/game_story.dart';
+import 'package:jamaica/storyboards/widgets/score_story.dart';
 import 'package:jamaica/storyboards/widgets/slide_up_route_story.dart';
 import 'package:jamaica/storyboards/widgets/story_board.dart';
 import 'package:jamaica/storyboards/widgets/store_screen_story.dart';
@@ -77,6 +78,7 @@ void main() {
     SlideUpRouteStory(),
     SpinWheelGameStory(),
     StoreScreenStory(),
+    ScoreStory(),
     StoryBoard(),
     TapWrongGameStory(),
     ThemeMapStory(),
