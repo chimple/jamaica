@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jamaica/screens/score_screen.dart';
+import 'package:jamaica/widgets/score.dart';
 
 void main() {
   testWidgets('score screen', (WidgetTester tester) async {
@@ -8,7 +8,7 @@ void main() {
     Key testKey = UniqueKey();
     await tester.pumpWidget(new MaterialApp(
       home: new Material(
-        child: new ScoreScreen(
+        child: new Score(
           key: testKey,
           score: 100,
           coinsCount: 20,
@@ -18,9 +18,7 @@ void main() {
     ));
     expect(find.byKey(testKey), findsOneWidget);
     await tester.pump(Duration(seconds: 5));
-     await tester.tap(find.byType(InkWell).first);
+    await tester.tap(find.byType(InkWell).first);
     await tester.pump();
   });
-
 }
-
