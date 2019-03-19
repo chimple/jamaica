@@ -22,7 +22,6 @@ class AudioTextBold extends StatefulWidget {
 
 class _TextAudioState extends State<AudioTextBold> {
   int duration;
-  int position;
   set _duration(int d) => duration = d;
   int get durationText => duration != null ? duration : 0;
   static AudioPlayer audioPlayer = new AudioPlayer();
@@ -38,12 +37,7 @@ class _TextAudioState extends State<AudioTextBold> {
   final _regex = RegExp('[a-zA-Z0-9]');
   final _regex1 = RegExp('[!?,|]');
   int numOfChar, charTime, incr = 0, _countDots;
-
   List<String> temp = [];
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -53,7 +47,7 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   Future pause() async {
-    print('pause ${listOfWords.length}');
+    print('pause');
     await audioPlayer.pause().then((s) {});
     setState(() => isPause = true);
     widget.pageSliding();
@@ -125,8 +119,6 @@ class _TextAudioState extends State<AudioTextBold> {
   void looping(List<String> w, int l) async {
     String space = " ";
     for (int i = 0; i < l - 1; i++) {
-      // int time = middle.length * charTime;
-      // print('time:: $time');
       if (mounted && !isPause)
         setState(() {
           start = start + middle;
@@ -137,7 +129,6 @@ class _TextAudioState extends State<AudioTextBold> {
             temp = w;
           } catch (c) {}
           end = "";
-          // for (String t in w) end = end + t + " ";
           end = w.join(" ");
         });
       await Future.delayed(
@@ -282,8 +273,6 @@ class _TextAudioState extends State<AudioTextBold> {
           InkWell(
             onTap: !isPlaying
                 ? () {
-                    if (isAudioFileAvailableOrNot)
-                      showSnackbar('No audio file for this story');
                     loadAudio(widget.fullText, widget.audioFile);
                   }
                 : () {
