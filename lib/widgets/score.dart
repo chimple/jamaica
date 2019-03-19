@@ -3,23 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:jamaica/widgets/coin_animation.dart';
 
-class ScoreScreen extends StatefulWidget {
-  int starCount;
-  int coinsCount;
-  int score;
-  ScoreScreen({
+typedef UpdateCoins(int coins);
+
+class Score extends StatefulWidget {
+  final int starCount;
+  final int coinsCount;
+  final int score;
+  final UpdateCoins updateCoins;
+  Score({
     Key key,
     this.starCount,
     this.coinsCount,
     this.score,
+    this.updateCoins,
   }) : super(key: key);
 
   @override
-  _ScoreScreenState createState() => new _ScoreScreenState();
+  _ScoreState createState() => new _ScoreState();
 }
 
-class _ScoreScreenState extends State<ScoreScreen>
-    with TickerProviderStateMixin {
+class _ScoreState extends State<Score> with TickerProviderStateMixin {
   AnimationController controller, buttoncontroller;
   AnimationController _animationController;
   double animationDuration = 0.0;
@@ -61,13 +64,14 @@ class _ScoreScreenState extends State<ScoreScreen>
     final int totalDuration = 4000;
     _animationController = AnimationController(
         vsync: this, duration: new Duration(milliseconds: totalDuration));
-    animationDuration = totalDuration / (100 * (totalDuration / widget.starCount));
+    animationDuration =
+        totalDuration / (100 * (totalDuration / widget.starCount));
     _animationController.forward();
     _animationController.addStatusListener((status) {
       if (_animationController.isCompleted) {
         setState(() {
           moveAnime = true;
-          widget.coinsCount = widget.coinsCount + widget.starCount;
+          widget.updateCoins(widget.starCount);
         });
       }
     });

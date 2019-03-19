@@ -123,15 +123,15 @@ class CuteButtonWrapperState extends State<CuteButtonWrapper> {
         child: AspectRatio(
           aspectRatio: 1.0,
           child: RaisedButton(
-            onPressed: (widget.child.onPressed == null ||
-                    buttonStatus != _ButtonStatus.down)
-                ? null
-                : () {
-                    setState(() {
-                      buttonStatus = _ButtonStatus.downToUp;
-                      reaction = widget.child.onPressed();
-                    });
-                  },
+            onPressed: () {
+              if (widget.child.onPressed != null &&
+                  buttonStatus == _ButtonStatus.down)
+                setState(() {
+                  buttonStatus = _ButtonStatus.downToUp;
+                  reaction = widget.child.onPressed();
+                });
+            },
+            elevation: 8.0,
             color: Colors.blue,
             disabledColor: Colors.blue,
             textColor: Colors.white,
