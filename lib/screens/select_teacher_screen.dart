@@ -29,101 +29,97 @@ class _TeachersScreenState extends State<TeachersScreen> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
-    return SafeArea(
-      child: Scaffold(
-          key: _scaffoldKey,
-          body: Container(
-            color: Colors.orange,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: media.size.height * .08,
-                  child: Center(
-                    child: Center(
-                      child: Text(
-                        "Choose your Class",
-                        style: TextStyle(
-                            fontSize: 30.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+    return Scaffold(
+      backgroundColor: Colors.orange,
+        key: _scaffoldKey,
+        body: Column(
+          children: <Widget>[
+            Container(
+              height: media.size.height * .08,
+              child: Center(
+                child: Center(
+                  child: Text(
+                    "Choose your Class",
+                    style: TextStyle(
+                        fontSize: 30.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                Center(
-                  child: Container(
-                    color: Colors.white70,
-                    width: media.size.width * .9,
-                    height: media.size.height * .004,
-                  ),
-                ),
-                Container(
-                  height: media.size.height * .8,
-                  child: new GridView.count(
-                    key: new Key('teacher_list'),
-                    primary: true,
-                    crossAxisCount: 3,
-                    // StateContainer.of(context).advertisers
-                    children: widget.advertisers
-                        .map((advertiser) => InkWell(
-                            onTap: () {
-                              setState(() {
-                                selected = advertiser['endPointId'];
-                                selectedTeacher = advertiser;
-                              });
-                            },
-                            child: TeacherDetails(advertiser, selected)))
-                        .toList(growable: false),
-                  ),
-                ),
-                Container(
-                  height: media.size.height * .06,
-                  width: media.size.width * .2,
-                  child: Center(
-                    child: InkWell(
-                      onTap: () async {
-                        if (selectedTeacher != null) {
-                          setState(() {
-                            loading = true;
-                          });
-                          _scaffoldKey.currentState.showSnackBar(new SnackBar(
-                            content: new Row(
-                              children: <Widget>[
-                                new CircularProgressIndicator(),
-                                new Text("  Processing...")
-                              ],
-                            ),
-                          ));
-                          await StateContainer.of(context)
-                              .connectTo(selectedTeacher, () {
-                            setState(() {
-                              loading = false;
-                            });
-                            _navigateToScreen(context, selectedTeacher);
-                          });
-                        }
-                      },
-                      child: Container(
-                        decoration: new BoxDecoration(
-                          color: Colors.white,
-                          border:
-                              new Border.all(color: Colors.white, width: 2.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Center(
-                            child: Text("Next",
-                                style: new TextStyle(
-                                    fontSize: 30.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.orange))),
-                      ),
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
-          )),
-    );
+            Center(
+              child: Container(
+                color: Colors.white70,
+                width: media.size.width * .9,
+                height: media.size.height * .004,
+              ),
+            ),
+            Container(
+              height: media.size.height * .8,
+              child: new GridView.count(
+                key: new Key('teacher_list'),
+                primary: true,
+                crossAxisCount: 3,
+                // StateContainer.of(context).advertisers
+                children: widget.advertisers
+                    .map((advertiser) => InkWell(
+                        onTap: () {
+                          setState(() {
+                            selected = advertiser['endPointId'];
+                            selectedTeacher = advertiser;
+                          });
+                        },
+                        child: TeacherDetails(advertiser, selected)))
+                    .toList(growable: false),
+              ),
+            ),
+            Container(
+              height: media.size.height * .06,
+              width: media.size.width * .2,
+              child: Center(
+                child: InkWell(
+                  onTap: () async {
+                    if (selectedTeacher != null) {
+                      setState(() {
+                        loading = true;
+                      });
+                      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+                        content: new Row(
+                          children: <Widget>[
+                            new CircularProgressIndicator(),
+                            new Text("  Processing...")
+                          ],
+                        ),
+                      ));
+                      await StateContainer.of(context)
+                          .connectTo(selectedTeacher, () {
+                        setState(() {
+                          loading = false;
+                        });
+                        _navigateToScreen(context, selectedTeacher);
+                      });
+                    }
+                  },
+                  child: Container(
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                      border:
+                          new Border.all(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Center(
+                        child: Text("Next",
+                            style: new TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange))),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   void _navigateToScreen(BuildContext context, dynamic selectedTeacher) {
@@ -168,7 +164,7 @@ class TeacherDetails extends StatelessWidget {
               children: <Widget>[
                 new Container(
                   decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.grey,
                       borderRadius:
                           const BorderRadius.all(const Radius.circular(50.0)),
                       image: DecorationImage(

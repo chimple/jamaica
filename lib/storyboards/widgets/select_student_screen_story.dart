@@ -16,7 +16,7 @@ class SelectStudentScreenStory extends FullScreenStory {
                   "endpointId": "x123y"
                 },
                 message:
-                    "{\"\$\":\"ClassStudents\",\"classId\":\"class1\",\"sessionId\":\"session12\",\"students\":[{\"id\":\"123\",\"name\":\"nikhil\",\"grade\":\"2\",\"photo\":\"002page5.jpg\"},{\"id\":\"124\",\"name\":\"kiran\",\"grade\":\"2\",\"photo\":\"002page5.jpg\"},{\"id\":\"135\",\"name\":\"shant\",\"grade\":\"2\",\"photo\":\"002page5.jpg\"},{\"id\":\"125\",\"name\":\"manu\",\"grade\":\"2\",\"photo\":\"002page5.jpg\"}]}",
+                    "{\"\$\":\"ClassStudents\",\"classId\":\"class1\",\"sessionId\":\"session12\",\"students\":[{\"id\":\"123\",\"name\":\"nikhil\",\"grade\":\"grade 2\",\"photo\":\"002page5.jpg\"},{\"id\":\"124\",\"name\":\"kiran\",\"grade\":\"grade 2\",\"photo\":\"002page5.jpg\"},{\"id\":\"135\",\"name\":\"shant\",\"grade\":\"grade 2\",\"photo\":\"002page5.jpg\"},{\"id\":\"125\",\"name\":\"manu\",\"grade\":\"grade 2\",\"photo\":\"002page5.jpg\"}]}",
               ),
             ),
           ),
