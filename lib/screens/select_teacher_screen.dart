@@ -28,9 +28,10 @@ class _TeachersScreenState extends State<TeachersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
     MediaQueryData media = MediaQuery.of(context);
     return Scaffold(
-      backgroundColor: Colors.orange,
+        backgroundColor: Colors.orange,
         key: _scaffoldKey,
         body: Column(
           children: <Widget>[
@@ -56,7 +57,7 @@ class _TeachersScreenState extends State<TeachersScreen> {
               ),
             ),
             Container(
-              height: media.size.height * .8,
+              height: orientation == Orientation.portrait ? media.size.height * .8: media.size.height*.75,
               child: new GridView.count(
                 key: new Key('teacher_list'),
                 primary: true,
@@ -66,7 +67,7 @@ class _TeachersScreenState extends State<TeachersScreen> {
                     .map((advertiser) => InkWell(
                         onTap: () {
                           setState(() {
-                            selected = advertiser['endPointId'];
+                            selected = advertiser['endPointName'];
                             selectedTeacher = advertiser;
                           });
                         },
@@ -75,7 +76,9 @@ class _TeachersScreenState extends State<TeachersScreen> {
               ),
             ),
             Container(
-              height: media.size.height * .06,
+              height: orientation == Orientation.portrait
+                  ? media.size.height * .06
+                  : media.size.height * .08,
               width: media.size.width * .2,
               child: Center(
                 child: InkWell(
@@ -104,14 +107,13 @@ class _TeachersScreenState extends State<TeachersScreen> {
                   child: Container(
                     decoration: new BoxDecoration(
                       color: Colors.white,
-                      border:
-                          new Border.all(color: Colors.white, width: 2.0),
+                      border: new Border.all(color: Colors.white, width: 2.0),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Center(
                         child: Text("Next",
                             style: new TextStyle(
-                                fontSize: 30.0,
+                                fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.orange))),
                   ),
@@ -156,10 +158,13 @@ class TeacherDetails extends StatelessWidget {
       child: new Stack(
         children: <Widget>[
           Container(
-            width: size.width * .2,
-            height: size.height * .15,
-            color:
-                selected == teacher['endPointId'] ? Colors.blue : Colors.orange,
+            width: size.width * .25,
+            height: orientation == Orientation.portrait
+                ? size.height * .18
+                : size.height * .3,
+            color: selected == teacher['endPointName']
+                ? Colors.blue
+                : Colors.orange,
             child: Column(
               children: <Widget>[
                 new Container(
@@ -172,23 +177,25 @@ class TeacherDetails extends StatelessWidget {
                             'assets/stories/images/${classSession.teacherPhoto}'),
                       )),
                   width: orientation == Orientation.portrait
-                      ? size.width * 0.15
-                      : size.width * 0.1,
-                  height: size.height * .1,
+                      ? size.width * 0.2
+                      : size.width * 0.12,
+                  height: orientation == Orientation.portrait
+                      ? size.height * .1
+                      : size.height * .2,
                 ),
                 new Container(
                     child: new Text(classSession.teacherName,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: new TextStyle(
-                            fontSize: size.height * .02, color: Colors.white),
+                            fontSize: orientation == Orientation.portrait ?size.height * .02: size.height*.05, color: Colors.white),
                         overflow: TextOverflow.ellipsis)),
                 new Container(
                     child: new Text(classSession.classId,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: new TextStyle(
-                            fontSize: size.height * .01, color: Colors.white),
+                            fontSize:  orientation == Orientation.portrait ?size.height * .015: size.height*.03, color: Colors.white),
                         overflow: TextOverflow.ellipsis)),
               ],
             ),
