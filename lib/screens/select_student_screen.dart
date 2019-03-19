@@ -8,9 +8,9 @@ import 'package:jamaica/state/state_container.dart';
 
 class SelectStudentScreen extends StatefulWidget {
   final dynamic selectedTeacher;
-  // final String message;
+  final String message;
 
-  SelectStudentScreen({Key key, this.selectedTeacher})
+  SelectStudentScreen({Key key, this.selectedTeacher, this.message})
       : super(key: key);
 
   @override
@@ -124,7 +124,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
             child: Center(
               child: InkWell(
                 onTap: () async {
-                await  StateContainer.of(context).student(selectedStudent);
+                  await StateContainer.of(context).student(selectedStudent);
                   ClassJoin classJoin = ClassJoin((b) => b
                     ..studentId = selectedStudent
                     ..sessionId = classStudent.sessionId);
@@ -133,8 +133,9 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                   final classJoinJsonString = jsonEncode(classJoinJson);
                   print(classJoinJsonString);
 
-                  StateContainer.of(context)
-                      .sendMessageTo(widget.selectedTeacher['endPointId'], classJoinJsonString);
+                  StateContainer.of(context).sendMessageTo(
+                      widget.selectedTeacher['endPointId'],
+                      classJoinJsonString);
 
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -150,7 +151,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                       : media.size.width * .15,
                   decoration: new BoxDecoration(
                     color: Colors.white,
-                    border: new Border.all(color: Colors.white, width: 2.0),
+                    border: new Border.all(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Center(
@@ -185,14 +186,18 @@ class StudentDetails extends StatelessWidget {
       height: orientation == Orientation.portrait
           ? size.height * .15
           : size.height * .2,
-      color: selectedStudent == studentDetails.id ? Colors.blue : Colors.orange,
       child: Column(
         children: <Widget>[
           new Container(
             decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Colors.red,
+                border: Border.all(
+                    color: selectedStudent == studentDetails.id
+                        ? Colors.green
+                        : Colors.grey,
+                    width: 5.0),
                 borderRadius:
-                    const BorderRadius.all(const Radius.circular(50.0)),
+                    const BorderRadius.all(const Radius.circular(60.0)),
                 image: DecorationImage(
                   image: AssetImage(
                       'assets/stories/images/${studentDetails.photo}'),

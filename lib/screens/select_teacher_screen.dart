@@ -115,7 +115,7 @@ class _TeachersScreenState extends State<TeachersScreen> {
                   child: Container(
                     decoration: new BoxDecoration(
                       color: Colors.white,
-                      border: new Border.all(color: Colors.white, width: 2.0),
+                      border: new Border.all(color: Colors.green, width: 2.0),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Center(
@@ -172,14 +172,16 @@ class TeacherDetails extends StatelessWidget {
             height: orientation == Orientation.portrait
                 ? size.height * .15
                 : size.height * .35,
-            color: selected == teacher['endPointName']
-                ? Colors.blue
-                : Colors.orange,
             child: Column(
               children: <Widget>[
                 new Container(
                   decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.red,
+                      border: Border.all(
+                          color: selected == teacher['endPointName']
+                              ? Colors.green
+                              : Colors.grey,
+                          width: 5.0),
                       borderRadius:
                           const BorderRadius.all(const Radius.circular(50.0)),
                       image: DecorationImage(
