@@ -77,32 +77,33 @@ class _TeachersScreenState extends State<TeachersScreen> {
                   ),
                 ),
                 Container(
-                  height: media.size.height * .09,
+                  height: media.size.height * .06,
+                  width: media.size.width * .2,
                   child: Center(
                     child: InkWell(
                       onTap: () async {
-                        setState(() {
-                          loading = true;
-                        });
-                        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-                          content: new Row(
-                            children: <Widget>[
-                              new CircularProgressIndicator(),
-                              new Text("  Processing...")
-                            ],
-                          ),
-                        ));
-                        await StateContainer.of(context)
-                            .connectTo(selectedTeacher, () {
+                        if (selectedTeacher != null) {
                           setState(() {
-                            loading = false;
+                            loading = true;
                           });
-                          _navigateToScreen(context, selectedTeacher);
-                        });
+                          _scaffoldKey.currentState.showSnackBar(new SnackBar(
+                            content: new Row(
+                              children: <Widget>[
+                                new CircularProgressIndicator(),
+                                new Text("  Processing...")
+                              ],
+                            ),
+                          ));
+                          await StateContainer.of(context)
+                              .connectTo(selectedTeacher, () {
+                            setState(() {
+                              loading = false;
+                            });
+                            _navigateToScreen(context, selectedTeacher);
+                          });
+                        }
                       },
                       child: Container(
-                        height: media.size.height * .06,
-                        width: media.size.width * .2,
                         decoration: new BoxDecoration(
                           color: Colors.white,
                           border:
@@ -135,17 +136,17 @@ class _TeachersScreenState extends State<TeachersScreen> {
 }
 
 class TeacherDetails extends StatelessWidget {
-  final dynamic advertiser;
+  final dynamic teacher;
   final String selected;
 
-  const TeacherDetails(this.advertiser, this.selected, {Key key})
+  const TeacherDetails(this.teacher, this.selected, {Key key})
       : super(key: key);
 
   Widget build(BuildContext context) {
     final standardSerializers =
         (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
-    final newJson = jsonDecode(advertiser['endPointName']);
+    final newJson = jsonDecode(teacher['endPointName']);
     ClassSession classSession = standardSerializers.deserialize(newJson);
 
     MediaQueryData media = MediaQuery.of(context);
@@ -161,9 +162,8 @@ class TeacherDetails extends StatelessWidget {
           Container(
             width: size.width * .2,
             height: size.height * .15,
-            color: selected == advertiser['endPointId']
-                ? Colors.blue
-                : Colors.orange,
+            color:
+                selected == teacher['endPointId'] ? Colors.blue : Colors.orange,
             child: Column(
               children: <Widget>[
                 new Container(

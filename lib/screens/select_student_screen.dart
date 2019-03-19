@@ -8,7 +8,10 @@ import 'package:jamaica/state/state_container.dart';
 
 class SelectStudentScreen extends StatefulWidget {
   final dynamic selectedTeacher;
-  SelectStudentScreen({Key key, this.selectedTeacher}) : super(key: key);
+  final dynamic message;
+
+  SelectStudentScreen({Key key, this.selectedTeacher, this.message})
+      : super(key: key);
 
   @override
   _SelectStudentScreenState createState() => _SelectStudentScreenState();
@@ -20,17 +23,19 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("mkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk..................");
     final standardSerializers =
         (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
+
     final selectedTeacher = jsonDecode(widget.selectedTeacher['endPointName']);
+    print(selectedTeacher);
     ClassSession classSession =
         standardSerializers.deserialize(selectedTeacher);
 
-    final newJson = jsonDecode(
-        StateContainer.of(context).messages[0]['textMessages']['message']);
+    final newJson = jsonDecode(widget.message);
     ClassStudents classStudent = standardSerializers.deserialize(newJson);
-    print("mk testing...${classStudent.students}");
+    print("class students..${classStudent.students}");
 
     for (var i = 0; i < classStudent.students.length; i++) {
       studentList.add(classStudent.students[i]);
@@ -119,7 +124,8 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                       print(classJoinJsonString);
 
                       StateContainer.of(context).sendMessageTo(
-                          classStudent.classId, classJoinJsonString);
+                          classSession.classId, classJoinJsonString);
+
 
                       Navigator.of(context).push(MaterialPageRoute<void>(
                           builder: (BuildContext context) {
