@@ -57,11 +57,19 @@ class _TeachersScreenState extends State<TeachersScreen> {
               ),
             ),
             Container(
-              height: orientation == Orientation.portrait ? media.size.height * .8: media.size.height*.75,
+              height: orientation == Orientation.portrait
+                  ? media.size.height * .8
+                  : media.size.height * .75,
+              width: media.size.width,
               child: new GridView.count(
                 key: new Key('teacher_list'),
                 primary: true,
-                crossAxisCount: 3,
+                crossAxisCount: 4,
+                childAspectRatio: orientation == Orientation.portrait
+                    ? MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height)
+                    : MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height * 2),
                 // StateContainer.of(context).advertisers
                 children: widget.advertisers
                     .map((advertiser) => InkWell(
@@ -127,8 +135,10 @@ class _TeachersScreenState extends State<TeachersScreen> {
   void _navigateToScreen(BuildContext context, dynamic selectedTeacher) {
     if (StateContainer.of(context).isConnected) {
       Navigator.of(context).push(MaterialPageRoute<Null>(
-          builder: (BuildContext context) =>
-              SelectStudentScreen(selectedTeacher: selectedTeacher)));
+          builder: (BuildContext context) => SelectStudentScreen(
+                selectedTeacher: selectedTeacher,
+                // message: messageData,
+              )));
     }
   }
 }
@@ -160,8 +170,8 @@ class TeacherDetails extends StatelessWidget {
           Container(
             width: size.width * .25,
             height: orientation == Orientation.portrait
-                ? size.height * .18
-                : size.height * .3,
+                ? size.height * .15
+                : size.height * .35,
             color: selected == teacher['endPointName']
                 ? Colors.blue
                 : Colors.orange,
@@ -188,14 +198,20 @@ class TeacherDetails extends StatelessWidget {
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: new TextStyle(
-                            fontSize: orientation == Orientation.portrait ?size.height * .02: size.height*.05, color: Colors.white),
+                            fontSize: orientation == Orientation.portrait
+                                ? size.height * .02
+                                : size.height * .05,
+                            color: Colors.white),
                         overflow: TextOverflow.ellipsis)),
                 new Container(
-                    child: new Text(classSession.classId,
+                    child: new Text(classSession.name,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: new TextStyle(
-                            fontSize:  orientation == Orientation.portrait ?size.height * .015: size.height*.03, color: Colors.white),
+                            fontSize: orientation == Orientation.portrait
+                                ? size.height * .015
+                                : size.height * .03,
+                            color: Colors.white),
                         overflow: TextOverflow.ellipsis)),
               ],
             ),

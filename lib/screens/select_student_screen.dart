@@ -8,9 +8,9 @@ import 'package:jamaica/state/state_container.dart';
 
 class SelectStudentScreen extends StatefulWidget {
   final dynamic selectedTeacher;
-  final dynamic message;
+  // final String message;
 
-  SelectStudentScreen({Key key, this.selectedTeacher, this.message})
+  SelectStudentScreen({Key key, this.selectedTeacher})
       : super(key: key);
 
   @override
@@ -20,9 +20,11 @@ class SelectStudentScreen extends StatefulWidget {
 class _SelectStudentScreenState extends State<SelectStudentScreen> {
   List<Student> studentList = [];
   String selectedStudent;
+  String message;
 
   @override
   Widget build(BuildContext context) {
+    message =StateContainer.of(context).receiveMessage;
     final standardSerializers =
         (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
@@ -30,7 +32,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
     ClassSession classSession =
         standardSerializers.deserialize(selectedTeacher);
 
-    final newJson = jsonDecode(widget.message);
+    final newJson = jsonDecode(message);
     ClassStudents classStudent = standardSerializers.deserialize(newJson);
     print("class students..${classStudent.students}");
     studentList.clear();
@@ -95,13 +97,15 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
             ),
           ),
           Container(
-            height: orientation == Orientation.portrait ?  media.size.height * .68: media.size.height * .52,
+            height: orientation == Orientation.portrait
+                ? media.size.height * .68
+                : media.size.height * .52,
             child: GridView.count(
               key: new Key('student_list_page'),
               primary: true,
               crossAxisSpacing: 12.0,
               mainAxisSpacing: 12.0,
-              crossAxisCount: media.size.height > media.size.width ? 3 : 4,
+              crossAxisCount: media.size.height > media.size.width ? 4 : 4,
               children: studentList
                   .map((t) => InkWell(
                       onTap: () {
@@ -114,10 +118,13 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
             ),
           ),
           Container(
-            height: orientation == Orientation.portrait ?  media.size.height * .08: media.size.height * .1,
+            height: orientation == Orientation.portrait
+                ? media.size.height * .08
+                : media.size.height * .1,
             child: Center(
               child: InkWell(
                 onTap: () async {
+                await  StateContainer.of(context).student(selectedStudent);
                   ClassJoin classJoin = ClassJoin((b) => b
                     ..studentId = selectedStudent
                     ..sessionId = classStudent.sessionId);
@@ -127,7 +134,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                   print(classJoinJsonString);
 
                   StateContainer.of(context)
-                      .sendMessageTo(classSession.classId, classJoinJsonString);
+                      .sendMessageTo(widget.selectedTeacher['endPointId'], classJoinJsonString);
 
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -135,8 +142,12 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                   }));
                 },
                 child: Container(
-                  height:  orientation == Orientation.portrait ?  media.size.height * .06: media.size.height * .1,
-                  width: orientation == Orientation.portrait ?  media.size.width * .25: media.size.width * .15,
+                  height: orientation == Orientation.portrait
+                      ? media.size.height * .06
+                      : media.size.height * .1,
+                  width: orientation == Orientation.portrait
+                      ? media.size.width * .25
+                      : media.size.width * .15,
                   decoration: new BoxDecoration(
                     color: Colors.white,
                     border: new Border.all(color: Colors.white, width: 2.0),

@@ -24,6 +24,8 @@ class StateContainerState extends State<StateContainer> {
   AppState state;
   Nearby _nearBy = Nearby.instance;
   List<dynamic> messages = [];
+  String studentIdVal;
+  String receiveMessage;
   Map<dynamic, List<dynamic>> messagesById = new Map<dynamic, List<dynamic>>();
   List<dynamic> connections = [];
 
@@ -283,22 +285,27 @@ class StateContainerState extends State<StateContainer> {
   void onReceiveMessage(Map<dynamic, dynamic> message) async {
     messages.add(message);
     var endPointId = message['textMessages']['endPointId'];
+    receiveMessage = message['textMessages']['message'];
 
-    if (messagesById.containsKey(endPointId)) {
-      final messagesForId = messagesById[endPointId];
-      messagesForId.add(message);
-      messagesById[endPointId] = messagesForId;
-    } else {
-      List<dynamic> messagesForId = <dynamic>[];
-      messagesForId.add(message);
-      messagesById[endPointId] = messagesForId;
-    }
+    //   if (messagesById.containsKey(endPointId)) {
+    //     final messagesForId = messagesById[endPointId];
+    //     messagesForId.add(message);
+    //     messagesById[endPointId] = messagesForId;
+    //   } else {
+    //     List<dynamic> messagesForId = <dynamic>[];
+    //     messagesForId.add(message);
+    //     messagesById[endPointId] = messagesForId;
+    //   }
   }
 
   Future<void> getConnections() async {
     List<dynamic> connections = await _nearBy.connections;
     setState(() => this.connections = connections);
     print('got connections : $connections');
+  }
+
+  student(String studentId) async {
+    studentIdVal = studentId;
   }
 
   @override
