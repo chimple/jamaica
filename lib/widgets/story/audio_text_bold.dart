@@ -159,6 +159,8 @@ class _TextAudioState extends State<AudioTextBold> {
   Future loadAudio(String text, String audio) async {
     String string = '';
     words = text.split(" ");
+    listOfLines?.clear();
+    _audioFiles?.clear();
     for (int i = 0; i < words.length; i++) {
       string = string + words[i] + ' ';
       if (words[i].contains(RegExp('[!.]'))) {
@@ -213,16 +215,17 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   void onComplete() {
-    boldTextComplete = true;
-    incr = 0;
-    duration = 0;
-    isDurationZero = false;
-    start = "";
-    middle = "";
-    end = "";
     setState(() {
       isPlaying = false;
       isPause = true;
+      start = "";
+      middle = "";
+      end = "";
+      boldTextComplete = true;
+      incr = 0;
+      duration = 0;
+      isDurationZero = false;
+      endLine = '';
     });
     widget.pageSliding();
   }
