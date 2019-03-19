@@ -24,6 +24,7 @@ class StoryPageState extends State<StoryPage> {
       ),
       body: Container(
         child: PageView.builder(
+          scrollDirection: Axis.vertical,
           physics:
               _isPlaying ? NeverScrollableScrollPhysics() : ScrollPhysics(),
           itemBuilder: (context, index) {
