@@ -1,5 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
+import 'package:built_value/standard_json_plugin.dart';
+import 'package:data/models/class_students.dart';
+import 'package:data/models/serializers.dart';
+import 'package:data/models/user_profile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
 import 'package:nearby/nearby.dart';
@@ -25,7 +30,9 @@ class StateContainerState extends State<StateContainer> {
   Nearby _nearBy = Nearby.instance;
   List<dynamic> messages = [];
   String studentIdVal;
-  String receiveMessage;
+  UserProfile userProfileDeatils;
+  ClassStudents classStudents;
+  String teacherEndPointId;
   Map<dynamic, List<dynamic>> messagesById = new Map<dynamic, List<dynamic>>();
   List<dynamic> connections = [];
 
@@ -284,18 +291,22 @@ class StateContainerState extends State<StateContainer> {
 
   void onReceiveMessage(Map<dynamic, dynamic> message) async {
     messages.add(message);
-    var endPointId = message['textMessages']['endPointId'];
-    receiveMessage = message['textMessages']['message'];
+    final standardSerializers =
+        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
-    //   if (messagesById.containsKey(endPointId)) {
-    //     final messagesForId = messagesById[endPointId];
-    //     messagesForId.add(message);
-    //     messagesById[endPointId] = messagesForId;
-    //   } else {
-    //     List<dynamic> messagesForId = <dynamic>[];
-    //     messagesForId.add(message);
-    //     messagesById[endPointId] = messagesForId;
-    //   }
+    final newJson = jsonDecode(message['textMessages']['message']);
+    print("recieved message iss...$newJson");
+    var values = newJson.keys;
+    print("data of key is.............$values");
+    String keys = values.first;
+
+    if (newJson[keys] == "ClassStudents") {
+      teacherEndPointId = message['textMessages']['endPointId'];
+      classStudents = standardSerializers.deserialize(newJson);
+      print("class students are...$classStudents");
+    } else if (newJson[keys] == "UserProfile") {
+      userProfileDeatils = standardSerializers.deserialize(newJson);
+    }
   }
 
   Future<void> getConnections() async {
