@@ -56,9 +56,12 @@ class StoryListState extends State<StoryList> {
       );
     } else {
       return new Container(
+        color: Colors.orange,
         child: GridView.builder(
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.30,
+          ),
           itemBuilder: (context, index) {
             return StoryCard(storyConfig: _stories[index]);
           },
