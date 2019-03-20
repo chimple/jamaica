@@ -1,23 +1,59 @@
-import 'package:flutter/material.dart';
-import 'dart:core';
+import 'dart:math';
 
-class DisplayStoryContent extends StatelessWidget {
-  int index;
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:jamaica/widgets/story/custom_editable_text.dart';
+import 'package:jamaica/widgets/story/dialog_box_screen.dart';
+
+enum StoryMode { showDialog, highlighter, dragText }
+
+class DisplayStoryContent extends StatefulWidget {
+  final Function pageSliding;
   final List<String> listofWords;
-  DisplayStoryContent({Key key, this.listofWords}) : super(key: key);
+  DisplayStoryContent({Key key, this.listofWords, this.pageSliding})
+      : super(key: key);
+
+  @override
+  _DisplayStoryContentState createState() => _DisplayStoryContentState();
+}
+
+class _DisplayStoryContentState extends State<DisplayStoryContent> {
+  StoryMode storyMode = StoryMode.highlighter;
+  int _baseOffset = 0;
+  bool highlightOnLongPress = false;
+  String _startSubString = '', _middleSubString = '', _endSubString = '';
+  int highlightIndex = -1;
+  void _startOffset(TextSelection t) {
+    _baseOffset = t.base.offset;
+  }
+
+  void _updateOffset(int extendOffset) {
+    if (_baseOffset < extendOffset)
+      setState(() {
+        _middleSubString =
+            widget.listofWords.join(' ').substring(_baseOffset, extendOffset);
+        _startSubString =
+            widget.listofWords.join(' ').substring(0, _baseOffset);
+        _endSubString = widget.listofWords
+            .join(' ')
+            .substring(extendOffset, widget.listofWords.join(' ').length);
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: listofWords.map((d) {
-        return InkWell(
-          splashColor: Colors.yellow,
-          onLongPress: () {
-            index = listofWords.indexOf(d);
-            showDialog(
-              context: context,
-              builder: (context) {
-                return FractionallySizedBox(
+    int index = 0;
+    Widget _build(String s, int i) {
+      return InkWell(
+        onLongPress: () {
+          setState(() {
+            highlightIndex = i;
+          });
+          showDialog(
+            context: context,
+            builder: (context) {
+              return FractionallySizedBox(
                   heightFactor:
                       MediaQuery.of(context).orientation == Orientation.portrait
                           ? 0.5
@@ -26,75 +62,91 @@ class DisplayStoryContent extends StatelessWidget {
                       MediaQuery.of(context).orientation == Orientation.portrait
                           ? 0.8
                           : 0.4,
-                  child: _textDescriptionDialog(context, d,
-                      "Hello This is the Description about the word that you just pressed and the word that you pressed is "),
-                );
-              },
-            );
-          },
-          child: Text(d + " ",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  wordSpacing: 4.0,
-                  letterSpacing: 2.0)),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _textDescriptionDialog(
-      BuildContext context, String text, String textDesciption) {
-    text = text.replaceAll(new RegExp(r'[^\w\s]+'), '');
-    MediaQueryData mediaQuery = MediaQuery.of(context);
-    return new Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(20.0),
-        ),
-      ),
-      child: Container(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Align(
-              alignment: AlignmentDirectional.topEnd,
-              child: new IconButton(
-                  icon: new Icon(Icons.volume_up),
-                  iconSize: mediaQuery.size.height * 0.07,
-                  color: Colors.black,
-                  onPressed: () {}),
+                  child: DialogBoxScreen()
+                      .textDescriptionDialog(context, s, 'textDesciption'));
+            },
+          );
+        },
+        child: Container(
+          color: highlightIndex == i ? Colors.red : Colors.transparent,
+          child: Text(
+            s + ' ',
+            style: TextStyle(
+              fontSize: 23,
+              color: Colors.black,
             ),
-            Column(
-              children: <Widget>[
-                Text(
-                  text,
-                  style: TextStyle(
-                      fontSize: mediaQuery.size.height * 0.05,
-                      color: Colors.green),
-                ),
-                Image.asset('assets/stories/images/$text.jpg',
-                    height: mediaQuery.orientation == Orientation.portrait
-                        ? mediaQuery.size.height * 0.2
-                        : mediaQuery.size.height * 0.3),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    textDesciption + '$text',
-                    style: TextStyle(
-                        fontSize: mediaQuery.orientation == Orientation.portrait
-                            ? mediaQuery.size.height * 0.02
-                            : mediaQuery.size.height * 0.03,
-                        color: Colors.black),
-                  ),
-                )
-              ],
-            )
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    }
+
+    if (storyMode == StoryMode.highlighter)
+      return Stack(
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                    text: _startSubString,
+                    style: TextStyle(fontSize: 23, color: Colors.transparent)),
+                TextSpan(
+                    text: _middleSubString,
+                    style: TextStyle(
+                        fontSize: 23,
+                        background: Paint()..color = Colors.red,
+                        color: Colors.transparent)),
+                TextSpan(
+                    text: _endSubString,
+                    style: TextStyle(
+                      color: Colors.transparent,
+                      fontSize: 23,
+                    ))
+              ],
+            ),
+          ),
+          CustomEditableText(
+              controller: CustomTextEditingController(
+                  text: widget.listofWords.join(' ')),
+              focusNode: FocusNode(),
+              cursorColor: Colors.transparent,
+              style: TextStyle(color: Colors.black, fontSize: 23),
+              backgroundCursorColor: Colors.transparent,
+              maxLines: null,
+              dragStartBehavior: DragStartBehavior.start,
+              startOffset: (s) => _startOffset(s),
+              updateOffset: (o) => _updateOffset(o.extentOffset),
+              draEnd: (t) {
+                _baseOffset = t.base.offset;
+                _updateOffset(t.extent.offset);
+              },
+              onLongPress: (s, textSelection) {
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return FractionallySizedBox(
+                //         heightFactor: MediaQuery.of(context).orientation ==
+                //                 Orientation.portrait
+                //             ? 0.5
+                //             : 0.8,
+                //         widthFactor: MediaQuery.of(context).orientation ==
+                //                 Orientation.portrait
+                //             ? 0.8
+                //             : 0.4,
+                //         child: DialogBoxScreen().textDescriptionDialog(
+                //             context, s, 'textDesciption'));
+                //   },
+                // );
+                // _baseOffset = textSelection.base.offset;
+                // _updateOffset(textSelection.extentOffset);
+              }),
+        ],
+      );
+    else if (storyMode == StoryMode.showDialog)
+      return Wrap(
+        children: widget.listofWords.map((s) => _build(s, index++)).toList(),
+      );
+    else {
+      return Container();
+    }
   }
 }
