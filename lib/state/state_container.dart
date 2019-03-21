@@ -1,5 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
+import 'package:built_value/standard_json_plugin.dart';
+import 'package:data/models/contest_session.dart';
+import 'package:data/models/contest_start.dart';
+import 'package:data/models/serializers.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
 import 'package:nearby/nearby.dart';
@@ -26,6 +31,10 @@ class StateContainerState extends State<StateContainer> {
   List<dynamic> messages = [];
   String studentIdVal;
   String receiveMessage;
+  var contestSessionEndPointId;
+  var data;
+  ContestStart contestStart;
+  ContestSession contestSession;
   Map<dynamic, List<dynamic>> messagesById = new Map<dynamic, List<dynamic>>();
   List<dynamic> connections = [];
 
@@ -284,9 +293,20 @@ class StateContainerState extends State<StateContainer> {
 
   void onReceiveMessage(Map<dynamic, dynamic> message) async {
     messages.add(message);
-    var endPointId = message['textMessages']['endPointId'];
+    data = message['textMessages']['message'];
     receiveMessage = message['textMessages']['message'];
-
+    final standardSerializers =
+        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+    final newJson = jsonDecode(message['textMessages']['message']);
+    var values = newJson.keys;
+    String keys = values.first;
+    if (newJson[keys] == "ContestSession") {
+      contestSessionEndPointId = message['textMessages']['endPointId'];
+      contestSession = standardSerializers.deserialize(newJson);
+      print("hello this contestSession object ....$newJson");
+    } else if (newJson[keys] == "ContestStart") {
+      contestStart = standardSerializers.deserialize(newJson);
+    }
     //   if (messagesById.containsKey(endPointId)) {
     //     final messagesForId = messagesById[endPointId];
     //     messagesForId.add(message);
