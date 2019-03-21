@@ -24,6 +24,13 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!StateContainer.of(context).isConnected) {
+      return Center(
+        child: SizedBox(
+            height: 30.0, width: 30.0, child: CircularProgressIndicator()),
+      );
+    }
+
     classStudents = StateContainer.of(context).classStudents;
 
     final standardSerializers =
@@ -38,7 +45,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
     }
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
-    double x = 12.0;
+
     return Scaffold(
       backgroundColor: Colors.orange,
       body: Column(
@@ -166,9 +173,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return MyApp();
-                  }
-                  
-                  ));
+                  }));
                 },
                 child: Container(
                   height: orientation == Orientation.portrait

@@ -215,7 +215,7 @@ class StateContainerState extends State<StateContainer> {
   }
 
   connectTo(
-      Map<dynamic, dynamic> connectionInfo, Function _navigateToScreen) async {
+      Map<dynamic, dynamic> connectionInfo) async {
     // Connect to device
     _connectionSubscription =
         _nearBy.connectTo(connectionInfo).listen((result) async {
@@ -223,7 +223,6 @@ class StateContainerState extends State<StateContainer> {
       setState(() {
         isConnected = result;
         _log('connection Result: $isConnected');
-        _navigateToScreen();
       });
     }, onDone: stopConnection);
   }

@@ -31,7 +31,7 @@ class _TeachersScreenState extends State<TeachersScreen> {
     Orientation orientation = MediaQuery.of(context).orientation;
     MediaQueryData media = MediaQuery.of(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
           backgroundColor: Colors.orange,
           key: _scaffoldKey,
           body: Column(
@@ -68,7 +68,7 @@ class _TeachersScreenState extends State<TeachersScreen> {
                   crossAxisCount: 4,
                   childAspectRatio: orientation == Orientation.portrait
                       ? MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height/1.4)
+                          (MediaQuery.of(context).size.height / 1.4)
                       : MediaQuery.of(context).size.width /
                           (MediaQuery.of(context).size.height * 1.6),
                   // StateContainer.of(context).advertisers
@@ -93,24 +93,14 @@ class _TeachersScreenState extends State<TeachersScreen> {
                   child: InkWell(
                     onTap: () async {
                       if (selectedTeacher != null) {
-                        setState(() {
-                          loading = true;
-                        });
-                        _scaffoldKey.currentState.showSnackBar(new SnackBar(
-                          content: new Row(
-                            children: <Widget>[
-                              new CircularProgressIndicator(),
-                              new Text("  Processing...")
-                            ],
-                          ),
-                        ));
                         await StateContainer.of(context)
-                            .connectTo(selectedTeacher, () {
-                          setState(() {
-                            loading = false;
-                          });
-                          _navigateToScreen(context, selectedTeacher);
-                        });
+                            .connectTo(selectedTeacher);
+                        Navigator.of(context).push(MaterialPageRoute<Null>(
+                            builder: (BuildContext context) =>
+                                SelectStudentScreen(
+                                  selectedTeacher: selectedTeacher,
+                                  // message: messageData,
+                                )));
                       }
                     },
                     child: Container(
@@ -208,7 +198,7 @@ class TeacherDetails extends StatelessWidget {
                             color: Colors.white),
                         overflow: TextOverflow.ellipsis)),
                 new Container(
-                    child: new Text(classSession.name,
+                    child: new Text(classSession.sessionId,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: new TextStyle(
