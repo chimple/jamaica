@@ -7,6 +7,8 @@ class StoryScreen extends StatelessWidget {
     return new Scaffold(
       appBar: AppBar(
         title: Text('Story'),
+        centerTitle: true,
+        backgroundColor: Colors.orange,
       ),
       body: StoryList(),
     );
