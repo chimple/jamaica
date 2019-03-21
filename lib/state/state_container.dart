@@ -8,6 +8,7 @@ import 'package:data/models/user_profile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
 import 'package:nearby/nearby.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class StateContainer extends StatefulWidget {
   final AppState state;
@@ -75,7 +76,7 @@ class StateContainerState extends State<StateContainer> {
 
   initialize() async {
     // Initialize Handlers
-
+    await SimplePermissions.requestPermission(Permission.AccessCoarseLocation);
     _nearBy.initializeMessageHandlers((Map<dynamic, dynamic> message) async {
       onReceiveMessage(message);
     });

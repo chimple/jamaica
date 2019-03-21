@@ -1,9 +1,74 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
-class DialogBoxScreen {
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
+enum StoryMode {
+  showDialogOnLongPressMode,
+  textHighlighterMode,
+  dragTextMode,
+  audioBoldTextMode,
+  textMode,
+}
+
+class ShowDialogMode extends StatefulWidget {
+  final List<String> listofWords;
+  final StoryMode storyMode;
+  ShowDialogMode({Key key, this.listofWords, this.storyMode}) : super(key: key);
+
+  @override
+  _ShowDialogModeState createState() => _ShowDialogModeState();
+}
+
+class _ShowDialogModeState extends State<ShowDialogMode> {
+  StoryMode storyMode = StoryMode.textHighlighterMode;
+  bool highlightOnLongPress = false;
+  int highlightIndex = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    int index = 0;
+    Widget _build(String s, int i) {
+      return InkWell(
+        onLongPress: () {
+          setState(() {
+            highlightIndex = i;
+          });
+          showDialog(
+            context: context,
+            builder: (context) {
+              return FractionallySizedBox(
+                  heightFactor:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? 0.5
+                          : 0.8,
+                  widthFactor:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? 0.8
+                          : 0.4,
+                  child: textDescriptionDialog(context, s, 'textDesciption'));
+            },
+          );
+        },
+        child: RichText(
+          text: TextSpan(
+            text: s + " ",
+            style: TextStyle(
+              fontSize: 23,
+              color: highlightIndex == i ? Colors.red : Colors.black,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Wrap(
+      children: widget.listofWords.map((s) => _build(s, index++)).toList(),
+    );
+  }
+
   Widget textDescriptionDialog(
       BuildContext context, String text, String textDesciption) {
-    print(';');
     text = text.replaceAll(new RegExp(r'[^\w\s]+'), '');
     MediaQueryData mediaQuery = MediaQuery.of(context);
     return new Card(
