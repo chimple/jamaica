@@ -26,7 +26,8 @@ dependencies:
   built_value: ^6.3.0
   built_collection: ^4.1.0
   tuple: ^1.0.2
-  bubble_tab_indicator: "^0.1.4"    
+  bubble_tab_indicator: "^0.1.4"
+  simple_permissions: ^0.1.9
   storyboard:
     git: https://github.com/chimple/storyboard
   flutter_svg: ^0.10.3
@@ -38,7 +39,7 @@ dependencies:
   data:
     path: ../data
   nearby:
-    path: ..\nearby
+    path: ../nearby
 
 dev_dependencies:
   build_runner: ^1.0.0
