@@ -62,8 +62,11 @@ class _ShowDialogModeState extends State<ShowDialogMode> {
       );
     }
 
-    return Wrap(
-      children: widget.listofWords.map((s) => _build(s, index++)).toList(),
+    return SingleChildScrollView(
+      controller: ScrollController(),
+      child: Wrap(
+        children: widget.listofWords.map((s) => _build(s, index++)).toList(),
+      ),
     );
   }
 

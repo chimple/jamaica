@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/widgets/story/drag_text_activity.dart';
 import 'package:jamaica/widgets/story/show_dialog_mode.dart';
-import 'package:jamaica/widgets/story/text_highlighter.dart';
+import 'package:jamaica/widgets/story/text_highlighter_activity.dart';
 
 final TextStyle textStyle = TextStyle(
   color: Colors.black,
@@ -54,7 +55,7 @@ class _TextAudioState extends State<AudioTextBold> {
   final _regex1 = RegExp('[!?,|]');
   int numOfChar, charTime, incr = 0, _count;
   List<String> temp = [];
-  StoryMode storyMode = StoryMode.textMode;
+  StoryMode storyMode = StoryMode.dragTextMode;
   List<StoryMode> listStoryMode = [];
   @override
   void initState() {
@@ -275,73 +276,112 @@ class _TextAudioState extends State<AudioTextBold> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).orientation == Orientation.portrait
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(flex: 6, child: _buildImage()),
-              Expanded(
-                flex: 1,
-                child: (storyMode != StoryMode.textHighlighterMode)
-                    ? PlayPauseButton(
-                        audioPlayer: audioPlayer,
-                        isPause: isPause,
-                        isPlaying: isPlaying,
-                        loadAudio: () =>
-                            loadAudio(widget.fullText, widget.audioFile),
-                        pause: () => pause(),
-                        resume: () => resume(),
-                      )
-                    : Container(),
-              ),
-              Expanded(
-                flex: 8,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: SingleChildScrollView(
-                      controller: ScrollController(), child: _buildText()),
-                ),
-              ),
-            ],
-          )
-        : Column(
-            children: <Widget>[
-              Expanded(
-                flex: 10,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(flex: 5, child: _buildImage()),
-                    Expanded(
-                      flex: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: SingleChildScrollView(
-                            controller: ScrollController(),
-                            child: _buildText()),
-                      ),
+    return Stack(
+      alignment: AlignmentDirectional.topEnd,
+      children: <Widget>[
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(flex: 6, child: _buildImage()),
+                  (storyMode == StoryMode.textMode ||
+                          storyMode == StoryMode.audioBoldTextMode ||
+                          storyMode == StoryMode.showDialogOnLongPressMode)
+                      ? Expanded(
+                          flex: 1,
+                          child: PlayPauseButton(
+                            audioPlayer: audioPlayer,
+                            isPause: isPause,
+                            isPlaying: isPlaying,
+                            loadAudio: () =>
+                                loadAudio(widget.fullText, widget.audioFile),
+                            pause: () => pause(),
+                            resume: () => resume(),
+                          ))
+                      : Container(),
+                  Expanded(
+                    flex: 7,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: _buildText(),
                     ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: (storyMode != StoryMode.textHighlighterMode)
-                    ? PlayPauseButton(
-                        audioPlayer: audioPlayer,
-                        isPause: isPause,
-                        isPlaying: isPlaying,
-                        loadAudio: () =>
-                            loadAudio(widget.fullText, widget.audioFile),
-                        pause: () => pause(),
-                        resume: () => resume(),
-                      )
-                    : Container(),
+                  ),
+                ],
               )
-            ],
-          );
+            : Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 10,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(flex: 5, child: _buildImage()),
+                        Expanded(
+                          flex: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8, right: 8),
+                            child: SingleChildScrollView(
+                                controller: ScrollController(),
+                                child: _buildText()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: (storyMode != StoryMode.textHighlighterMode)
+                        ? PlayPauseButton(
+                            audioPlayer: audioPlayer,
+                            isPause: isPause,
+                            isPlaying: isPlaying,
+                            loadAudio: () =>
+                                loadAudio(widget.fullText, widget.audioFile),
+                            pause: () => pause(),
+                            resume: () => resume(),
+                          )
+                        : Container(),
+                  )
+                ],
+              ),
+        CircleAvatar(
+          backgroundColor: Colors.cyanAccent,
+          maxRadius: 35,
+          child: IconButton(
+            icon: Icon(
+              storyMode != StoryMode.dragTextMode
+                  ? Icons.navigate_next
+                  : Icons.close,
+              color: Colors.blue,
+              size: 35,
+            ),
+            onPressed: storyMode != StoryMode.dragTextMode
+                ? () {
+                    if (storyMode == StoryMode.showDialogOnLongPressMode) {
+                      setState(() {
+                        storyMode = StoryMode.textHighlighterMode;
+                      });
+                    } else if (storyMode == StoryMode.showDialogOnLongPressMode)
+                      setState(() {
+                        storyMode = StoryMode.textHighlighterMode;
+                      });
+                    else if (storyMode == StoryMode.textHighlighterMode)
+                      setState(() {
+                        storyMode = StoryMode.dragTextMode;
+                      });
+                  }
+                : () {
+                    setState(() {
+                      storyMode = StoryMode.textMode;
+                    });
+                  },
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildText() {
+    print(storyMode);
     if (storyMode == StoryMode.textMode)
       return TextMode(
         text: widget.fullText,
@@ -359,7 +399,7 @@ class _TextAudioState extends State<AudioTextBold> {
         ),
       );
     } else if (storyMode == StoryMode.textHighlighterMode)
-      return TextHighlighter(
+      return TextHighlighterActivity(
         text: widget.fullText,
       );
     else if (storyMode == StoryMode.showDialogOnLongPressMode)
@@ -367,7 +407,7 @@ class _TextAudioState extends State<AudioTextBold> {
         listofWords: widget.fullText.split(' '),
       );
     else
-      return Container();
+      return DragTextActivity();
   }
 
   Widget _buildImage() {
@@ -387,8 +427,11 @@ class TextMode extends StatelessWidget {
   TextMode({this.text});
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(text: text, style: textStyle),
+    return SingleChildScrollView(
+      controller: ScrollController(),
+      child: RichText(
+        text: TextSpan(text: text, style: textStyle),
+      ),
     );
   }
 }
