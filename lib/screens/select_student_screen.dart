@@ -24,7 +24,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!StateContainer.of(context).isConnected) {
+    if (StateContainer.of(context).classStudents == null) {
       return Center(
         child: SizedBox(
             height: 30.0, width: 30.0, child: CircularProgressIndicator()),

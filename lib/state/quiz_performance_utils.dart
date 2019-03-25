@@ -4,7 +4,7 @@ import 'package:data/data.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/state/state_container.dart';
 
-performance(
+eachQuizPerformance(
     {GameData gameData,
     int score,
     DateTime startTime,
@@ -15,26 +15,26 @@ performance(
     case 'BasicCountingGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
 
       break;
     case 'BingoGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'BoxMatchingGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'CountingGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'CrosswordGame':
@@ -44,37 +44,37 @@ performance(
     case 'DiceGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'FindWordGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'FingerGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'JumbledWordsGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers.toString(), score,
+      return sendPerformance(contestSession, gd.answers.toString(), score,
           startTime, endTime, context);
       break;
     case 'MatchTheShapeGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'MatchWithImageGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'MathOpGame':
@@ -86,50 +86,50 @@ performance(
     case 'MemoryGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'OrderBySizeGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'RecognizeNumberGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'RhymeWordsGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'SequenceAlphabetGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'SequenceTheNumberGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'TrueFalseGame':
       final gd = gameData as MultiData;
 
-      return sendPerformnce(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(contestSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
   }
   return Container();
 }
 
-sendPerformnce(ContestSession contestSession, String string, int score,
+sendPerformance(ContestSession contestSession, String string, int score,
     DateTime startTime, DateTime endTime, BuildContext context) {
   final standardSerializers =
       (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
