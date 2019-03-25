@@ -36,12 +36,15 @@ class StoryPageState extends State<StoryPage> {
         scrollDirection: Axis.vertical,
         physics: _isPlaying ? NeverScrollableScrollPhysics() : ScrollPhysics(),
         itemBuilder: (context, index) {
-          print('index $index');
+          var d = widget.pages[index].imageItemsPosition;
+          print('drag data :: ${d}');
+          print('data:: ${widget.pages[index].highlightQuestion}');
           return AudioTextBold(
               imagePath: widget.pages[index].imagePath,
               audioFile: widget.pages[index].audioPath,
               fullText: widget.pages[index].text,
               pageNumber: widget.pages[index].pageNumber,
+              // imageItemsPosition: widget.pages[index].imageItemsPosition,
               pageSliding: () {
                 setState(() {
                   _isPlaying = !_isPlaying;

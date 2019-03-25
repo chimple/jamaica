@@ -66,22 +66,3 @@ class StoryCard extends StatelessWidget {
     });
   }
 }
-
-class _InteractiveInkFeatureFactory extends InteractiveInkFeatureFactory {
-  InteractiveInkFeature _interactiveInkFeature;
-  @override
-  InteractiveInkFeature create(
-      {MaterialInkController controller,
-      RenderBox referenceBox,
-      Offset position,
-      Color color,
-      TextDirection textDirection,
-      bool containedInkWell = false,
-      rectCallback,
-      BorderRadius borderRadius,
-      ShapeBorder customBorder,
-      double radius,
-      onRemoved}) {
-    return _interactiveInkFeature..color = Colors.red;
-  }
-}

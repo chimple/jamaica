@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 enum StoryMode {
+  activityMode,
   showDialogOnLongPressMode,
   textHighlighterMode,
   dragTextMode,
   audioBoldTextMode,
   textMode,
+  doneStatus
 }
 
 class ShowDialogMode extends StatefulWidget {

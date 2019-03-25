@@ -7,7 +7,7 @@ class DragTextActivity extends StatefulWidget {
 
 class _DragTextState extends State<DragTextActivity> {
   final List<String> list = [
-    "tiget",
+    "tiger",
     "cloud",
     "building",
     "tree",
