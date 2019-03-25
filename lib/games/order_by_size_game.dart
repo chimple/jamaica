@@ -36,6 +36,8 @@ class OrderBySizeGame extends StatefulWidget {
 class _OrderBySizeGameState extends State<OrderBySizeGame> {
   List<_ChoiceDetail> choiceDetails;
   List<_ChoiceDetail> answerDetails;
+  var score = 0;
+  int complete;
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _OrderBySizeGameState extends State<OrderBySizeGame> {
     answerDetails = widget.answers
         .map((c) => choiceDetails.firstWhere((d) => d.number == c))
         .toList(growable: false);
+    complete = answerDetails.length;
   }
 
   @override
@@ -79,15 +82,25 @@ class _OrderBySizeGameState extends State<OrderBySizeGame> {
                   onWillAccept: (data) {
                     return data == a.number.toString();
                   },
-                  onAccept: (data) => WidgetsBinding.instance
-                      .addPostFrameCallback((_) => setState(() {
-                            a.type = _Type.answer;
-                            choiceDetails.forEach((c) => c.reaction =
-                                c.number == a.number
-                                    ? Reaction.success
-                                    : Reaction.enter);
-                          })),
-                )
+                  onAccept: (data) {
+                    setState(() {
+                      if (data == a.number.toString()) {
+                        score++;
+                        print("this my score$score");
+                        if (--complete == 0) widget.onGameOver(score);
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((_) => setState(() {
+                                  a.type = _Type.answer;
+                                  choiceDetails.forEach((c) => c.reaction =
+                                      c.number == a.number
+                                          ? Reaction.success
+                                          : Reaction.enter);
+                                }));
+                      }
+                      //  else
+                      //   score--;
+                    });
+                  })
               : CuteButton(
                   key: Key(a.number.toString()),
                   reaction: a.reaction,
