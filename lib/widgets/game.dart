@@ -43,9 +43,9 @@ class _GameState extends State<Game> {
   @override
   Widget build(BuildContext context) {
     startTime = new DateTime.now();
-    final data = StateContainer.of(context).contestSession;
-    final start = StateContainer.of(context).contestStart;
-    if (start == null && data != null) {
+    final contestSession = StateContainer.of(context).contestSession;
+    final contestStart = StateContainer.of(context).contestStart;
+    if (contestStart == null && contestSession != null) {
       return new Center(
           child: new SizedBox(
         width: 20.0,

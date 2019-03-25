@@ -33,9 +33,9 @@ class StateContainerState extends State<StateContainer> {
   Nearby _nearBy = Nearby.instance;
   List<dynamic> messages = [];
   String studentIdVal;
-  String receiveMessage;
+
   var contestSessionEndPointId;
-  var data;
+
   ContestStart contestStart;
   ContestSession contestSession;
   UserProfile userProfileDeatils;
@@ -297,14 +297,12 @@ class StateContainerState extends State<StateContainer> {
 
   void onReceiveMessage(Map<dynamic, dynamic> message) async {
     messages.add(message);
-    data = message['textMessages']['message'];
-    receiveMessage = message['textMessages']['message'];
     final standardSerializers =
         (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
     final newJson = jsonDecode(message['textMessages']['message']);
     var values = newJson.keys;
-    String keys = values.first;
-    switch (newJson[keys]) {
+    String key = values.first;
+    switch (newJson[key]) {
       case 'ContestSession':
         contestSessionEndPointId = message['textMessages']['endPointId'];
         contestSession = standardSerializers.deserialize(newJson);
