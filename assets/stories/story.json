@@ -11,7 +11,7 @@
                     "text": "Look at these beautiful horses and elephants! Who brought them here? squealed Ahilya. Reluctantly, she tore her eyes away from the beautiful animals – it would get dark soon! She hurried inside the temple and lit a lamp. Ahilya closed her eyes and bowed in prayer.",
                     "imagePath": "001page1.jpg",
                     "audioPath": "001page1audio",
-                    "imageItems": {
+                    "imageItemsPosition ": {
                         "hospital": {
                             "x": 123,
                             "y": 234,
@@ -54,7 +54,22 @@
                             "height": 321,
                             "width": 146
                         }
-                    }
+                    },
+                    "imageItemsAnswer": [
+                        "tiget",
+                        "cloud",
+                        "building",
+                        "tree",
+                        "hospital"
+                    ],
+                    "highlightQuestion": [
+                        "1. Where georgle porgle went in the afternoon",
+                        "2. Where georgle porgle went in the afternoon"
+                    ],
+                    "highlightAnswer": [
+                        "1.one after noon, he went to the park near his house",
+                        "2.one after noon, he went to the park near his house"
+                    ]
                 },
                 {
                     "pageNumber": "2",

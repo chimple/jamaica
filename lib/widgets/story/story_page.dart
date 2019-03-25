@@ -36,7 +36,9 @@ class StoryPageState extends State<StoryPage> {
         scrollDirection: Axis.vertical,
         physics: _isPlaying ? NeverScrollableScrollPhysics() : ScrollPhysics(),
         itemBuilder: (context, index) {
-          print('index $index');
+          var d = widget.pages[index].imageItemsPosition;
+          print('drag data :: ${d}');
+          print('data:: ${widget.pages[index].highlightQuestion}');
           return AudioTextBold(
               imagePath: widget.pages[index].imagePath,
               audioFile: widget.pages[index].audioPath,
@@ -49,33 +51,6 @@ class StoryPageState extends State<StoryPage> {
                   //     int.parse(widget.pages[index].pageNumber) - 1);
                 });
               });
-          //  Column(
-          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //     children: <Widget>[
-          // Expanded(
-          //   flex: 4,
-          //   child: SizedBox(
-          //     width: double.infinity,
-          //     child: Image.asset(
-          //       'assets/stories/images/${widget.pages[index].imagePath}',
-          //       fit: BoxFit.fill,
-          //     ),
-          //   ),
-          // ),
-          //       // Expanded(
-          //       //   flex: 6,
-          //       //   child: AudioTextBold(
-          //       //       audioFile: widget.pages[index].audioPath,
-          //       //       fullText: widget.pages[index].text,
-          //       //       pageNumber: widget.pages[index].pageNumber,
-          //       //       pageSliding: () {
-          //       //         setState(() {
-          //       //           _isPlaying = !_isPlaying;
-          //       //         });
-          //       //       }),
-          //       // )
-          //     ],
-          //   )
         },
         itemCount: widget.pages.length,
       ),
