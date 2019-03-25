@@ -13,6 +13,7 @@ class DiceGameStory extends FullScreenStory {
               question: 4,
               answerPosition: 1,
               choices: BuiltList<int>([1, 4, 5, 8]),
+              onGameOver: (_) {},
             ),
           ),
         )

@@ -33,6 +33,7 @@ class _SequenceTheNumberGameState extends State<SequenceTheNumberGame> {
   List<_ChoiceDetail> questionDetails;
   bool solved;
   int answerPosition;
+  var score = 0;
 
   @override
   void initState() {
@@ -76,10 +77,16 @@ class _SequenceTheNumberGameState extends State<SequenceTheNumberGame> {
                 setState(() {
                   if (c.choice ==
                       widget.sequence[widget.blankPosition].toString()) {
+                    score++;
                     c.reaction = Reaction.success;
-                    Future.delayed(const Duration(milliseconds: 1000),
-                        () => setState(() => solved = true));
+                    Future.delayed(
+                        const Duration(milliseconds: 1000),
+                        () => setState(() {
+                              solved = true;
+                              widget.onGameOver(score);
+                            }));
                   } else {
+                    score--;
                     c.reaction = Reaction.failure;
                   }
                 });

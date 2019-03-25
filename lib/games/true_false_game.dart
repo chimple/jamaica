@@ -68,7 +68,8 @@ class _RhymeWordsGameState extends State<TrueFalseGame> {
           )),
           onPressed: () {
             if (widget.right_or_wrong) {
-              return Reaction.success;
+              //  Reaction.success;
+              widget.onGameOver(1);
             } else {
               return Reaction.failure;
             }
@@ -83,7 +84,8 @@ class _RhymeWordsGameState extends State<TrueFalseGame> {
           )),
           onPressed: () {
             if (!widget.right_or_wrong) {
-              return Reaction.success;
+              widget.onGameOver(1);
+              // return Reaction.success;
             } else {
               return Reaction.failure;
             }

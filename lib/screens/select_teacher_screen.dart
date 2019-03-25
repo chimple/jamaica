@@ -61,9 +61,9 @@ class _TeachersScreenState extends State<TeachersScreen> {
                   crossAxisCount: 4,
                   childAspectRatio: orientation == Orientation.portrait
                       ? MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height)
+                          (MediaQuery.of(context).size.height / 1.4)
                       : MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height * 2),
+                          (MediaQuery.of(context).size.height * 1.6),
                   // StateContainer.of(context).advertisers
                   children: widget.advertisers
                       .map((advertiser) => InkWell(
@@ -81,25 +81,16 @@ class _TeachersScreenState extends State<TeachersScreen> {
                 child: InkWell(
                   onTap: () async {
                     if (selectedTeacher != null) {
-                      setState(() {
-                        loading = true;
-                      });
-                      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-                        content: new Row(
-                          children: <Widget>[
-                            new CircularProgressIndicator(),
-                            new Text("  Processing...")
-                          ],
-                        ),
-                      ));
                       await StateContainer.of(context)
-                          .connectTo(selectedTeacher, () {
-                        setState(() {
-                          loading = false;
-                        });
-                        _navigateToScreen(context, selectedTeacher);
-                      });
+                          .connectTo(selectedTeacher);
+                      Navigator.of(context).push(MaterialPageRoute<Null>(
+                          builder: (BuildContext context) =>
+                              SelectStudentScreen(
+                                selectedTeacher: selectedTeacher,
+                                // message: messageData,
+                              )));
                     }
+                    ;
                   },
                   child: Container(
                     decoration: new BoxDecoration(
@@ -107,12 +98,6 @@ class _TeachersScreenState extends State<TeachersScreen> {
                       border: new Border.all(color: Colors.green, width: 2.0),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: Center(
-                        child: Text("Next",
-                            style: new TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange))),
                   ),
                 ),
               )
@@ -195,7 +180,7 @@ class TeacherDetails extends StatelessWidget {
                             color: Colors.white),
                         overflow: TextOverflow.ellipsis)),
                 new Container(
-                    child: new Text(classSession.name,
+                    child: new Text(classSession.sessionId,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: new TextStyle(

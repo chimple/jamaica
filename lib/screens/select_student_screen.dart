@@ -8,7 +8,7 @@ import 'package:jamaica/state/state_container.dart';
 
 class SelectStudentScreen extends StatefulWidget {
   final dynamic selectedTeacher;
-  final String message;
+  final dynamic message;
 
   SelectStudentScreen({Key key, this.selectedTeacher, this.message})
       : super(key: key);
@@ -20,71 +20,81 @@ class SelectStudentScreen extends StatefulWidget {
 class _SelectStudentScreenState extends State<SelectStudentScreen> {
   List<Student> studentList = [];
   String selectedStudent;
-  String message;
+  ClassStudents classStudents;
 
   @override
   Widget build(BuildContext context) {
-    message =StateContainer.of(context).receiveMessage;
+    if (!StateContainer.of(context).isConnected) {
+      return Center(
+        child: SizedBox(
+            height: 30.0, width: 30.0, child: CircularProgressIndicator()),
+      );
+    }
+
+    classStudents = StateContainer.of(context).classStudents;
+
     final standardSerializers =
         (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
     final selectedTeacher = jsonDecode(widget.selectedTeacher['endPointName']);
     ClassSession classSession =
         standardSerializers.deserialize(selectedTeacher);
-
-    final newJson = jsonDecode(message);
-    ClassStudents classStudent = standardSerializers.deserialize(newJson);
-    print("class students..${classStudent.students}");
     studentList.clear();
-    for (var i = 0; i < classStudent.students.length; i++) {
-      studentList.add(classStudent.students[i]);
+    for (var i = 0; i < classStudents.students.length; i++) {
+      studentList.add(classStudents.students[i]);
     }
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
+
     return Scaffold(
       backgroundColor: Colors.orange,
       body: Column(
         children: <Widget>[
-          Container(
-            height: orientation == Orientation.portrait
-                ? media.size.height * .18
-                : media.size.height * .25,
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  new Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius:
-                            const BorderRadius.all(const Radius.circular(50.0)),
-                        image: DecorationImage(
-                          image:
-                              AssetImage('assets/stories/images/002page5.jpg'),
-                        )),
-                    width: orientation == Orientation.portrait
-                        ? media.size.width * 0.2
-                        : media.size.width * .15,
-                    height: orientation == Orientation.portrait
-                        ? media.size.height * .1
-                        : media.size.height * .2,
-                  ),
-                  new Container(
-                      child: new Text(classSession.teacherName,
-                          textAlign: TextAlign.right,
-                          textDirection: TextDirection.rtl,
-                          style: new TextStyle(
-                              fontSize: media.size.height * .03,
-                              color: Colors.white),
-                          overflow: TextOverflow.ellipsis)),
-                  new Container(
-                      child: new Text(classSession.sessionId,
-                          textAlign: TextAlign.right,
-                          textDirection: TextDirection.rtl,
-                          style: new TextStyle(
-                              fontSize: media.size.height * .01,
-                              color: Colors.white),
-                          overflow: TextOverflow.ellipsis)),
-                ],
+          Expanded(
+            flex: orientation == Orientation.portrait ? 1 : 2,
+            child: Container(
+              height: orientation == Orientation.portrait
+                  ? media.size.height * .18
+                  : media.size.height * .25,
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    new Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: const BorderRadius.all(
+                              const Radius.circular(50.0)),
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'assets/stories/images/002page5.jpg'),
+                          )),
+                      width: orientation == Orientation.portrait
+                          ? media.size.width * 0.2
+                          : media.size.width * .15,
+                      height: orientation == Orientation.portrait
+                          ? media.size.height * .1
+                          : media.size.height * .2,
+                    ),
+                    new Container(
+                        child: new Text(classSession.teacherName,
+                            textAlign: TextAlign.right,
+                            textDirection: TextDirection.rtl,
+                            style: new TextStyle(
+                                fontSize: orientation == Orientation.portrait
+                                    ? media.size.height * .03
+                                    : media.size.height * .05,
+                                color: Colors.white),
+                            overflow: TextOverflow.ellipsis)),
+                    new Container(
+                        child: new Text(classSession.sessionId,
+                            textAlign: TextAlign.right,
+                            textDirection: TextDirection.rtl,
+                            style: new TextStyle(
+                                fontSize: media.size.height * .02,
+                                color: Colors.white),
+                            overflow: TextOverflow.ellipsis)),
+                  ],
+                ),
               ),
             ),
           ),
@@ -93,28 +103,51 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
               margin: EdgeInsets.all(5.0),
               color: Colors.white70,
               width: media.size.width * .9,
-              height: media.size.height * .004,
+              height: orientation == Orientation.portrait
+                  ? media.size.height * .004
+                  : media.size.height * .005,
             ),
           ),
           Container(
-            height: orientation == Orientation.portrait
-                ? media.size.height * .68
-                : media.size.height * .52,
-            child: GridView.count(
-              key: new Key('student_list_page'),
-              primary: true,
-              crossAxisSpacing: 12.0,
-              mainAxisSpacing: 12.0,
-              crossAxisCount: media.size.height > media.size.width ? 4 : 4,
-              children: studentList
-                  .map((t) => InkWell(
-                      onTap: () {
-                        setState(() {
-                          selectedStudent = t.id;
-                        });
-                      },
-                      child: StudentDetails(t, selectedStudent)))
-                  .toList(growable: false),
+              margin: EdgeInsets.only(left: media.size.width * .05),
+              width: media.size.width,
+              height: orientation == Orientation.portrait
+                  ? media.size.height * .04
+                  : media.size.height * .08,
+              child: Text("Select Your Photo",
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.start,
+                  style: new TextStyle(
+                      fontSize: orientation == Orientation.portrait
+                          ? media.size.height * .03
+                          : media.size.height * .06,
+                      color: Colors.white),
+                  overflow: TextOverflow.ellipsis)),
+          Expanded(
+            flex: orientation == Orientation.portrait ? 4 : 3,
+            child: Container(
+              height: orientation == Orientation.portrait
+                  ? media.size.height * .64
+                  : media.size.height * .48,
+              child: GridView.count(
+                key: new Key('student_list_page'),
+                primary: true,
+                crossAxisSpacing: 12.0,
+                mainAxisSpacing: 12.0,
+                childAspectRatio: orientation == Orientation.portrait
+                    ? media.size.width / (media.size.height / 1.5)
+                    : media.size.width / (media.size.height * 1.3),
+                crossAxisCount: 4,
+                children: studentList
+                    .map((t) => InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedStudent = t.id;
+                          });
+                        },
+                        child: StudentDetails(t, selectedStudent)))
+                    .toList(growable: false),
+              ),
             ),
           ),
           Container(
@@ -127,7 +160,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                   await StateContainer.of(context).student(selectedStudent);
                   ClassJoin classJoin = ClassJoin((b) => b
                     ..studentId = selectedStudent
-                    ..sessionId = classStudent.sessionId);
+                    ..sessionId = classStudents.sessionId);
                   final classJoinJson =
                       standardSerializers.serialize(classJoin);
                   final classJoinJsonString = jsonEncode(classJoinJson);
@@ -199,8 +232,7 @@ class StudentDetails extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.all(const Radius.circular(60.0)),
                 image: DecorationImage(
-                  image: AssetImage(
-                      'assets/stories/images/${studentDetails.photo}'),
+                  image: AssetImage('assets/stories/images/002page3.jpg'),
                 )),
             width: orientation == Orientation.portrait
                 ? size.width * 0.2
