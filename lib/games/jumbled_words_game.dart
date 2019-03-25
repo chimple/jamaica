@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
@@ -40,6 +41,7 @@ class JumbledWordsGame extends StatefulWidget {
 class _JumbledWordsGameState extends State<JumbledWordsGame> {
   List<_ChoiceDetail> choiceDetails;
   bool thisSolved = false;
+  int score = 0;
 
   @override
   void initState() {
@@ -76,13 +78,18 @@ class _JumbledWordsGameState extends State<JumbledWordsGame> {
                 builder: (context, candidateData, rejectedData) =>
                     Center(child: Text(widget.answer)),
                 onWillAccept: (data) => data == widget.answer,
-                onAccept: (data) => WidgetsBinding.instance
-                    .addPostFrameCallback((_) => setState(() {
-                          choiceDetails
-                              .firstWhere((c) => c.choice == data)
-                              .solved = true;
-                          thisSolved = true;
-                        })),
+                onAccept: (data) {
+                  WidgetsBinding.instance
+                      .addPostFrameCallback((_) => setState(() {
+                            choiceDetails
+                                .firstWhere((c) => c.choice == data)
+                                .solved = true;
+                            thisSolved = true;
+                            score++;
+                            Future.delayed(const Duration(milliseconds: 700),
+                                () => widget.onGameOver(score));
+                          }));
+                },
               )
             ],
       rows: 4,

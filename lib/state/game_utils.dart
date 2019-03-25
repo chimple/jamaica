@@ -68,21 +68,22 @@ Widget buildGame({GameData gameData, OnGameOver onGameOver}) {
       final gd = gameData as NumMultiData;
       return DiceGame(
         question: gd.answers[0],
-        answerPosition: gd.choices.length,
-        choices: gd.choices.rebuild((c) => c..add(gd.answers[0])),
+        answerPosition: gd.choices.indexOf(gd.answers[0]),
+        choices: gd.choices,
         onGameOver: onGameOver,
       );
     case 'FillInTheBlanksGame':
       final gd = gameData as MultiData;
       return FillInTheBlanksGame(
         question: gd.question,
-        answers: gd.answers,
+        choices: gd.choices,
         onGameOver: onGameOver,
       );
       break;
     case 'FindWordGame':
       final gd = gameData as MultiData;
       return FindWordGame(
+        image: gd.specials.first,
         answer: gd.answers,
         choices: gd.choices,
         onGameOver: onGameOver,

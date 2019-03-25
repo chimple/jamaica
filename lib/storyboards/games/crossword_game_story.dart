@@ -32,6 +32,7 @@ class CrosswordGameStory extends FullScreenStory {
                   ..x = 2
                   ..y = 4),
               ]),
+              onGameOver: (_) {},
             ),
           ),
         ),
@@ -58,6 +59,7 @@ class CrosswordGameStory extends FullScreenStory {
                   ..x = 1
                   ..y = 2),
               ]),
+              onGameOver: (_) {},
             ),
           ),
         ),
@@ -98,6 +100,7 @@ class CrosswordGameStory extends FullScreenStory {
                   ..x = 4
                   ..y = 2),
               ]),
+              onGameOver: (_) {},
             ),
           ),
         )
