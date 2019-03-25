@@ -9,11 +9,12 @@ class FindWordGameStory extends FullScreenStory {
   List<Widget> get storyContent => [
         Scaffold(
           body: SafeArea(
-            child: FindWordGame(
+          child: FindWordGame(
               image: 'assets/accessories/apple.png',
               answer: BuiltList<String>(['A', 'P', 'P', 'L', 'E']),
               choices:
                   BuiltList<String>(['A', 'X', 'Y', 'P', 'E', 'B', 'L', 'W']),
+              onGameOver: (_) {},
             ),
           ),
         ),
