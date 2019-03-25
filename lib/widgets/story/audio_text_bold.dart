@@ -394,6 +394,12 @@ class _TextAudioState extends State<AudioTextBold> {
       return TextHighlighterActivity(
           text: widget.fullText,
           onCorrectAnswer: (l) {
+            new Future.delayed(Duration(seconds: 1), () {
+              setState(() {
+                storyMode = StoryMode.dragTextMode;
+              });
+            });
+
             print(l);
           });
     else if (storyMode == StoryMode.showDialogOnLongPressMode)
