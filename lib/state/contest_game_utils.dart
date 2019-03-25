@@ -4,7 +4,7 @@ import 'package:data/data.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/state/state_container.dart';
 
-eachQuizPerformance(
+contestPerformance(
     {GameData gameData,
     int score,
     DateTime startTime,
