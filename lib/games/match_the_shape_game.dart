@@ -38,6 +38,8 @@ class MatchTheShapeGame extends StatefulWidget {
 
 class _MatchTheShapeGameState extends State<MatchTheShapeGame> {
   List<_ChoiceDetail> choiceDetails;
+  var score = 0;
+  int complete;
 
   @override
   void initState() {
@@ -45,8 +47,10 @@ class _MatchTheShapeGameState extends State<MatchTheShapeGame> {
     choiceDetails = widget.first
         .map((c) => _ChoiceDetail(choice: c, type: 'first'))
         .toList();
+           complete=choiceDetails.length;
     choiceDetails.addAll(
         widget.second.map((c) => _ChoiceDetail(choice: c, type: 'second')));
+     
   }
 
   @override
@@ -65,19 +69,33 @@ class _MatchTheShapeGameState extends State<MatchTheShapeGame> {
                     builder: (context, candidateData, rejectedData) => Center(
                           child: Text(c.choice),
                         ),
-                    onWillAccept: (data) => data.split('_').first == c.choice,
                     onAccept: (data) => setState(() {
+                      if(data.split('_').first == c.choice){
+                          
+                          score++;
+                          print("this is my data ${data.length}");
+                          print("this is my score in match $score");
+                          if (--complete==0) 
+                            widget.onGameOver(score);
+                          
                           choiceDetails
                               .where((choice) => c.choice == choice.choice)
                               .forEach((choice) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) =>
-                                setState(
-                                    () => choice.escape = _Escape.escaping));
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((_) => setState(() {
+                                      choice.escape = _Escape.escaping;
+
+                                      print(
+                                          "this is my length in match ${data.length}");
+                                    }));
                             Future.delayed(
                                 Duration(milliseconds: 1000),
                                 () => setState(
                                     () => choice.escape = _Escape.escaped));
                           });
+                      }
+                      else
+                      score--;
                         }),
                   ),
                 )

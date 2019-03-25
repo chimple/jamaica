@@ -24,6 +24,8 @@ class OrderItGame extends StatefulWidget {
 
 class _OrderItGameState extends State<OrderItGame> {
   List<_ChoiceDetail> choiceDetails;
+  var score = 0;
+  int complete;
 
   @override
   void initState() {
@@ -33,6 +35,8 @@ class _OrderItGameState extends State<OrderItGame> {
         .map((a) => _ChoiceDetail(choice: a, index: i++))
         .toList()
           ..shuffle();
+          complete =choiceDetails.length;
+
   }
 
   @override
@@ -49,9 +53,15 @@ class _OrderItGameState extends State<OrderItGame> {
                 child: DragTarget<String>(
                   builder: (context, candidateData, rejectedData) =>
                       Center(child: Text(c.choice)),
-                  onWillAccept: (data) => true,
+                  // onWillAccept: (data) => true,
                   onAccept: (data) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                    setState(() {
+                     if(data != null){
+                        score++;
+                        print("this my score$score");
+                        if (--complete == 0) 
+                        // widget.onGameOver(score);
+                       WidgetsBinding.instance.addPostFrameCallback((_) =>
                         setState(() {
                           int currentIndex = choiceDetails.indexWhere((ch) =>
                               ch.index.toString() == c.index.toString());
@@ -61,6 +71,10 @@ class _OrderItGameState extends State<OrderItGame> {
                           choiceDetails.removeAt(droppedIndex);
                           choiceDetails.insert(currentIndex, droppedChoice);
                         }));
+                     }else
+                     score--; 
+                    });
+                    
                   },
                 ),
               ))

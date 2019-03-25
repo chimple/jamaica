@@ -47,6 +47,8 @@ class _BingoGameState extends State<BingoGame> {
   static int _maxSize = 2;
   var _referenceMatrix;
   List _letters = [];
+  bool _bingo = false;
+  var score = 0;
 
   @override
   void initState() {
@@ -123,6 +125,7 @@ class _BingoGameState extends State<BingoGame> {
     if (str1 == str2) {
       setState(() {
         count++;
+        score++;
       });
       ques = questionDetails[count];
       int counter = 0;
@@ -148,6 +151,7 @@ class _BingoGameState extends State<BingoGame> {
           for (i = matchRow; i < _maxSize + matchRow; i++) {
             setState(() {
               print("bingo row succesfulllll");
+              _bingo =true;
             });
           }
         }
@@ -162,11 +166,23 @@ class _BingoGameState extends State<BingoGame> {
           for (i = matchColumn; i < _maxSize * _maxSize; i++) {
             setState(() {
               print("bingo horizonatal succesfulllll");
+              _bingo = true;
               i = i + _maxSize - 1;
             });
           }
         }
       }
+    if(_bingo == true)
+    {
+       print("this is my game $score");
+      widget.onGameOver(score);
+    }
+
+    }
+    else if(str1 != str2){
+
+      score--;
+      print("this is my game $score");
     }
   }
 

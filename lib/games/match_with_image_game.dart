@@ -34,6 +34,8 @@ class MatchWithImageGame extends StatefulWidget {
 class _MatchWithImageGameState extends State<MatchWithImageGame> {
   List<_ChoiceDetail> answerDetails;
   List<_ChoiceDetail> choiceDetails;
+  var score = 0;
+  int complete;
 
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _MatchWithImageGameState extends State<MatchWithImageGame> {
     choiceDetails = widget.choices
         .map((c) => _ChoiceDetail(choice: c))
         .toList(growable: false);
+        complete=choiceDetails.length;
     answerDetails = widget.answers
         .map((a) => _ChoiceDetail(choice: a, appear: false))
         .toList(growable: false);
@@ -75,12 +78,22 @@ class _MatchWithImageGameState extends State<MatchWithImageGame> {
                   )
                 : DropBox(
                     key: Key((i++).toString()),
-                    onWillAccept: (data) => data == a.choice,
+                    // onWillAccept: (data) => data == a.choice,
                     onAccept: (data) => setState(() {
-                          a.appear = true;
-                          choiceDetails
-                              .firstWhere((c) => c.choice == a.choice)
-                              .appear = false;
+                          if (data == a.choice) {
+                            score++;
+                            print("this is my data ${data.length}");
+                            print("this is my score in match $score");
+                             
+                           
+                            a.appear = true;
+                            choiceDetails
+                                .firstWhere((c) => c.choice == a.choice)
+                                .appear = false;
+                                if (--complete == 0)
+                                 widget.onGameOver(score);
+                          } else
+                            score--;
                         }),
                   ))),
       dragConfig: DragConfig.draggableBounceBack,
