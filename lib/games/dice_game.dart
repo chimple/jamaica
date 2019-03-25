@@ -102,9 +102,12 @@ class _DiceGameState extends State<DiceGame> {
                 print(data);
                 return data == widget.answerPosition.toString();
               },
-              onAccept: (data) => WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => setState(() => choiceDetails[widget.answerPosition]
-                      .type = _Type.answer)),
+              onAccept: (data) {
+                WidgetsBinding.instance.addPostFrameCallback((_) => setState(
+                    () => choiceDetails[widget.answerPosition].type =
+                        _Type.answer));
+                widget.onGameOver(1);
+              },
             );
             break;
           case _Type.answer:

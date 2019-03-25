@@ -5,11 +5,13 @@ import 'package:jamaica/screens/games_screen.dart';
 import 'package:jamaica/screens/map_screen.dart';
 import 'package:jamaica/screens/profile_screen.dart';
 import 'package:jamaica/screens/home_screen.dart';
+import 'package:jamaica/screens/select_teacher_screen.dart';
 import 'package:jamaica/screens/store_screen.dart';
 import 'package:jamaica/screens/story_screen.dart';
 import 'package:jamaica/state/state_container.dart';
 
-void main() => runApp(StateContainer(child: MyApp()));
+void main() =>
+    runApp(StateContainer(child: MaterialApp(home: SelectTeacherScreen())));
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
