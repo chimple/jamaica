@@ -88,8 +88,8 @@ class _GameState extends State<Game> {
       return buildGame(
           gameData: widget.contestSession.gameData[index],
           onGameOver: (score) {
-
             setState(() {
+              quizScore(score);
               _score += score;
               if (score > 0) _stars++;
 //              _currentGame++;
@@ -97,6 +97,8 @@ class _GameState extends State<Game> {
             Navigator.push(
                 context,
                 SlideUpRoute(
+                    widgetBuilder: (context) =>
+                        _buildGame(context, ++index, quizScore)));
           });
     } else {
       return Score(

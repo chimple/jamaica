@@ -25,6 +25,7 @@ class ContestGame extends StatelessWidget {
       ));
     }
     return Game(
+      contestSession: contestSession,
       quizScore: (score) {
         DateTime endTime = new DateTime.now();
         eachQuizPerformance(
@@ -35,7 +36,6 @@ class ContestGame extends StatelessWidget {
             context: context);
         startTime = endTime;
       },
-      contestSession: contestSession,
     );
   }
 }
