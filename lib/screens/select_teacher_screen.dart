@@ -33,62 +33,51 @@ class _TeachersScreenState extends State<TeachersScreen> {
     return Scaffold(
         backgroundColor: Colors.orange,
         key: _scaffoldKey,
-        body: Column(
-          children: <Widget>[
-            Container(
-              height: media.size.height * .08,
-              child: Center(
-                child: Center(
-                  child: Text(
-                    "Choose your Class",
-                    style: TextStyle(
-                        fontSize: 30.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              RaisedButton(
+                child: Text('Local Student'),
+                textColor: Colors.orange,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                onPressed: () {
+                  StateContainer.of(context).stopDiscovery();
+                  Navigator.of(context).pushNamed('/chatbot');
+                },
+              ),
+              Text(
+                "Or Choose your Class",
+                style: TextStyle(
+                    fontSize: 30.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              Expanded(
+                child: GridView.count(
+                  key: new Key('teacher_list'),
+                  primary: true,
+                  crossAxisCount: 4,
+                  childAspectRatio: orientation == Orientation.portrait
+                      ? MediaQuery.of(context).size.width /
+                          (MediaQuery.of(context).size.height)
+                      : MediaQuery.of(context).size.width /
+                          (MediaQuery.of(context).size.height * 2),
+                  // StateContainer.of(context).advertisers
+                  children: widget.advertisers
+                      .map((advertiser) => InkWell(
+                          onTap: () {
+                            setState(() {
+                              selected = advertiser['endPointName'];
+                              selectedTeacher = advertiser;
+                            });
+                          },
+                          child: TeacherDetails(advertiser, selected)))
+                      .toList(growable: false),
                 ),
               ),
-            ),
-            Center(
-              child: Container(
-                color: Colors.white70,
-                width: media.size.width * .9,
-                height: media.size.height * .004,
-              ),
-            ),
-            Container(
-              height: orientation == Orientation.portrait
-                  ? media.size.height * .8
-                  : media.size.height * .75,
-              width: media.size.width,
-              child: new GridView.count(
-                key: new Key('teacher_list'),
-                primary: true,
-                crossAxisCount: 4,
-                childAspectRatio: orientation == Orientation.portrait
-                    ? MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height)
-                    : MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height * 2),
-                // StateContainer.of(context).advertisers
-                children: widget.advertisers
-                    .map((advertiser) => InkWell(
-                        onTap: () {
-                          setState(() {
-                            selected = advertiser['endPointName'];
-                            selectedTeacher = advertiser;
-                          });
-                        },
-                        child: TeacherDetails(advertiser, selected)))
-                    .toList(growable: false),
-              ),
-            ),
-            Container(
-              height: orientation == Orientation.portrait
-                  ? media.size.height * .06
-                  : media.size.height * .08,
-              width: media.size.width * .2,
-              child: Center(
+              Center(
                 child: InkWell(
                   onTap: () async {
                     if (selectedTeacher != null) {
@@ -126,9 +115,9 @@ class _TeachersScreenState extends State<TeachersScreen> {
                                 color: Colors.orange))),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ));
   }
 

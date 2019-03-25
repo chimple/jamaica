@@ -30,6 +30,7 @@ import 'package:jamaica/storyboards/games/true_false_game_story.dart';
 import 'package:jamaica/storyboards/user_progress_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/audio_widget_story.dart';
 import 'package:jamaica/storyboards/widgets/bento_box_story.dart';
+import 'package:jamaica/storyboards/widgets/chat_bot_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/chat_bot_story.dart';
 import 'package:jamaica/storyboards/widgets/cute_button_story.dart';
 import 'package:jamaica/storyboards/widgets/dot_number_story.dart';
@@ -53,6 +54,7 @@ void main() {
     BingoGameStory(),
     BoxMatchingGameStory(),
     ChatBotStory(),
+    ChatBotScreenStory(),
     CollectedItemStory(),
     CountingGameStory(),
     CrosswordGameStory(),
