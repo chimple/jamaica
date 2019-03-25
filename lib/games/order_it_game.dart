@@ -35,8 +35,7 @@ class _OrderItGameState extends State<OrderItGame> {
         .map((a) => _ChoiceDetail(choice: a, index: i++))
         .toList()
           ..shuffle();
-          complete =choiceDetails.length;
-
+    complete = choiceDetails.length;
   }
 
   @override
@@ -56,25 +55,28 @@ class _OrderItGameState extends State<OrderItGame> {
                   // onWillAccept: (data) => true,
                   onAccept: (data) {
                     setState(() {
-                     if(data != null){
+                      if (data != null) {
                         score++;
                         print("this my score$score");
-                        if (--complete == 0) 
-                        // widget.onGameOver(score);
-                       WidgetsBinding.instance.addPostFrameCallback((_) =>
-                        setState(() {
-                          int currentIndex = choiceDetails.indexWhere((ch) =>
-                              ch.index.toString() == c.index.toString());
-                          int droppedIndex = choiceDetails
-                              .indexWhere((ch) => ch.index.toString() == data);
-                          final droppedChoice = choiceDetails[droppedIndex];
-                          choiceDetails.removeAt(droppedIndex);
-                          choiceDetails.insert(currentIndex, droppedChoice);
-                        }));
-                     }else
-                     score--; 
+                        if (--complete == 0)
+                          // widget.onGameOver(score);
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((_) => setState(() {
+                                    int currentIndex = choiceDetails.indexWhere(
+                                        (ch) =>
+                                            ch.index.toString() ==
+                                            c.index.toString());
+                                    int droppedIndex = choiceDetails.indexWhere(
+                                        (ch) => ch.index.toString() == data);
+                                    final droppedChoice =
+                                        choiceDetails[droppedIndex];
+                                    choiceDetails.removeAt(droppedIndex);
+                                    choiceDetails.insert(
+                                        currentIndex, droppedChoice);
+                                  }));
+                      } else
+                        score--;
                     });
-                    
                   },
                 ),
               ))

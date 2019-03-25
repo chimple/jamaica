@@ -151,7 +151,7 @@ class _BingoGameState extends State<BingoGame> {
           for (i = matchRow; i < _maxSize + matchRow; i++) {
             setState(() {
               print("bingo row succesfulllll");
-              _bingo =true;
+              _bingo = true;
             });
           }
         }
@@ -172,15 +172,11 @@ class _BingoGameState extends State<BingoGame> {
           }
         }
       }
-    if(_bingo == true)
-    {
-       print("this is my game $score");
-      widget.onGameOver(score);
-    }
-
-    }
-    else if(str1 != str2){
-
+      if (_bingo == true) {
+        print("this is my game $score");
+        widget.onGameOver(score);
+      }
+    } else if (str1 != str2) {
       score--;
       print("this is my game $score");
     }
@@ -197,7 +193,6 @@ class _BingoGameState extends State<BingoGame> {
       }
       if (bingo) return i;
     }
-
     return -1;
   }
 
@@ -212,7 +207,6 @@ class _BingoGameState extends State<BingoGame> {
       }
       if (bingo) return j;
     }
-
     return -1;
   }
 }

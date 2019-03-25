@@ -66,13 +66,11 @@ class _RecognizeNumberGameState extends State<RecognizeNumberGame> {
                   setState(() {
                     if ((c.number == widget.answer)) {
                       score++;
-                       c.reaction = Reaction.success;
+                      c.reaction = Reaction.success;
                       print("this my score $score");
                       print("this is my answer ${widget.answer}");
-                       print("this is my choice ${c.number}");
-                      if (--complete == 0)
-                       widget.onGameOver(score);
-                     
+                      print("this is my choice ${c.number}");
+                      if (--complete == 0) widget.onGameOver(score);
                     } else {
                       score--;
                       c.reaction = Reaction.failure;

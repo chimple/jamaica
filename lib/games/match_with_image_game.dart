@@ -43,7 +43,7 @@ class _MatchWithImageGameState extends State<MatchWithImageGame> {
     choiceDetails = widget.choices
         .map((c) => _ChoiceDetail(choice: c))
         .toList(growable: false);
-        complete=choiceDetails.length;
+    complete = choiceDetails.length;
     answerDetails = widget.answers
         .map((a) => _ChoiceDetail(choice: a, appear: false))
         .toList(growable: false);
@@ -84,14 +84,11 @@ class _MatchWithImageGameState extends State<MatchWithImageGame> {
                             score++;
                             print("this is my data ${data.length}");
                             print("this is my score in match $score");
-                             
-                           
                             a.appear = true;
                             choiceDetails
                                 .firstWhere((c) => c.choice == a.choice)
                                 .appear = false;
-                                if (--complete == 0)
-                                 widget.onGameOver(score);
+                            if (--complete == 0) widget.onGameOver(score);
                           } else
                             score--;
                         }),

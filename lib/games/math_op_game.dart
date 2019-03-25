@@ -129,13 +129,12 @@ class _MathOpGameState extends State<MathOpGame> {
                           setState(() {
                             if (data == a.number.toString()) {
                               score++;
-                             print("this my score$score");
-                              if (--complete == 0)
-                               a.solved = true;
-                               widget.onGameOver(score);
+                              print("this my score$score");
+                              if (--complete == 0) a.solved = true;
+                              widget.onGameOver(score);
                             } else
                               score--;
-                              print("this my decrement score $score");
+                            print("this my decrement score $score");
                           });
                         },
                       ))

@@ -32,8 +32,7 @@ class _RhymeWordsGameState extends State<RhymeWordsGame> {
   var score = 0;
   int complete = 0;
   int count = 0;
-    List<String> _endList = [];
-
+  List<String> _endList = [];
 
   @override
   void initState() {
@@ -102,23 +101,23 @@ class _RhymeWordsGameState extends State<RhymeWordsGame> {
                                       choiceDetails[dataIndex];
                                   choiceDetails[dataIndex] = current;
                                   choiceDetails.forEach((d) {
-                              print(".......${d.choice}");
-                              _endList.add(d.choice);
-                            });
-                            print("this is my new game $_endList");
+                                    print(".......${d.choice}");
+                                    _endList.add(d.choice);
+                                  });
+                                  print("this is my new game $_endList");
 
-                            if (_endList.join() == widget.answers.join()) {
-                              print("success....");
-                              Future.delayed(
-                                    const Duration(milliseconds: 1000),
-                                    () => setState(
-                                        () => widget.onGameOver(score)));
-                            } else {
-                              score--;
-                              _endList = [];
-                            }
+                                  if (_endList.join() ==
+                                      widget.answers.join()) {
+                                    print("success....");
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000),
+                                        () => setState(
+                                            () => widget.onGameOver(score)));
+                                  } else {
+                                    score--;
+                                    _endList = [];
+                                  }
                                 }),
-                               
                           );
                         } else
                           score--;

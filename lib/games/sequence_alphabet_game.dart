@@ -91,9 +91,9 @@ class _SequenceAlphabetGameState extends State<SequenceAlphabetGame> {
                             if (_endList.join() == widget.answers.join()) {
                               print("success....");
                               Future.delayed(
-                                    const Duration(milliseconds: 1000),
-                                    () => setState(
-                                        () => widget.onGameOver(score)));
+                                  const Duration(milliseconds: 1000),
+                                  () =>
+                                      setState(() => widget.onGameOver(score)));
                             } else {
                               score--;
                               _endList = [];
