@@ -1,15 +1,10 @@
 import 'dart:convert';
-
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:data/models/contest_join.dart';
-import 'package:data/models/contest_session.dart';
-import 'package:data/models/multi_data.dart';
-
 import 'package:data/models/serializers.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/contest_game.dart';
-import 'package:jamaica/widgets/game.dart';
 
 class HomeScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -81,14 +76,6 @@ class HomeScreen extends StatelessWidget {
                           StateContainer.of(context).contestSessionEndPointId;
                       StateContainer.of(context)
                           .sendMessageTo(endPointId, jsoncontestJoinString);
-
-                      // Navigator.push(
-                      //   context,
-                      //   new MaterialPageRoute(
-                      //       builder: (ctxt) => new Game(
-                      //             contestSession: contestSession,
-                      //           )),
-                      // );
 
                       Navigator.push(
                         context,
