@@ -2,8 +2,6 @@ import 'package:data/models/contest_session.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/game_utils.dart';
-import 'package:jamaica/state/quiz_performance_utils.dart';
-import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/score.dart';
 import 'package:jamaica/widgets/slide_up_route.dart';
 import 'package:jamaica/widgets/stars.dart';
@@ -11,8 +9,8 @@ import 'package:jamaica/widgets/stars.dart';
 class Game extends StatefulWidget {
   final ContestSession contestSession;
   final UpdateCoins updateCoins;
-
-  const Game({Key key, this.contestSession, this.updateCoins})
+  final Function quizScore;
+  const Game({Key key, this.contestSession, this.updateCoins, this.quizScore})
       : super(key: key);
   @override
   _GameState createState() => _GameState();
@@ -22,7 +20,6 @@ class _GameState extends State<Game> {
   int _currentGame = 0;
   int _score = 0;
   int _stars = 0;
-  DateTime startTime;
   Navigator _navigator;
 
   @override
@@ -30,7 +27,8 @@ class _GameState extends State<Game> {
     super.initState();
     _navigator = Navigator(
       onGenerateRoute: (settings) => SlideUpRoute(
-            widgetBuilder: (context) => _buildGame(context, 0),
+            widgetBuilder: (context) =>
+                _buildGame(context, 0, widget.quizScore),
           ),
     );
   }
@@ -42,7 +40,6 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    startTime = new DateTime.now();
     return Scaffold(
       backgroundColor: Colors.purple,
       body: SafeArea(
@@ -86,21 +83,11 @@ class _GameState extends State<Game> {
     );
   }
 
-  Widget _buildGame(BuildContext context, int index) {
-    final contestStart = StateContainer.of(context).contestStart;
+  Widget _buildGame(BuildContext context, int index, quizScore) {
     if (index < widget.contestSession.gameData.length) {
       return buildGame(
           gameData: widget.contestSession.gameData[index],
           onGameOver: (score) {
-            DateTime endTime = new DateTime.now();
-            contestStart != null
-                ? eachQuizPerformance(
-                    gameData: widget.contestSession.gameData[_currentGame],
-                    score: score,
-                    startTime: startTime,
-                    endTime: endTime,
-                    context: context)
-                : Container();
 
             setState(() {
               _score += score;
@@ -110,8 +97,6 @@ class _GameState extends State<Game> {
             Navigator.push(
                 context,
                 SlideUpRoute(
-                    widgetBuilder: (context) => _buildGame(context, ++index)));
-            startTime = endTime;
           });
     } else {
       return Score(

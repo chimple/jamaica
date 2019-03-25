@@ -1,6 +1,7 @@
 import 'package:data/models/contest_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/state/quiz_performance_utils.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/game.dart';
 
@@ -10,6 +11,9 @@ class ContestGame extends StatelessWidget {
   const ContestGame({Key key, this.contestSession}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    DateTime startTime;
+    startTime = new DateTime.now();
+    int i = 0;
     final contestSession = StateContainer.of(context).contestSession;
     final contestStart = StateContainer.of(context).contestStart;
     if (contestStart == null && contestSession != null) {
@@ -21,6 +25,16 @@ class ContestGame extends StatelessWidget {
       ));
     }
     return Game(
+      quizScore: (score) {
+        DateTime endTime = new DateTime.now();
+        eachQuizPerformance(
+            gameData: contestSession.gameData[i++],
+            score: score,
+            startTime: startTime,
+            endTime: endTime,
+            context: context);
+        startTime = endTime;
+      },
       contestSession: contestSession,
     );
   }
