@@ -1,23 +1,43 @@
-import 'package:flutter/material.dart';
-import 'dart:core';
+import 'dart:math';
 
-class DisplayStoryContent extends StatelessWidget {
-  int index;
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
+enum StoryMode {
+  showDialogOnLongPressMode,
+  textHighlighterMode,
+  dragTextMode,
+  audioBoldTextMode,
+  textMode,
+}
+
+class ShowDialogMode extends StatefulWidget {
   final List<String> listofWords;
-  DisplayStoryContent({Key key, this.listofWords}) : super(key: key);
+  final StoryMode storyMode;
+  ShowDialogMode({Key key, this.listofWords, this.storyMode}) : super(key: key);
+
+  @override
+  _ShowDialogModeState createState() => _ShowDialogModeState();
+}
+
+class _ShowDialogModeState extends State<ShowDialogMode> {
+  StoryMode storyMode = StoryMode.textHighlighterMode;
+  bool highlightOnLongPress = false;
+  int highlightIndex = -1;
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: listofWords.map((d) {
-        return InkWell(
-          splashColor: Colors.yellow,
-          onLongPress: () {
-            index = listofWords.indexOf(d);
-            showDialog(
-              context: context,
-              builder: (context) {
-                return FractionallySizedBox(
+    int index = 0;
+    Widget _build(String s, int i) {
+      return InkWell(
+        onLongPress: () {
+          setState(() {
+            highlightIndex = i;
+          });
+          showDialog(
+            context: context,
+            builder: (context) {
+              return FractionallySizedBox(
                   heightFactor:
                       MediaQuery.of(context).orientation == Orientation.portrait
                           ? 0.5
@@ -26,25 +46,28 @@ class DisplayStoryContent extends StatelessWidget {
                       MediaQuery.of(context).orientation == Orientation.portrait
                           ? 0.8
                           : 0.4,
-                  child: _textDescriptionDialog(context, d,
-                      "Hello This is the Description about the word that you just pressed and the word that you pressed is "),
-                );
-              },
-            );
-          },
-          child: Text(d + " ",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  wordSpacing: 4.0,
-                  letterSpacing: 2.0)),
-        );
-      }).toList(),
+                  child: textDescriptionDialog(context, s, 'textDesciption'));
+            },
+          );
+        },
+        child: RichText(
+          text: TextSpan(
+            text: s + " ",
+            style: TextStyle(
+              fontSize: 23,
+              color: highlightIndex == i ? Colors.red : Colors.black,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Wrap(
+      children: widget.listofWords.map((s) => _build(s, index++)).toList(),
     );
   }
 
-  Widget _textDescriptionDialog(
+  Widget textDescriptionDialog(
       BuildContext context, String text, String textDesciption) {
     text = text.replaceAll(new RegExp(r'[^\w\s]+'), '');
     MediaQueryData mediaQuery = MediaQuery.of(context);
