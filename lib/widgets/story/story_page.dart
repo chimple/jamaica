@@ -44,7 +44,6 @@ class StoryPageState extends State<StoryPage> {
               audioFile: widget.pages[index].audioPath,
               fullText: widget.pages[index].text,
               pageNumber: widget.pages[index].pageNumber,
-              // imageItemsPosition: widget.pages[index].imageItemsPosition,
               pageSliding: () {
                 setState(() {
                   _isPlaying = !_isPlaying;
@@ -52,33 +51,6 @@ class StoryPageState extends State<StoryPage> {
                   //     int.parse(widget.pages[index].pageNumber) - 1);
                 });
               });
-          //  Column(
-          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //     children: <Widget>[
-          // Expanded(
-          //   flex: 4,
-          //   child: SizedBox(
-          //     width: double.infinity,
-          //     child: Image.asset(
-          //       'assets/stories/images/${widget.pages[index].imagePath}',
-          //       fit: BoxFit.fill,
-          //     ),
-          //   ),
-          // ),
-          //       // Expanded(
-          //       //   flex: 6,
-          //       //   child: AudioTextBold(
-          //       //       audioFile: widget.pages[index].audioPath,
-          //       //       fullText: widget.pages[index].text,
-          //       //       pageNumber: widget.pages[index].pageNumber,
-          //       //       pageSliding: () {
-          //       //         setState(() {
-          //       //           _isPlaying = !_isPlaying;
-          //       //         });
-          //       //       }),
-          //       // )
-          //     ],
-          //   )
         },
         itemCount: widget.pages.length,
       ),
