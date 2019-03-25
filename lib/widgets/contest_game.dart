@@ -1,7 +1,7 @@
 import 'package:data/models/contest_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/state/quiz_performance_utils.dart';
+import 'package:jamaica/state/contest_game_utils.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/game.dart';
 
