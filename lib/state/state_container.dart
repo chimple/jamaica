@@ -5,6 +5,8 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:data/models/contest_session.dart';
 import 'package:data/models/contest_start.dart';
 import 'package:data/models/serializers.dart';
+import 'package:data/models/class_students.dart';
+import 'package:data/models/user_profile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
 import 'package:nearby/nearby.dart';
@@ -36,6 +38,9 @@ class StateContainerState extends State<StateContainer> {
   var data;
   ContestStart contestStart;
   ContestSession contestSession;
+  UserProfile userProfileDeatils;
+  ClassStudents classStudents;
+  String teacherEndPointId;
   Map<dynamic, List<dynamic>> messagesById = new Map<dynamic, List<dynamic>>();
   List<dynamic> connections = [];
 
@@ -217,8 +222,7 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  connectTo(
-      Map<dynamic, dynamic> connectionInfo, Function _navigateToScreen) async {
+  connectTo(Map<dynamic, dynamic> connectionInfo) async {
     // Connect to device
     _connectionSubscription =
         _nearBy.connectTo(connectionInfo).listen((result) async {
@@ -226,7 +230,6 @@ class StateContainerState extends State<StateContainer> {
       setState(() {
         isConnected = result;
         _log('connection Result: $isConnected');
-        _navigateToScreen();
       });
     }, onDone: stopConnection);
   }
@@ -301,22 +304,23 @@ class StateContainerState extends State<StateContainer> {
     final newJson = jsonDecode(message['textMessages']['message']);
     var values = newJson.keys;
     String keys = values.first;
-    if (newJson[keys] == "ContestSession") {
-      contestSessionEndPointId = message['textMessages']['endPointId'];
-      contestSession = standardSerializers.deserialize(newJson);
-      print("hello this contestSession object ....$newJson");
-    } else if (newJson[keys] == "ContestStart") {
-      contestStart = standardSerializers.deserialize(newJson);
+    switch (newJson[keys]) {
+      case 'ContestSession':
+        contestSessionEndPointId = message['textMessages']['endPointId'];
+        contestSession = standardSerializers.deserialize(newJson);
+        break;
+      case 'ContestStart':
+        contestStart = standardSerializers.deserialize(newJson);
+        break;
+      case 'ClassStudents':
+        teacherEndPointId = message['textMessages']['endPointId'];
+        classStudents = standardSerializers.deserialize(newJson);
+        break;
+      case 'UserProfile':
+        userProfileDeatils = standardSerializers.deserialize(newJson);
+        break;
+      default:
     }
-    //   if (messagesById.containsKey(endPointId)) {
-    //     final messagesForId = messagesById[endPointId];
-    //     messagesForId.add(message);
-    //     messagesById[endPointId] = messagesForId;
-    //   } else {
-    //     List<dynamic> messagesForId = <dynamic>[];
-    //     messagesForId.add(message);
-    //     messagesById[endPointId] = messagesForId;
-    //   }
   }
 
   Future<void> getConnections() async {

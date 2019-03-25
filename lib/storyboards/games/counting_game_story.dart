@@ -10,6 +10,7 @@ class CountingGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: CountingGame(
+              onGameOver: (_) {},
               answer: 5,
               choices: BuiltList<int>([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]),
             ),
@@ -18,6 +19,7 @@ class CountingGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: CountingGame(
+              onGameOver: (_) {},
               answer: 2,
               choices: BuiltList<int>([1, 2]),
             ),
