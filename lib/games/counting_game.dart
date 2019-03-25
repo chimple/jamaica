@@ -101,10 +101,7 @@ class _CountingGameState extends State<CountingGame> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(16.0))),
                             ),
-                        onWillAccept: (data) {
-                          print(data);
-                          return data == a.number.toString();
-                        },
+                        onWillAccept: (data) => data == a.number.toString(),
                         onAccept: (data) {
                           setState(() => a.solved = true);
                           widget.onGameOver(1);

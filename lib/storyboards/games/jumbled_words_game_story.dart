@@ -12,6 +12,7 @@ class JumbledWordsGameStory extends FullScreenStory {
             child: JumbledWordsGame(
               answer: 'A',
               choices: BuiltList<String>(['A', 'B', 'C', 'D', 'E', 'F', 'H']),
+              onGameOver: (_) {},
             ),
           ),
         ),
@@ -20,6 +21,7 @@ class JumbledWordsGameStory extends FullScreenStory {
             child: JumbledWordsGame(
               answer: 'A',
               choices: BuiltList<String>(['A', 'B', 'C', 'D']),
+              onGameOver: (_) {},
             ),
           ),
         ),

@@ -9,9 +9,11 @@ class BoxMatchingGameStory extends FullScreenStory {
         Scaffold(
           body: SafeArea(
             child: BoxMatchingGame(
-                choices: BuiltList<String>(
-                    ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B']),
-                answers: BuiltList<String>(['A', 'B', 'C', 'D'])),
+              choices: BuiltList<String>(
+                  ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D', 'A', 'B']),
+              answers: BuiltList<String>(['A', 'B', 'C', 'D']),
+              onGameOver: (_) {},
+            ),
           ),
         )
       ];

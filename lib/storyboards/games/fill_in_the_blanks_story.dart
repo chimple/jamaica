@@ -11,23 +11,26 @@ class FillInTheBlanksGameStory extends FullScreenStory {
           body: SafeArea(
             child: FillInTheBlanksGame(
               question: ' Mount Everest is the highest 1_ in the 2_ .',
-              answers:
+              choices:
                   BuiltList<String>(['mountain', 'earth', 'chair', 'ball']),
+              onGameOver: (_) {},
             ),
           ),
         ),
         Scaffold(
             body: SafeArea(
                 child: FillInTheBlanksGame(
-                    question:
-                        ' The fact is Mount Everest is the highest 1_ in the earth followed by K2,located in the Himalayas.',
-                    answers: BuiltList<String>(
-                        ['mountain', 'earth', 'chair', 'ball'])))),
+          question:
+              ' The fact is Mount Everest is the highest 1_ in the earth followed by K2,located in the Himalayas.',
+          choices: BuiltList<String>(['mountain', 'earth', 'chair', 'ball']),
+          onGameOver: (_) {},
+        ))),
         Scaffold(
             body: SafeArea(
                 child: FillInTheBlanksGame(
-                    question: 'Lion is the king of the 1_ .',
-                    answers: BuiltList<String>(
-                        ['jungle', 'earth', 'chair', 'ball']))))
+          question: 'Lion is the king of the 1_ .',
+          choices: BuiltList<String>(['jungle', 'earth', 'chair', 'ball']),
+          onGameOver: (_) {},
+        )))
       ];
 }
