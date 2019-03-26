@@ -3,10 +3,10 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/widgets/story/drag_text_activity.dart';
+import 'package:jamaica/widgets/story/activity/drag_text_activity.dart';
 import 'package:jamaica/widgets/story/play_pause_button.dart';
 import 'package:jamaica/widgets/story/show_dialog_mode.dart';
-import 'package:jamaica/widgets/story/text_highlighter_activity.dart';
+import 'package:jamaica/widgets/story/activity/text_highlighter_activity.dart';
 
 final TextStyle textStyle = TextStyle(
   color: Colors.black,
