@@ -1,6 +1,9 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 
 class DragTextActivity extends StatefulWidget {
+  final BuiltList<String> data;
+  DragTextActivity({this.data});
   @override
   _DragTextState createState() => new _DragTextState();
 }
@@ -20,7 +23,12 @@ class _DragTextState extends State<DragTextActivity> {
   @override
   initState() {
     super.initState();
+    if (widget.data != null) if (widget.data.isNotEmpty) {
+      list.clear();
+      list.addAll(widget.data);
+    }
     list.sort((a, b) => a.length.compareTo(b.length));
+    print('list $list');
   }
 
   Widget _build(String s) {
@@ -46,14 +54,14 @@ class _DragTextState extends State<DragTextActivity> {
     print('textSize $textSize');
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Text(
             'Drag and drop the text to their relevant image',
             style: TextStyle(fontSize: 23),
           ),
           Wrap(
-              runAlignment: WrapAlignment.spaceAround,
+              runAlignment: WrapAlignment.center,
               verticalDirection: VerticalDirection.down,
               crossAxisAlignment: WrapCrossAlignment.center,
               alignment: WrapAlignment.center,

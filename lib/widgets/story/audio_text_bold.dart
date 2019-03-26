@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/story/drag_text_activity.dart';
+import 'package:jamaica/widgets/story/play_pause_button.dart';
 import 'package:jamaica/widgets/story/show_dialog_mode.dart';
 import 'package:jamaica/widgets/story/text_highlighter_activity.dart';
 
@@ -21,11 +22,14 @@ final TextStyle highlightTextStyle = TextStyle(
 class AudioTextBold extends StatefulWidget {
   final String fullText;
   final Function pageSliding;
+  final Function(int, StoryMode) storyModeCallback;
   final String audioFile;
   final String pageNumber;
   final StoryMode storyMode;
   final String imagePath;
   final imageItemsPosition;
+  final BuiltList<String> imageItemsAnswer;
+  final int index;
   AudioTextBold(
       {Key key,
       this.storyMode,
@@ -34,6 +38,9 @@ class AudioTextBold extends StatefulWidget {
       this.pageSliding,
       this.audioFile,
       this.imagePath,
+      this.storyModeCallback,
+      this.imageItemsAnswer,
+      this.index,
       this.pageNumber})
       : super(key: key);
   @override
@@ -60,9 +67,11 @@ class _TextAudioState extends State<AudioTextBold> {
   List<String> temp = [];
   StoryMode storyMode = StoryMode.textMode;
   List<StoryMode> listStoryMode = [];
+  ScrollController _scrollController = new ScrollController();
   @override
   void initState() {
     super.initState();
+    print('initState');
   }
 
   @override
@@ -232,6 +241,11 @@ class _TextAudioState extends State<AudioTextBold> {
           isAudioFileAvailableOrNot = false;
         });
         widget.pageSliding();
+        if (storyMode == StoryMode.audioBoldTextMode) {
+          _scrollController.addListener(() {
+            print('listenre');
+          });
+        }
       }, onError: (e) {
         setState(() {
           isPlaying = false;
@@ -347,19 +361,21 @@ class _TextAudioState extends State<AudioTextBold> {
               ),
         CircleAvatar(
           backgroundColor: Colors.cyanAccent,
-          maxRadius: 35,
+          maxRadius: 25,
           child: IconButton(
               icon: Icon(
-                storyMode == StoryMode.textHighlighterMode
+                (storyMode == StoryMode.textHighlighterMode ||
+                        storyMode == StoryMode.dragTextMode)
                     ? Icons.close
                     : Icons.navigate_next,
                 color: Colors.blue,
-                size: 35,
+                size: 25,
               ),
               onPressed: () {
                 if (storyMode == StoryMode.showDialogOnLongPressMode) {
                   setState(() => storyMode = StoryMode.textHighlighterMode);
-                } else if (storyMode == StoryMode.textHighlighterMode) {
+                } else if (storyMode == StoryMode.textHighlighterMode ||
+                    storyMode == StoryMode.dragTextMode) {
                   setState(
                       () => storyMode = StoryMode.showDialogOnLongPressMode);
                 }
@@ -378,15 +394,18 @@ class _TextAudioState extends State<AudioTextBold> {
     else if (storyMode == StoryMode.audioBoldTextMode) {
       return Padding(
         padding: const EdgeInsets.only(left: 8),
-        child: RichText(
-          text: new TextSpan(
-            children: <TextSpan>[
-              new TextSpan(text: startLine, style: textStyle),
-              new TextSpan(text: start, style: textStyle),
-              new TextSpan(text: middle, style: highlightTextStyle),
-              new TextSpan(text: end, style: textStyle),
-              new TextSpan(text: endLine, style: textStyle),
-            ],
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: RichText(
+            text: new TextSpan(
+              children: <TextSpan>[
+                new TextSpan(text: startLine, style: textStyle),
+                new TextSpan(text: start, style: textStyle),
+                new TextSpan(text: middle, style: highlightTextStyle),
+                new TextSpan(text: end, style: textStyle),
+                new TextSpan(text: endLine, style: textStyle),
+              ],
+            ),
           ),
         ),
       );
@@ -407,7 +426,9 @@ class _TextAudioState extends State<AudioTextBold> {
         listofWords: widget.fullText.split(' '),
       );
     else
-      return DragTextActivity();
+      return DragTextActivity(
+        data: widget.imageItemsAnswer,
+      );
   }
 
   Widget _buildImage() {
@@ -448,57 +469,5 @@ class TextMode extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class PlayPauseButton extends StatelessWidget {
-  final bool isPlaying;
-  final isPause;
-  final StoryMode storyMode;
-  final VoidCallback loadAudio;
-  final AudioPlayer audioPlayer;
-  final VoidCallback resume;
-  final VoidCallback pause;
-  PlayPauseButton(
-      {this.isPlaying,
-      this.isPause,
-      this.storyMode,
-      this.loadAudio,
-      this.audioPlayer,
-      this.pause,
-      this.resume});
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraint) {
-      return Container(
-        width: double.infinity,
-        color: Colors.green[200],
-        child: storyMode != StoryMode.textHighlighterMode
-            ? InkWell(
-                onTap: !isPlaying
-                    ? () {
-                        loadAudio();
-                      }
-                    : () {
-                        if (audioPlayer.state == AudioPlayerState.PAUSED ||
-                            audioPlayer.state == AudioPlayerState.COMPLETED) {
-                          resume();
-                        } else if (audioPlayer.state ==
-                            AudioPlayerState.PLAYING) pause();
-                      },
-                child: CircleAvatar(
-                  maxRadius: constraint.maxHeight,
-                  backgroundColor: Colors.white,
-                  child: isPause
-                      ? Icon(
-                          Icons.play_arrow,
-                          size: constraint.maxHeight * .9,
-                        )
-                      : Icon(Icons.pause, size: constraint.maxHeight * .9),
-                ),
-              )
-            : Container(),
-      );
-    });
   }
 }
