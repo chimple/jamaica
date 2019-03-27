@@ -36,6 +36,7 @@ class _BoxMatchingGameState extends State<BoxMatchingGame> {
   List<_ChoiceDetail> choiceDetails;
   List<_ChoiceDetail> answerDetails;
   List<List<String>> addToBox = [];
+  int complete, score = 0;
   @override
   void initState() {
     super.initState();
@@ -45,6 +46,7 @@ class _BoxMatchingGameState extends State<BoxMatchingGame> {
         .map((c) => _ChoiceDetail(choice: c, index: i++))
         .toList(growable: false)
           ..shuffle();
+    complete = choiceDetails.length;
     answerDetails = widget.answers
         .map((a) => _ChoiceDetail(choice: a, appear: false, index: j++))
         .toList(growable: false);
@@ -101,10 +103,10 @@ class _BoxMatchingGameState extends State<BoxMatchingGame> {
                                                 .toList(growable: false))
                                         : Container());
                               }),
-                          onWillAccept: (data) {
-                            return data[0] == a.choice;
-                          },
+                          onWillAccept: (data) => data[0] == a.choice,
                           onAccept: (data) => setState(() {
+                                score++;
+                                if (--complete == 0) widget.onGameOver(score);
                                 int index = int.parse(data.substring(1));
                                 print(
                                     "${data.substring(1)}......${choiceDetails[index]}");

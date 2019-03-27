@@ -10,8 +10,7 @@ import 'package:jamaica/screens/store_screen.dart';
 import 'package:jamaica/screens/story_screen.dart';
 import 'package:jamaica/state/state_container.dart';
 
-void main() =>
-    runApp(StateContainer(child: MaterialApp(home: SelectTeacherScreen())));
+void main() => runApp(StateContainer(child: MyApp()));
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -41,8 +40,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomePageWrapper(title: 'Flutter Demo Home Page'),
+      home: SelectTeacherScreen(),
       routes: <String, WidgetBuilder>{
+        '/chatbot': (BuildContext context) => HomeScreen(),
         '/profile': (BuildContext context) => ProfileScreen(),
         '/map': (BuildContext context) => MapScreen(),
         '/games': (BuildContext context) => GamesScreen(),

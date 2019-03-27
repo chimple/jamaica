@@ -70,6 +70,7 @@ flutter:
     - assets/map/
     - assets/game/
     - assets/accessories/
+    - assets/chat/
     - assets/character/
     - assets/stories/
     - assets/stories/images/

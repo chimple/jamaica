@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/widgets/story/drag_text_activity.dart';
 import 'package:jamaica/widgets/story/show_dialog_mode.dart';
-import 'package:jamaica/widgets/story/text_highlighter.dart';
+import 'package:jamaica/widgets/story/text_highlighter_activity.dart';
 
 final TextStyle textStyle = TextStyle(
   color: Colors.black,
@@ -23,9 +25,11 @@ class AudioTextBold extends StatefulWidget {
   final String pageNumber;
   final StoryMode storyMode;
   final String imagePath;
+  final imageItemsPosition;
   AudioTextBold(
       {Key key,
       this.storyMode,
+      this.imageItemsPosition,
       this.fullText,
       this.pageSliding,
       this.audioFile,
@@ -48,7 +52,7 @@ class _TextAudioState extends State<AudioTextBold> {
       boldTextComplete = false,
       isPause = true,
       isAudioFileAvailableOrNot = false;
-  String start = "", middle = "", end = "", endLine = '', firstLine = '';
+  String start = "", middle = "", end = "", endLine = '', startLine = '';
   List<String> _audioFiles = [], listOfLines = [], words;
   final _regex = RegExp('[a-zA-Z0-9]');
   final _regex1 = RegExp('[!?,|]');
@@ -59,7 +63,6 @@ class _TextAudioState extends State<AudioTextBold> {
   @override
   void initState() {
     super.initState();
-    print('inddex:: ${widget.pageNumber}');
   }
 
   @override
@@ -80,8 +83,7 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   Future resume() async {
-    print('resume');
-    reset();
+    // reset();
     await audioPlayer.release();
     play(_audioFiles[incr]).then((s) {
       setState(() {
@@ -93,28 +95,27 @@ class _TextAudioState extends State<AudioTextBold> {
   }
 
   void reset() {
+    startLine = '';
+    for (int i = 0; i < incr; i++) {
+      startLine = startLine + listOfLines[i];
+    }
     endLine = '';
-    firstLine = '';
     for (int i = incr + 1; i < listOfLines.length; i++) {
       endLine = endLine + listOfLines[i];
-    }
-    print('end line:: $endLine');
-    for (int i = 0; i < incr; i++) {
-      print('start line:: ${listOfLines[i]}');
-      firstLine = firstLine + listOfLines[i];
     }
     setState(() {});
   }
 
   play(String url) async {
     print('play');
-    reset();
     try {
       await audioCache.play('$url');
       audioPlayer.durationHandler = (d) {
         _duration = d.inMilliseconds;
         if (durationText > 0 && !isDurationZero) {
+          reset();
           looper(listOfLines[incr], durationText);
+          storyMode = StoryMode.audioBoldTextMode;
           isDurationZero = true;
         }
       };
@@ -154,9 +155,6 @@ class _TextAudioState extends State<AudioTextBold> {
 
   String lastString, lastAudioFile;
   void looper(String text, int time) async {
-    start = '';
-    middle = '';
-    end = '';
     print(text);
     List<String> listOfWords = [];
     lastString = text;
@@ -168,6 +166,9 @@ class _TextAudioState extends State<AudioTextBold> {
 
   void looping(List<String> w, int l) async {
     String space = " ";
+    start = '';
+    middle = '';
+    end = '';
     for (int i = 0; i < l - 1; i++) {
       if (mounted && !isPause)
         setState(() {
@@ -223,11 +224,11 @@ class _TextAudioState extends State<AudioTextBold> {
     try {
       await audioCache.loadAll(_audioFiles).then((s) {
         lastAudioFile = _audioFiles[0];
+        // reset();
         play(_audioFiles[0]);
         setState(() {
           isPlaying = true;
           isPause = false;
-          storyMode = StoryMode.audioBoldTextMode;
           isAudioFileAvailableOrNot = false;
         });
         widget.pageSliding();
@@ -275,109 +276,160 @@ class _TextAudioState extends State<AudioTextBold> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).orientation == Orientation.portrait
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(flex: 6, child: _buildImage()),
-              Expanded(
-                flex: 1,
-                child: (storyMode != StoryMode.textHighlighterMode)
-                    ? PlayPauseButton(
-                        audioPlayer: audioPlayer,
-                        isPause: isPause,
-                        isPlaying: isPlaying,
-                        loadAudio: () =>
-                            loadAudio(widget.fullText, widget.audioFile),
-                        pause: () => pause(),
-                        resume: () => resume(),
-                      )
-                    : Container(),
-              ),
-              Expanded(
-                flex: 8,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: SingleChildScrollView(
-                      controller: ScrollController(), child: _buildText()),
-                ),
-              ),
-            ],
-          )
-        : Column(
-            children: <Widget>[
-              Expanded(
-                flex: 10,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(flex: 5, child: _buildImage()),
-                    Expanded(
-                      flex: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: SingleChildScrollView(
-                            controller: ScrollController(),
-                            child: _buildText()),
-                      ),
+    return Stack(
+      alignment: AlignmentDirectional.topEnd,
+      children: <Widget>[
+        MediaQuery.of(context).orientation == Orientation.portrait
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(flex: 12, child: _buildImage()),
+                  (storyMode == StoryMode.textMode ||
+                          storyMode == StoryMode.audioBoldTextMode ||
+                          storyMode == StoryMode.showDialogOnLongPressMode)
+                      ? Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            child: PlayPauseButton(
+                              audioPlayer: audioPlayer,
+                              isPause: isPause,
+                              isPlaying: isPlaying,
+                              loadAudio: () =>
+                                  loadAudio(widget.fullText, widget.audioFile),
+                              pause: () => pause(),
+                              resume: () => resume(),
+                            ),
+                          ))
+                      : Container(),
+                  Expanded(
+                    flex: 7,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: _buildText(),
                     ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: (storyMode != StoryMode.textHighlighterMode)
-                    ? PlayPauseButton(
-                        audioPlayer: audioPlayer,
-                        isPause: isPause,
-                        isPlaying: isPlaying,
-                        loadAudio: () =>
-                            loadAudio(widget.fullText, widget.audioFile),
-                        pause: () => pause(),
-                        resume: () => resume(),
-                      )
-                    : Container(),
+                  ),
+                ],
               )
-            ],
-          );
+            : Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 10,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(flex: 5, child: _buildImage()),
+                        Expanded(
+                          flex: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8, right: 8),
+                            child: SingleChildScrollView(
+                                controller: ScrollController(),
+                                child: _buildText()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: (storyMode != StoryMode.textHighlighterMode)
+                        ? PlayPauseButton(
+                            audioPlayer: audioPlayer,
+                            isPause: isPause,
+                            isPlaying: isPlaying,
+                            loadAudio: () =>
+                                loadAudio(widget.fullText, widget.audioFile),
+                            pause: () => pause(),
+                            resume: () => resume(),
+                          )
+                        : Container(),
+                  )
+                ],
+              ),
+        CircleAvatar(
+          backgroundColor: Colors.cyanAccent,
+          maxRadius: 35,
+          child: IconButton(
+              icon: Icon(
+                storyMode == StoryMode.textHighlighterMode
+                    ? Icons.close
+                    : Icons.navigate_next,
+                color: Colors.blue,
+                size: 35,
+              ),
+              onPressed: () {
+                if (storyMode == StoryMode.showDialogOnLongPressMode) {
+                  setState(() => storyMode = StoryMode.textHighlighterMode);
+                } else if (storyMode == StoryMode.textHighlighterMode) {
+                  setState(
+                      () => storyMode = StoryMode.showDialogOnLongPressMode);
+                }
+              }),
+        ),
+      ],
+    );
   }
 
   Widget _buildText() {
+    print('storymode: ${storyMode}');
     if (storyMode == StoryMode.textMode)
       return TextMode(
         text: widget.fullText,
       );
     else if (storyMode == StoryMode.audioBoldTextMode) {
-      return RichText(
-        text: new TextSpan(
-          children: <TextSpan>[
-            new TextSpan(text: firstLine, style: textStyle),
-            new TextSpan(text: start, style: textStyle),
-            new TextSpan(text: middle, style: highlightTextStyle),
-            new TextSpan(text: end, style: textStyle),
-            new TextSpan(text: endLine, style: textStyle),
-          ],
+      return Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: RichText(
+          text: new TextSpan(
+            children: <TextSpan>[
+              new TextSpan(text: startLine, style: textStyle),
+              new TextSpan(text: start, style: textStyle),
+              new TextSpan(text: middle, style: highlightTextStyle),
+              new TextSpan(text: end, style: textStyle),
+              new TextSpan(text: endLine, style: textStyle),
+            ],
+          ),
         ),
       );
     } else if (storyMode == StoryMode.textHighlighterMode)
-      return TextHighlighter(
-        text: widget.fullText,
-      );
+      return TextHighlighterActivity(
+          text: widget.fullText,
+          onCorrectAnswer: (l) {
+            new Future.delayed(Duration(seconds: 1), () {
+              setState(() {
+                storyMode = StoryMode.dragTextMode;
+              });
+            });
+
+            print(l);
+          });
     else if (storyMode == StoryMode.showDialogOnLongPressMode)
       return ShowDialogMode(
         listofWords: widget.fullText.split(' '),
       );
     else
-      return Container();
+      return DragTextActivity();
   }
 
   Widget _buildImage() {
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: Image.asset(
-        'assets/stories/images/${widget.imagePath}',
-        fit: BoxFit.fill,
-      ),
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: <Widget>[
+        SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Image.asset(
+            'assets/stories/images/${widget.imagePath}',
+            fit: BoxFit.cover,
+          ),
+        ),
+        storyMode == StoryMode.textHighlighterMode
+            ? Text('Where georgie Porgie went in the  afternoon',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                ))
+            : Container()
+      ],
     );
   }
 }
@@ -387,8 +439,14 @@ class TextMode extends StatelessWidget {
   TextMode({this.text});
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(text: text, style: textStyle),
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: SingleChildScrollView(
+        controller: ScrollController(),
+        child: RichText(
+          text: TextSpan(text: text, style: textStyle),
+        ),
+      ),
     );
   }
 }
@@ -397,10 +455,10 @@ class PlayPauseButton extends StatelessWidget {
   final bool isPlaying;
   final isPause;
   final StoryMode storyMode;
-  final Function loadAudio;
+  final VoidCallback loadAudio;
   final AudioPlayer audioPlayer;
-  final Function resume;
-  final Function pause;
+  final VoidCallback resume;
+  final VoidCallback pause;
   PlayPauseButton(
       {this.isPlaying,
       this.isPause,
@@ -422,7 +480,6 @@ class PlayPauseButton extends StatelessWidget {
                         loadAudio();
                       }
                     : () {
-                        print(audioPlayer.state);
                         if (audioPlayer.state == AudioPlayerState.PAUSED ||
                             audioPlayer.state == AudioPlayerState.COMPLETED) {
                           resume();
