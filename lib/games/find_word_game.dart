@@ -30,6 +30,7 @@ class FindWordGame extends StatefulWidget {
 class _FindWordGameState extends State<FindWordGame> {
   List<_ChoiceDetail> choiceDetails;
   List<String> word = [];
+  int score = 0;
 
   @override
   void initState() {
@@ -65,10 +66,14 @@ class _FindWordGameState extends State<FindWordGame> {
                         widget.onGameOver(1);
                         if (c.letter == widget.answer[word.length]) {
                           setState(() {
+                            score++;
                             c.reaction = Reaction.success;
                             word.add(c.letter);
+                            if (word.length == widget.answer.length)
+                              widget.onGameOver(score);
                           });
                         } else {
+                          if (score > 0) score--;
                           c.reaction = Reaction.failure;
                         }
                       },

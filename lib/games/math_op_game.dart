@@ -37,6 +37,8 @@ class MathOpGame extends StatefulWidget {
 
 class _MathOpGameState extends State<MathOpGame> {
   List<_ChoiceDetail> answers = [];
+  var score = 0;
+  int complete;
 
   @override
   void initState() {
@@ -52,6 +54,7 @@ class _MathOpGameState extends State<MathOpGame> {
           ));
       value ~/= 10;
     }
+    complete = value;
   }
 
   @override
@@ -118,11 +121,22 @@ class _MathOpGameState extends State<MathOpGame> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(16.0))),
                             ),
-                        onWillAccept: (data) {
-                          print(data);
-                          return data == a.number.toString();
+                        // onWillAccept: (data) {
+                        //   print(data);
+                        //   return data == a.number.toString();
+                        // },
+                        onAccept: (data) {
+                          setState(() {
+                            if (data == a.number.toString()) {
+                              score++;
+                              print("this my score$score");
+                              if (--complete == 0) a.solved = true;
+                              widget.onGameOver(score);
+                            } else
+                              score--;
+                            print("this my decrement score $score");
+                          });
                         },
-                        onAccept: (data) => setState(() => a.solved = true),
                       ))
                 .toList(growable: false),
           ),

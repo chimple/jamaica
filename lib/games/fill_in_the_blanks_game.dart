@@ -12,7 +12,7 @@ class _QuestionDetail {
   bool appear;
 
   _QuestionDetail(
-      {this.choice, this.appear = true, this.reaction = Reaction.success});
+      {this.choice, this.appear = true, this.reaction = Reaction.enter});
   @override
   String toString() =>
       '_QuestionDetail(choice: $choice, appear: $appear, reaction: $reaction)';
@@ -20,11 +20,11 @@ class _QuestionDetail {
 
 class FillInTheBlanksGame extends StatefulWidget {
   final String question;
-  final BuiltList<String> answers;
+  final BuiltList<String> choices;
   final OnGameOver onGameOver;
 
   const FillInTheBlanksGame(
-      {Key key, this.onGameOver, this.question, this.answers})
+      {Key key, this.onGameOver, this.question, this.choices})
       : super(key: key);
 
   @override
@@ -36,6 +36,7 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   List<String> dragBoxData = [];
   List<String> questionWords = [];
   List<int> index = [];
+  int complete = 0, score = 0;
 
   @override
   void initState() {
@@ -43,15 +44,16 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
     questionWords.addAll(widget.question.trim().split(' '));
     int i = 1;
     while (questionWords.contains('$i' + '_')) {
+      complete++;
       index.add(questionWords.indexOf('$i' + '_'));
       i++;
     }
-    dragBoxData = widget.answers.map((f) => f).toList(growable: false)
+    dragBoxData = widget.choices.map((f) => f).toList(growable: false)
       ..shuffle();
     for (int p = 0, i = 1; p < questionWords.length; p++) {
       questionDetails.add(_QuestionDetail(
         choice: questionWords[p] == '$i' + '_'
-            ? widget.answers[i - 1]
+            ? widget.choices[i - 1]
             : questionWords[p],
         appear: questionWords[p] == '$i' + '_' ? false : true,
       ));
@@ -89,11 +91,15 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
                                 ),
                                 onWillAccept: (data) =>
                                     data.substring(1) == f.choice,
-                                onAccept: (data) => setState(() {
-                                      f.reaction = Reaction.success;
-                                      f.appear = true;
-                                    }),
-                              ))
+                                onAccept: (data) {
+                                  setState(() {
+                                    score++;
+                                    if (--complete == 0)
+                                      widget.onGameOver(score);
+                                    f.reaction = Reaction.success;
+                                    f.appear = true;
+                                  });
+                                }))
                         .toList(growable: false),
                   ),
                 ))),

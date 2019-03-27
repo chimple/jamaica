@@ -30,6 +30,8 @@ class RecognizeNumberGame extends StatefulWidget {
 
 class _RecognizeNumberGameState extends State<RecognizeNumberGame> {
   List<_ChoiceDetail> choiceDetails;
+  var score = 0;
+  int complete = 1;
 
   @override
   void initState() {
@@ -61,9 +63,19 @@ class _RecognizeNumberGameState extends State<RecognizeNumberGame> {
                 ),
                 reaction: c.reaction,
                 onPressed: () {
-                  setState(() => c.reaction = (c.number == widget.answer)
-                      ? Reaction.success
-                      : Reaction.failure);
+                  setState(() {
+                    if ((c.number == widget.answer)) {
+                      score++;
+                      c.reaction = Reaction.success;
+                      print("this my score $score");
+                      print("this is my answer ${widget.answer}");
+                      print("this is my choice ${c.number}");
+                      if (--complete == 0) widget.onGameOver(score);
+                    } else {
+                      score--;
+                      c.reaction = Reaction.failure;
+                    }
+                  });
                 },
               ))
           .toList(growable: false),

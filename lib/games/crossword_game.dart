@@ -50,14 +50,15 @@ class _CrosswordGameState extends State<CrosswordGame> {
 
   int rows;
   int cols;
+  int complete, score = 0;
 
   @override
   void initState() {
     super.initState();
     cols = widget.data.length;
     rows = widget.data[0].length;
-    List<String> letters = [];
 
+    List<String> letters = [];
     widget.data.forEach((e) {
       e.forEach((v) {
         letters.add(v);
@@ -98,6 +99,8 @@ class _CrosswordGameState extends State<CrosswordGame> {
 
     choiceDetails =
         choices.map((c) => _ChoiceDetail(choice: c)).toList(growable: false);
+
+    complete = letterIndex.length;
 
     for (int p = 0; p < letters.length; p++) {
       crossword.add(_ChoiceDetail(
@@ -150,6 +153,8 @@ class _CrosswordGameState extends State<CrosswordGame> {
                                 choiceDetails[int.parse(data)].choice ==
                                 f.choice,
                             onAccept: (data) => setState(() {
+                                  score++;
+                                  if (--complete == 0) widget.onGameOver(score);
                                   f.appear = true;
                                   choiceDetails[int.parse(data)].appear = false;
                                 }),
