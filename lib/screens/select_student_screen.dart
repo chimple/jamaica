@@ -60,12 +60,15 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
           ),
           Padding(
             padding: EdgeInsets.only(left: media.size.width * .05),
-            child: Text(
-              "Select your Photo",
-              style: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
+            child: Container(
+              width: media.size.width,
+              child: Text(
+                "Select your Photo",
+                style: TextStyle(
+                    fontSize: 30.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           Expanded(
@@ -82,7 +85,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                         await StateContainer.of(context).studentJoin(
                             t.id,
                             classStudents.sessionId,
-                            widget.selectedTeacher['endPOintId']);
+                            widget.selectedTeacher['endPointId']);
                         Navigator.of(context).pushNamed('/chatbot');
                       },
                       child: StudentDetails(t)))

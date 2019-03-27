@@ -29,8 +29,6 @@ class StudentDetails extends StatelessWidget {
         ),
         new Container(
             child: new Text(studentDetails.name,
-                textAlign: TextAlign.right,
-                textDirection: TextDirection.rtl,
                 style: new TextStyle(
                     fontSize: orientation == Orientation.portrait
                         ? size.height * .02

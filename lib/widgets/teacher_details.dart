@@ -45,8 +45,6 @@ class TeacherDetails extends StatelessWidget {
           ),
           new Container(
               child: new Text(classSession.teacherName,
-                  textAlign: TextAlign.right,
-                  textDirection: TextDirection.rtl,
                   style: new TextStyle(
                       fontSize: orientation == Orientation.portrait
                           ? size.height * .02
@@ -55,8 +53,6 @@ class TeacherDetails extends StatelessWidget {
                   overflow: TextOverflow.ellipsis)),
           new Container(
               child: new Text(classSession.name,
-                  textAlign: TextAlign.right,
-                  textDirection: TextDirection.rtl,
                   style: new TextStyle(
                       fontSize: orientation == Orientation.portrait
                           ? size.height * .015
