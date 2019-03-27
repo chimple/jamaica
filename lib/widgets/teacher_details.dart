@@ -35,6 +35,8 @@ class TeacherDetails extends StatelessWidget {
               children: <Widget>[
                 new Container(
                   decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey, width: 5.0),
                       borderRadius:
                           const BorderRadius.all(const Radius.circular(50.0)),
                       image: DecorationImage(
