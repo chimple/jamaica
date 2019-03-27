@@ -15,15 +15,6 @@ class ChatBot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Flexible(
-          child: Hero(
-            tag: 'chimp',
-            child: FlareActor("assets/character/chimp.flr",
-                alignment: Alignment.center,
-                fit: BoxFit.contain,
-                animation: "idle"),
-          ),
-        ),
         Text(text),
         Expanded(
           child: Align(

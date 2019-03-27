@@ -30,39 +30,32 @@ class _TeachersScreenState extends State<TeachersScreen> {
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
     MediaQueryData media = MediaQuery.of(context);
-    return SafeArea(
-      child: Scaffold(
-          backgroundColor: Colors.orange,
-          key: _scaffoldKey,
-          body: Column(
+    return Scaffold(
+        backgroundColor: Colors.orange,
+        key: _scaffoldKey,
+        body: SafeArea(
+          child: Column(
             children: <Widget>[
-              Container(
-                height: media.size.height * .08,
-                child: Center(
-                  child: Center(
-                    child: Text(
-                      "Choose your Class",
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+              RaisedButton(
+                child: Text('Local Student'),
+                textColor: Colors.orange,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                onPressed: () {
+                  StateContainer.of(context).stopDiscovery();
+                  Navigator.of(context).pushNamed('/chatbot');
+                },
               ),
-              Center(
-                child: Container(
-                  color: Colors.white70,
-                  width: media.size.width * .9,
-                  height: media.size.height * .004,
-                ),
+              Text(
+                "Or Choose your Class",
+                style: TextStyle(
+                    fontSize: 30.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
-              Container(
-                height: orientation == Orientation.portrait
-                    ? media.size.height * .8
-                    : media.size.height * .75,
-                width: media.size.width,
-                child: new GridView.count(
+              Expanded(
+                child: GridView.count(
                   key: new Key('teacher_list'),
                   primary: true,
                   crossAxisCount: 4,
@@ -84,44 +77,33 @@ class _TeachersScreenState extends State<TeachersScreen> {
                       .toList(growable: false),
                 ),
               ),
-              Container(
-                height: orientation == Orientation.portrait
-                    ? media.size.height * .06
-                    : media.size.height * .08,
-                width: media.size.width * .2,
-                child: Center(
-                  child: InkWell(
-                    onTap: () async {
-                      if (selectedTeacher != null) {
-                        await StateContainer.of(context)
-                            .connectTo(selectedTeacher);
-                        Navigator.of(context).push(MaterialPageRoute<Null>(
-                            builder: (BuildContext context) =>
-                                SelectStudentScreen(
-                                  selectedTeacher: selectedTeacher,
-                                  // message: messageData,
-                                )));
-                      }
-                    },
-                    child: Container(
-                      decoration: new BoxDecoration(
-                        color: Colors.white,
-                        border: new Border.all(color: Colors.green, width: 2.0),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Center(
-                          child: Text("Next",
-                              style: new TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange))),
+              Center(
+                child: InkWell(
+                  onTap: () async {
+                    if (selectedTeacher != null) {
+                      await StateContainer.of(context)
+                          .connectTo(selectedTeacher);
+                      Navigator.of(context).push(MaterialPageRoute<Null>(
+                          builder: (BuildContext context) =>
+                              SelectStudentScreen(
+                                selectedTeacher: selectedTeacher,
+                                // message: messageData,
+                              )));
+                    }
+                    ;
+                  },
+                  child: Container(
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                      border: new Border.all(color: Colors.green, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                 ),
               )
             ],
-          )),
-    );
+          ),
+        ));
   }
 
   void _navigateToScreen(BuildContext context, dynamic selectedTeacher) {
