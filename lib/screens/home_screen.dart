@@ -5,7 +5,7 @@ import 'package:data/models/serializers.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/state_container.dart';
-import 'package:jamaica/widgets/contest_game.dart';
+import 'package:jamaica/widgets/quiz_game.dart';
 import 'package:data/data.dart';
 import 'package:flutter/services.dart';
 import 'package:jamaica/widgets/chat_bot.dart';
@@ -63,12 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }
-    final contestSession = StateContainer.of(context).contestSession;
+    final quizSession = StateContainer.of(context).quizSession;
 
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.cyan,
-        body: contestSession == null
+        body: quizSession == null
             ? SafeArea(
                 child: Column(
                   verticalDirection: VerticalDirection.up,
@@ -130,29 +130,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             ..addPlugin(StandardJsonPlugin()))
                           .build();
 
-                      final contestSession =
-                          StateContainer.of(context).contestSession;
+                      final quizSession =
+                          StateContainer.of(context).quizSession;
                       final studentId = StateContainer.of(context).studentIdVal;
 
-                      ContestJoin contestJoin = ContestJoin((d) => d
-                        ..sessionId = contestSession.sessionId
+                      QuizJoin quizJoin = QuizJoin((d) => d
+                        ..sessionId = quizSession.sessionId
                         ..studentId = studentId);
 
-                      final jsoncontestJoin =
-                          standardSerializers.serialize(contestJoin);
-                      final jsoncontestJoinString = jsonEncode(jsoncontestJoin);
-                      print(jsoncontestJoinString);
-                      print(".......object is.....$contestJoin");
+                      final jsonquizJoin =
+                          standardSerializers.serialize(quizJoin);
+                      final jsonquizJoinString = jsonEncode(jsonquizJoin);
+                      print(jsonquizJoinString);
+                      print(".......object is.....$quizJoin");
                       final endPointId =
-                          StateContainer.of(context).contestSessionEndPointId;
+                          StateContainer.of(context).quizSessionEndPointId;
                       StateContainer.of(context)
-                          .sendMessageTo(endPointId, jsoncontestJoinString);
+                          .sendMessageTo(endPointId, jsonquizJoinString);
 
                       Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (ctxt) => new ContestGame(
-                                  contestSession: contestSession,
+                            builder: (ctxt) => new QuizGame(
+                                  quizSession: quizSession,
                                 )),
                       );
                     },
