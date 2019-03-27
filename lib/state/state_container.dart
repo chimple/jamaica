@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/standard_json_plugin.dart';
-import 'package:data/models/contest_session.dart';
-import 'package:data/models/contest_start.dart';
+import 'package:data/models/quiz_session.dart';
+import 'package:data/models/quiz_update.dart';
 import 'package:data/models/serializers.dart';
 import 'package:data/models/class_students.dart';
 import 'package:data/models/user_profile.dart';
@@ -34,10 +34,10 @@ class StateContainerState extends State<StateContainer> {
   List<dynamic> messages = [];
   String studentIdVal;
 
-  var contestSessionEndPointId;
+  var quizSessionEndPointId;
 
-  ContestStart contestStart;
-  ContestSession contestSession;
+  QuizUpdate quizUpdate;
+  QuizSession quizSession;
   UserProfile userProfileDeatils;
   ClassStudents classStudents;
   String teacherEndPointId;
@@ -303,12 +303,12 @@ class StateContainerState extends State<StateContainer> {
     var values = newJson.keys;
     String key = values.first;
     switch (newJson[key]) {
-      case 'ContestSession':
-        contestSessionEndPointId = message['textMessages']['endPointId'];
-        contestSession = standardSerializers.deserialize(newJson);
+      case 'QuizSession':
+        quizSessionEndPointId = message['textMessages']['endPointId'];
+        quizSession = standardSerializers.deserialize(newJson);
         break;
-      case 'ContestStart':
-        contestStart = standardSerializers.deserialize(newJson);
+      case 'QuizUpdate':
+        quizUpdate = standardSerializers.deserialize(newJson);
         break;
       case 'ClassStudents':
         teacherEndPointId = message['textMessages']['endPointId'];
