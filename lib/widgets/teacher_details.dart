@@ -24,55 +24,45 @@ class TeacherDetails extends StatelessWidget {
         borderRadius: const BorderRadius.all(const Radius.circular(16.0)),
       ),
       margin: EdgeInsets.all(size.width * .02),
-      child: new Stack(
+      child: Column(
         children: <Widget>[
-          Container(
-            width: size.width * .25,
+          new Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey, width: 5.0),
+                borderRadius:
+                    const BorderRadius.all(const Radius.circular(50.0)),
+                image: DecorationImage(
+                  image: AssetImage(
+                      'assets/stories/images/${classSession.teacherPhoto}'),
+                )),
+            width: orientation == Orientation.portrait
+                ? size.width * 0.2
+                : size.width * 0.12,
             height: orientation == Orientation.portrait
-                ? size.height * .15
-                : size.height * .35,
-            child: Column(
-              children: <Widget>[
-                new Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey, width: 5.0),
-                      borderRadius:
-                          const BorderRadius.all(const Radius.circular(50.0)),
-                      image: DecorationImage(
-                        image: AssetImage(
-                            'assets/stories/images/${classSession.teacherPhoto}'),
-                      )),
-                  width: orientation == Orientation.portrait
-                      ? size.width * 0.2
-                      : size.width * 0.12,
-                  height: orientation == Orientation.portrait
-                      ? size.height * .1
-                      : size.height * .2,
-                ),
-                new Container(
-                    child: new Text(classSession.teacherName,
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: new TextStyle(
-                            fontSize: orientation == Orientation.portrait
-                                ? size.height * .02
-                                : size.height * .05,
-                            color: Colors.white),
-                        overflow: TextOverflow.ellipsis)),
-                new Container(
-                    child: new Text(classSession.name,
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: new TextStyle(
-                            fontSize: orientation == Orientation.portrait
-                                ? size.height * .015
-                                : size.height * .03,
-                            color: Colors.white),
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-          )
+                ? size.height * .1
+                : size.height * .2,
+          ),
+          new Container(
+              child: new Text(classSession.teacherName,
+                  textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
+                  style: new TextStyle(
+                      fontSize: orientation == Orientation.portrait
+                          ? size.height * .02
+                          : size.height * .05,
+                      color: Colors.white),
+                  overflow: TextOverflow.ellipsis)),
+          new Container(
+              child: new Text(classSession.name,
+                  textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
+                  style: new TextStyle(
+                      fontSize: orientation == Orientation.portrait
+                          ? size.height * .015
+                          : size.height * .03,
+                      color: Colors.white),
+                  overflow: TextOverflow.ellipsis)),
         ],
       ),
     );

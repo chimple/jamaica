@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:data/data.dart';
 import 'package:data/models/class_students.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/main.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/student_details.dart';
 import 'package:jamaica/widgets/teacher_details.dart';
@@ -32,11 +30,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
             height: 30.0, width: 30.0, child: CircularProgressIndicator()),
       );
     }
-
     classStudents = StateContainer.of(context).classStudents;
-
-    final standardSerializers =
-        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
     studentList.clear();
     for (var i = 0; i < classStudents.students.length; i++) {
@@ -85,18 +79,10 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
               children: studentList
                   .map((t) => InkWell(
                       onTap: () async {
-                        await StateContainer.of(context)
-                            .student(selectedStudent);
-                        ClassJoin classJoin = ClassJoin((b) => b
-                          ..studentId = t.id
-                          ..sessionId = classStudents.sessionId);
-                        final classJoinJson =
-                            standardSerializers.serialize(classJoin);
-                        final classJoinJsonString = jsonEncode(classJoinJson);
-                        print(classJoinJsonString);
-                        StateContainer.of(context).sendMessageTo(
-                            widget.selectedTeacher['endPointId'],
-                            classJoinJsonString);
+                        await StateContainer.of(context).studentJoin(
+                            t.id,
+                            classStudents.sessionId,
+                            widget.selectedTeacher['endPOintId']);
                         Navigator.of(context).pushNamed('/chatbot');
                       },
                       child: StudentDetails(t)))
