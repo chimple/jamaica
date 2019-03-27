@@ -48,12 +48,10 @@ class _TeachersScreenState extends State<TeachersScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  RaisedButton(
-                    child: Text('Local Student'),
-                    textColor: Colors.orange,
+                  IconButton(
+                    icon: Icon(Icons.add_circle_outline),
+                    iconSize: 40.0,
                     color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16.0))),
                     onPressed: () {
                       StateContainer.of(context).stopDiscovery();
                       Navigator.of(context).pushNamed('/chatbot');

@@ -12,7 +12,7 @@ class StudentDetails extends StatelessWidget {
     var size = media.size;
     return Column(
       children: <Widget>[
-        new Container(
+        Container(
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.grey, width: 5.0),
@@ -27,14 +27,13 @@ class StudentDetails extends StatelessWidget {
               ? size.height * .1
               : size.height * .2,
         ),
-        new Container(
-            child: new Text(studentDetails.name,
-                style: new TextStyle(
-                    fontSize: orientation == Orientation.portrait
-                        ? size.height * .02
-                        : size.height * .05,
-                    color: Colors.white),
-                overflow: TextOverflow.ellipsis)),
+        Text(studentDetails.name,
+            style: TextStyle(
+                fontSize: orientation == Orientation.portrait
+                    ? size.height * .02
+                    : size.height * .05,
+                color: Colors.white),
+            overflow: TextOverflow.ellipsis),
       ],
     );
   }

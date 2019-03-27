@@ -19,14 +19,14 @@ class TeacherDetails extends StatelessWidget {
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
     var size = media.size;
-    return new Container(
-      decoration: new BoxDecoration(
+    return Container(
+      decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(const Radius.circular(16.0)),
       ),
       margin: EdgeInsets.all(size.width * .02),
       child: Column(
         children: <Widget>[
-          new Container(
+          Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.grey, width: 5.0),
@@ -43,22 +43,20 @@ class TeacherDetails extends StatelessWidget {
                 ? size.height * .1
                 : size.height * .2,
           ),
-          new Container(
-              child: new Text(classSession.teacherName,
-                  style: new TextStyle(
-                      fontSize: orientation == Orientation.portrait
-                          ? size.height * .02
-                          : size.height * .05,
-                      color: Colors.white),
-                  overflow: TextOverflow.ellipsis)),
-          new Container(
-              child: new Text(classSession.name,
-                  style: new TextStyle(
-                      fontSize: orientation == Orientation.portrait
-                          ? size.height * .015
-                          : size.height * .03,
-                      color: Colors.white),
-                  overflow: TextOverflow.ellipsis)),
+          Text(classSession.teacherName,
+              style: TextStyle(
+                  fontSize: orientation == Orientation.portrait
+                      ? size.height * .02
+                      : size.height * .05,
+                  color: Colors.white),
+              overflow: TextOverflow.ellipsis),
+          Text(classSession.name,
+              style: TextStyle(
+                  fontSize: orientation == Orientation.portrait
+                      ? size.height * .015
+                      : size.height * .03,
+                  color: Colors.white),
+              overflow: TextOverflow.ellipsis),
         ],
       ),
     );
