@@ -1,10 +1,11 @@
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/material.dart';
-
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:built_value/standard_json_plugin.dart';
+import 'package:data/models/serializers.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/material.dart';
+import 'package:jamaica/state/state_container.dart';
+import 'package:jamaica/widgets/contest_game.dart';
 import 'package:data/data.dart';
 import 'package:flutter/services.dart';
 import 'package:jamaica/widgets/chat_bot.dart';
@@ -16,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isLoading = true;
   Navigator _navigator;
   ChatScript _chatScript;
@@ -61,56 +63,101 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }
+    final contestSession = StateContainer.of(context).contestSession;
+
     return Scaffold(
-      backgroundColor: Colors.cyan,
-      body: SafeArea(
-        child: Column(
-          verticalDirection: VerticalDirection.up,
-          children: <Widget>[
-            Expanded(
-              child: _navigator,
-            ),
-            Flexible(
-              child: Hero(
-                tag: 'chimp',
-                child: FlareActor(
-                  "assets/character/chimp.flr",
-                  alignment: Alignment.center,
-                  fit: BoxFit.contain,
-                  animation: _emotion,
-                  callback: (String name) => setState(() => _emotion = 'idle'),
+        key: _scaffoldKey,
+        backgroundColor: Colors.cyan,
+        body: contestSession == null
+            ? SafeArea(
+                child: Column(
+                  verticalDirection: VerticalDirection.up,
+                  children: <Widget>[
+                    Expanded(
+                      child: _navigator,
+                    ),
+                    Flexible(
+                      child: Hero(
+                        tag: 'chimp',
+                        child: FlareActor(
+                          "assets/character/chimp.flr",
+                          alignment: Alignment.center,
+                          fit: BoxFit.contain,
+                          animation: _emotion,
+                          callback: (String name) =>
+                              setState(() => _emotion = 'idle'),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.account_circle),
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed('/profile'),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.map),
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed('/map'),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.games),
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed('/games'),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.store),
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed('/store'),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.book),
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed('/story'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.account_circle),
-                  onPressed: () => Navigator.of(context).pushNamed('/profile'),
-                ),
-                IconButton(
-                  icon: Icon(Icons.map),
-                  onPressed: () => Navigator.of(context).pushNamed('/map'),
-                ),
-                IconButton(
-                  icon: Icon(Icons.games),
-                  onPressed: () => Navigator.of(context).pushNamed('/games'),
-                ),
-                IconButton(
-                  icon: Icon(Icons.store),
-                  onPressed: () => Navigator.of(context).pushNamed('/store'),
-                ),
-                IconButton(
-                  icon: Icon(Icons.book),
-                  onPressed: () => Navigator.of(context).pushNamed('/story'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+              )
+            : AlertDialog(
+                title: new Text("Quiz  to Start student"),
+                content: RaisedButton(
+                    onPressed: () {
+                      final standardSerializers = (serializers.toBuilder()
+                            ..addPlugin(StandardJsonPlugin()))
+                          .build();
+
+                      final contestSession =
+                          StateContainer.of(context).contestSession;
+                      final studentId = StateContainer.of(context).studentIdVal;
+
+                      ContestJoin contestJoin = ContestJoin((d) => d
+                        ..sessionId = contestSession.sessionId
+                        ..studentId = studentId);
+
+                      final jsoncontestJoin =
+                          standardSerializers.serialize(contestJoin);
+                      final jsoncontestJoinString = jsonEncode(jsoncontestJoin);
+                      print(jsoncontestJoinString);
+                      print(".......object is.....$contestJoin");
+                      final endPointId =
+                          StateContainer.of(context).contestSessionEndPointId;
+                      StateContainer.of(context)
+                          .sendMessageTo(endPointId, jsoncontestJoinString);
+
+                      Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (ctxt) => new ContestGame(
+                                  contestSession: contestSession,
+                                )),
+                      );
+                    },
+                    child: new Text("Yes, Ready To Play")),
+              ));
   }
 
   Widget _buildChatBot(BuildContext context, {String choice}) {

@@ -180,7 +180,7 @@ class TeacherDetails extends StatelessWidget {
                             color: Colors.white),
                         overflow: TextOverflow.ellipsis)),
                 new Container(
-                    child: new Text(classSession.sessionId,
+                    child: new Text(classSession.name,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: new TextStyle(
