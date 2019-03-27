@@ -77,7 +77,6 @@ class _TeachersScreenState extends State<TeachersScreen> {
                 childAspectRatio: orientation == Orientation.portrait
                     ? media.size.width / (media.size.height / 1.4)
                     : media.size.width / (media.size.height * 1.6),
-                // StateContainer.of(context).advertisers
                 children: widget.advertisers
                     .map((advertiser) => InkWell(
                         onTap: () {

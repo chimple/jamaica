@@ -49,8 +49,7 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
       backgroundColor: Colors.orange,
       body: Column(
         children: <Widget>[
-          Expanded(
-            flex: orientation == Orientation.portrait ? 1 : 2,
+          Container(
             child: Center(
               child: TeacherDetails(widget.selectedTeacher),
             ),
@@ -65,28 +64,20 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                   : media.size.height * .005,
             ),
           ),
-          Container(
-              margin: EdgeInsets.only(left: media.size.width * .05),
-              width: media.size.width,
-              height: orientation == Orientation.portrait
-                  ? media.size.height * .04
-                  : media.size.height * .08,
-              child: Text("Select Your Photo",
-                  textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.start,
-                  style: new TextStyle(
-                      fontSize: orientation == Orientation.portrait
-                          ? media.size.height * .03
-                          : media.size.height * .06,
-                      color: Colors.white),
-                  overflow: TextOverflow.ellipsis)),
+          Padding(
+            padding: EdgeInsets.only(left: media.size.width * .05),
+            child: Text(
+              "Select your Photo",
+              style: TextStyle(
+                  fontSize: 30.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
           Expanded(
-            flex: orientation == Orientation.portrait ? 4 : 3,
             child: GridView.count(
               key: new Key('student_list_page'),
               primary: true,
-              crossAxisSpacing: 12.0,
-              mainAxisSpacing: 12.0,
               childAspectRatio: orientation == Orientation.portrait
                   ? media.size.width / (media.size.height / 1.5)
                   : media.size.width / (media.size.height * 1.3),
@@ -103,7 +94,6 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
                             standardSerializers.serialize(classJoin);
                         final classJoinJsonString = jsonEncode(classJoinJson);
                         print(classJoinJsonString);
-
                         StateContainer.of(context).sendMessageTo(
                             widget.selectedTeacher['endPointId'],
                             classJoinJsonString);
