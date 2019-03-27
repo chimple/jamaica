@@ -29,13 +29,17 @@ class RhymeWordsGame extends StatefulWidget {
 
 class _RhymeWordsGameState extends State<RhymeWordsGame> {
   List<_ChoiceDetail> choiceDetails;
+  var score = 0;
+  int complete = 0;
+  int count = 0;
+  List<String> _endList = [];
 
   @override
   void initState() {
     super.initState();
     int i = 0;
     choiceDetails = widget.answers
-        .map((a) => _ChoiceDetail(choice: a, index: ++i))
+        .map((a) => _ChoiceDetail(choice: a, index: i++))
         .toList(growable: false)
           ..shuffle();
   }
@@ -65,30 +69,60 @@ class _RhymeWordsGameState extends State<RhymeWordsGame> {
           .map((c) => CuteButton(
                 key: Key(c.choice),
                 child: DragTarget<String>(
-                  builder: (context, candidateData, rejectedData) =>
-                      Center(child: Text(c.choice)),
-                  onWillAccept: (data) {
-                    int currentIndex =
-                        choiceDetails.indexWhere((ch) => ch.choice == c.choice);
-                    int dataIndex = widget.answers.indexWhere((a) => a == data);
-                    return dataIndex == currentIndex;
-                  },
-                  onAccept: (data) =>
-                      WidgetsBinding.instance.addPostFrameCallback(
-                        (_) => setState(() {
-                              print(data);
-                              int currentIndex = choiceDetails
-                                  .indexWhere((ch) => ch.choice == c.choice);
-                              int dataIndex = choiceDetails
-                                  .indexWhere((a) => a.choice == data);
-                              print('$currentIndex $dataIndex');
-                              final current = choiceDetails[currentIndex];
-                              choiceDetails[currentIndex] =
-                                  choiceDetails[dataIndex];
-                              choiceDetails[dataIndex] = current;
-                            }),
-                      ),
-                ),
+                    builder: (context, candidateData, rejectedData) =>
+                        Center(child: Text(c.choice)),
+                    onWillAccept: (data) {
+                      int currentIndex = choiceDetails
+                          .indexWhere((ch) => ch.choice == c.choice);
+                      int dataIndex =
+                          widget.answers.indexWhere((a) => a == data);
+                      return dataIndex == currentIndex;
+                    },
+                    onAccept: (data) {
+                      setState(() {
+                        int currentIndex = choiceDetails
+                            .indexWhere((ch) => ch.choice == c.choice);
+                        int dataIndex =
+                            widget.answers.indexWhere((a) => a == data);
+                        if (dataIndex == currentIndex) {
+                          score++;
+                          if (--complete == 0) widget.onGameOver(score);
+                          print("this is complete $complete");
+                          WidgetsBinding.instance.addPostFrameCallback(
+                            (_) => setState(() {
+                                  print(data);
+                                  int currentIndex = choiceDetails.indexWhere(
+                                      (ch) => ch.choice == c.choice);
+                                  int dataIndex = choiceDetails
+                                      .indexWhere((a) => a.choice == data);
+                                  print('$currentIndex $dataIndex');
+                                  final current = choiceDetails[currentIndex];
+                                  choiceDetails[currentIndex] =
+                                      choiceDetails[dataIndex];
+                                  choiceDetails[dataIndex] = current;
+                                  choiceDetails.forEach((d) {
+                                    print(".......${d.choice}");
+                                    _endList.add(d.choice);
+                                  });
+                                  print("this is my new game $_endList");
+
+                                  if (_endList.join() ==
+                                      widget.answers.join()) {
+                                    print("success....");
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000),
+                                        () => setState(
+                                            () => widget.onGameOver(score)));
+                                  } else {
+                                    score--;
+                                    _endList = [];
+                                  }
+                                }),
+                          );
+                        } else
+                          score--;
+                      });
+                    }),
               ))
           .toList(growable: false),
     );

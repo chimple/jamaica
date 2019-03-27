@@ -15,28 +15,25 @@ class ChatBot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Flexible(
-          child: Hero(
-            tag: 'chimp',
-            child: FlareActor("assets/character/chimp.flr",
-                alignment: Alignment.center,
-                fit: BoxFit.contain,
-                animation: "idle"),
-          ),
+        Text(
+          text,
+          style: Theme.of(context).textTheme.headline,
         ),
-        Text(text),
         Expanded(
-          child: Align(
-            alignment: Alignment(-1, 1),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: choices
-                  .map((c) => RaisedButton(
-                        child: Text(c),
-                        onPressed: () => chatCallback(c),
-                      ))
-                  .toList(growable: false),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment(-1, 1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: choices
+                    .map((c) => RaisedButton(
+                          child: Text(c),
+                          onPressed: () => chatCallback(c),
+                        ))
+                    .toList(growable: false),
+              ),
             ),
           ),
         )

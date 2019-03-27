@@ -29,6 +29,7 @@ class FingerGame extends StatefulWidget {
 class _FingerGameState extends State<FingerGame> {
   List<int> fingers;
   List<_ChoiceDetail> choiceDetails;
+  int score = 0;
 
   @override
   void initState() {
@@ -64,9 +65,16 @@ class _FingerGameState extends State<FingerGame> {
                       ),
                       reaction: c.reaction,
                       onPressed: () {
-                        setState(() => c.reaction = (c.number == widget.answer)
-                            ? Reaction.success
-                            : Reaction.failure);
+                        setState(() {
+                          score++;
+                          if (c.number == widget.answer) {
+                            c.reaction = Reaction.success;
+                            widget.onGameOver(score);
+                          } else {
+                            if (score > 0) score--;
+                            c.reaction = Reaction.failure;
+                          }
+                        });
                       },
                     ))
                 .toList(growable: false),

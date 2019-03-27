@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/standard_json_plugin.dart';
-import 'package:data/models/class_students.dart';
+import 'package:data/models/contest_session.dart';
+import 'package:data/models/contest_start.dart';
 import 'package:data/models/serializers.dart';
+import 'package:data/models/class_students.dart';
 import 'package:data/models/user_profile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
@@ -31,6 +33,11 @@ class StateContainerState extends State<StateContainer> {
   Nearby _nearBy = Nearby.instance;
   List<dynamic> messages = [];
   String studentIdVal;
+
+  var contestSessionEndPointId;
+
+  ContestStart contestStart;
+  ContestSession contestSession;
   UserProfile userProfileDeatils;
   ClassStudents classStudents;
   String teacherEndPointId;
@@ -215,8 +222,7 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  connectTo(
-      Map<dynamic, dynamic> connectionInfo) async {
+  connectTo(Map<dynamic, dynamic> connectionInfo) async {
     // Connect to device
     _connectionSubscription =
         _nearBy.connectTo(connectionInfo).listen((result) async {
@@ -293,19 +299,25 @@ class StateContainerState extends State<StateContainer> {
     messages.add(message);
     final standardSerializers =
         (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
-
     final newJson = jsonDecode(message['textMessages']['message']);
-    print("recieved message iss...$newJson");
     var values = newJson.keys;
-    print("data of key is.............$values");
-    String keys = values.first;
-
-    if (newJson[keys] == "ClassStudents") {
-      teacherEndPointId = message['textMessages']['endPointId'];
-      classStudents = standardSerializers.deserialize(newJson);
-      print("class students are...$classStudents");
-    } else if (newJson[keys] == "UserProfile") {
-      userProfileDeatils = standardSerializers.deserialize(newJson);
+    String key = values.first;
+    switch (newJson[key]) {
+      case 'ContestSession':
+        contestSessionEndPointId = message['textMessages']['endPointId'];
+        contestSession = standardSerializers.deserialize(newJson);
+        break;
+      case 'ContestStart':
+        contestStart = standardSerializers.deserialize(newJson);
+        break;
+      case 'ClassStudents':
+        teacherEndPointId = message['textMessages']['endPointId'];
+        classStudents = standardSerializers.deserialize(newJson);
+        break;
+      case 'UserProfile':
+        userProfileDeatils = standardSerializers.deserialize(newJson);
+        break;
+      default:
     }
   }
 

@@ -6,11 +6,13 @@ import 'package:jamaica/widgets/score.dart';
 import 'package:jamaica/widgets/slide_up_route.dart';
 import 'package:jamaica/widgets/stars.dart';
 
+typedef UpdateContestScore(int score);
+
 class Game extends StatefulWidget {
   final ContestSession contestSession;
   final UpdateCoins updateCoins;
-
-  const Game({Key key, this.contestSession, this.updateCoins})
+  final UpdateContestScore updateScore;
+  const Game({Key key, this.contestSession, this.updateCoins, this.updateScore})
       : super(key: key);
   @override
   _GameState createState() => _GameState();
@@ -27,7 +29,8 @@ class _GameState extends State<Game> {
     super.initState();
     _navigator = Navigator(
       onGenerateRoute: (settings) => SlideUpRoute(
-            widgetBuilder: (context) => _buildGame(context, 0),
+            widgetBuilder: (context) =>
+                _buildGame(context, 0, widget.updateScore),
           ),
     );
   }
@@ -82,20 +85,23 @@ class _GameState extends State<Game> {
     );
   }
 
-  Widget _buildGame(BuildContext context, int index) {
+  Widget _buildGame(BuildContext context, int index, updateScore) {
     if (index < widget.contestSession.gameData.length) {
       return buildGame(
           gameData: widget.contestSession.gameData[index],
           onGameOver: (score) {
             setState(() {
+              updateScore(score);
               _score += score;
               if (score > 0) _stars++;
 //              _currentGame++;
             });
+
             Navigator.push(
                 context,
                 SlideUpRoute(
-                    widgetBuilder: (context) => _buildGame(context, ++index)));
+                    widgetBuilder: (context) =>
+                        _buildGame(context, ++index, updateScore)));
           });
     } else {
       return Score(
