@@ -4,7 +4,7 @@ import 'package:data/data.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/state/state_container.dart';
 
-contestPerformance(
+sendContestPerformance(
     {GameData gameData,
     int score,
     DateTime startTime,
@@ -22,14 +22,14 @@ contestPerformance(
     case 'BingoGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'BoxMatchingGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'CountingGame':
       final gd = gameData as NumMultiData;
@@ -50,8 +50,8 @@ contestPerformance(
     case 'FindWordGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'FingerGame':
       final gd = gameData as NumMultiData;
@@ -68,14 +68,14 @@ contestPerformance(
     case 'MatchTheShapeGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'MatchWithImageGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'MathOpGame':
       final gd = gameData as MathOpData;
@@ -86,8 +86,8 @@ contestPerformance(
     case 'MemoryGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'OrderBySizeGame':
       final gd = gameData as NumMultiData;
@@ -104,14 +104,14 @@ contestPerformance(
     case 'RhymeWordsGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'SequenceAlphabetGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
-          startTime, endTime, context);
+      return sendPerformance(
+          contestSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'SequenceTheNumberGame':
       final gd = gameData as NumMultiData;
@@ -126,7 +126,6 @@ contestPerformance(
           startTime, endTime, context);
       break;
   }
-  return Container();
 }
 
 sendPerformance(ContestSession contestSession, String string, int score,

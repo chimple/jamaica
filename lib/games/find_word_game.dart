@@ -43,10 +43,10 @@ class _FindWordGameState extends State<FindWordGame> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // Flexible(
-        //   flex: 1,
-        //   child: Image.asset(widget.image),
-        // ),
+        Flexible(
+          flex: 1,
+          child: Image.asset(widget.image),
+        ),
         Flexible(
           flex: 1,
           child: Text(word.join()),

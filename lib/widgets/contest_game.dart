@@ -26,9 +26,9 @@ class ContestGame extends StatelessWidget {
     }
     return Game(
       contestSession: contestSession,
-      quizScore: (score) {
+      updateScore: (int score) {
         DateTime endTime = new DateTime.now();
-        contestPerformance(
+        sendContestPerformance(
             gameData: contestSession.gameData[i++],
             score: score,
             startTime: startTime,
