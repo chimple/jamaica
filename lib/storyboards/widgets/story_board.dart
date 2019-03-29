@@ -18,9 +18,9 @@ class StoryBoard extends FullScreenStory {
           body: SafeArea(
             child: JumbleWords(
               answers:
-                  BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']),
+                  BuiltList<String>(["He", 'Like', 'to', 'tease', 'people']),
               choices:
-                  BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']),
+                  BuiltList<String>(["He", 'Like', 'to', 'tease', 'people']),
               onGameOver: (_) {},
             ),
           ),
