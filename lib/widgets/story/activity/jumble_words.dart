@@ -84,9 +84,7 @@ class _JumbleWordsState extends State<JumbleWords> {
           }
         },
         onLeave: (s) {},
-        onWillAccept: (data) {
-          return data == s ? true : false;
-        },
+        onWillAccept: (data) => data == s,
         builder: (context, list, er) {
           return Container(
             child: Text(
