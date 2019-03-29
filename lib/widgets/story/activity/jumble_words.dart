@@ -1,18 +1,20 @@
-import 'dart:math';
-
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/games/jumbled_words_game.dart';
+import 'package:jamaica/state/game_utils.dart';
 import 'package:jamaica/widgets/bento_box.dart';
 import 'package:jamaica/widgets/cute_button.dart';
 
-TextStyle textStyle({double fSize = 25, color: Colors.red}) =>
-    TextStyle(fontSize: fSize, fontFamily: 'Bungee', color: color, shadows: [
-      Shadow(
-        blurRadius: 3.0,
-        color: Colors.black,
-      )
-    ]);
+TextStyle textStyle({double fSize = 25, color: Colors.red}) => TextStyle(
+        fontSize: fSize,
+        fontStyle: FontStyle.normal,
+        fontWeight: FontWeight.bold,
+        color: color,
+        shadows: [
+          Shadow(
+            blurRadius: 3.0,
+            color: Colors.black,
+          )
+        ]);
 
 class _ChoiceDetail {
   String choice;
@@ -26,9 +28,11 @@ class _ChoiceDetail {
 }
 
 class JumbleWords extends StatefulWidget {
-  const JumbleWords({
-    Key key,
-  }) : super(key: key);
+  final BuiltList choices;
+  final BuiltList answers;
+  final OnGameOver onGameOver;
+  const JumbleWords({Key key, this.answers, this.choices, this.onGameOver})
+      : super(key: key);
 
   @override
   _JumbleWordsState createState() => _JumbleWordsState();
@@ -37,10 +41,10 @@ class JumbleWords extends StatefulWidget {
 class _JumbleWordsState extends State<JumbleWords> {
   List<_ChoiceDetail> choiceDetails;
   List<_ChoiceDetail> answerDetails;
-  final BuiltList<String> choices =
-      BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']);
-  final BuiltList<String> answers =
-      BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']);
+  // final BuiltList<String> choices =
+  //     BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']);
+  // final BuiltList<String> answers =
+  //     BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']);
   List<List<String>> addToBox = [];
   int complete, score = 0;
   List<bool> _colorStatus = [];
@@ -49,11 +53,11 @@ class _JumbleWordsState extends State<JumbleWords> {
     super.initState();
     int i = 0;
     int j = 0;
-    choiceDetails = choices
+    choiceDetails = widget.choices
         .map((c) => _ChoiceDetail(choice: c, index: i++))
         .toList(growable: false);
     complete = choiceDetails.length;
-    answerDetails = answers
+    answerDetails = widget.answers
         .map((a) => _ChoiceDetail(choice: a, appear: false, index: j++))
         .toList(growable: false);
     for (int k = 0; k < answerDetails.length; k++) {
@@ -68,11 +72,15 @@ class _JumbleWordsState extends State<JumbleWords> {
         onAccept: (a) {
           if (a == s) {
             setState(() {
-              answerDetails[choices.indexOf(a)].appear = true;
-              choiceDetails[choices.indexOf(a)].appear = false;
+              answerDetails[widget.choices.indexOf(a)].appear = true;
+              choiceDetails[widget.choices.indexOf(a)].appear = false;
             });
-
-            print('onaccept ${choices.indexOf(a)}, $answerDetails');
+            score++;
+            if (--complete == 0) {
+              print('game over');
+              widget.onGameOver(score);
+            }
+            // print('on accept ${widget.choices.indexOf(a)}, $answerDetails');
           }
         },
         onLeave: (s) {},
@@ -96,7 +104,7 @@ class _JumbleWordsState extends State<JumbleWords> {
       alignment: AlignmentDirectional.center,
       children: <Widget>[
         Wrap(
-          spacing: 20,
+          spacing: 15,
           children: answerDetails
               .map((s) => _dragTarget(s.choice, index++, s.appear))
               .toList(),

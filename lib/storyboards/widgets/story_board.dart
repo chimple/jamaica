@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/screens/story_screen.dart';
@@ -15,7 +16,13 @@ class StoryBoard extends FullScreenStory {
         ),
         Scaffold(
           body: SafeArea(
-            child: JumbleWords(),
+            child: JumbleWords(
+              answers:
+                  BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']),
+              choices:
+                  BuiltList<String>(["He", 'Like', 'to', 'tease', 'peaope']),
+              onGameOver: (_) {},
+            ),
           ),
         ),
         Scaffold(
