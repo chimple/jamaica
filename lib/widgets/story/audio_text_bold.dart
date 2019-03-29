@@ -3,10 +3,12 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
-import 'package:jamaica/widgets/story/activity/drag_text_activity.dart';
+import 'package:jamaica/widgets/story/activity/drag_text.dart';
+// import 'package:jamaica/widgets/story/activity/jumble_words.dart';
 import 'package:jamaica/widgets/story/play_pause_button.dart';
+// import 'package:jamaica/widgets/story/router.dart';
 import 'package:jamaica/widgets/story/show_dialog_mode.dart';
-import 'package:jamaica/widgets/story/activity/text_highlighter_activity.dart';
+import 'package:jamaica/widgets/story/activity/text_highlighter.dart';
 
 final TextStyle textStyle = TextStyle(
   color: Colors.black,
@@ -71,6 +73,7 @@ class _TextAudioState extends State<AudioTextBold> {
   @override
   void initState() {
     super.initState();
+
     print('initState');
   }
 
@@ -241,11 +244,7 @@ class _TextAudioState extends State<AudioTextBold> {
           isAudioFileAvailableOrNot = false;
         });
         widget.pageSliding();
-        if (storyMode == StoryMode.audioBoldTextMode) {
-          _scrollController.addListener(() {
-            print('listenre');
-          });
-        }
+        if (storyMode == StoryMode.audioBoldTextMode) {}
       }, onError: (e) {
         setState(() {
           isPlaying = false;
@@ -410,7 +409,7 @@ class _TextAudioState extends State<AudioTextBold> {
         ),
       );
     } else if (storyMode == StoryMode.textHighlighterMode)
-      return TextHighlighterActivity(
+      return TextHighlighter(
           text: widget.fullText,
           onCorrectAnswer: (l) {
             new Future.delayed(Duration(seconds: 1), () {
@@ -425,10 +424,13 @@ class _TextAudioState extends State<AudioTextBold> {
       return ShowDialogMode(
         listofWords: widget.fullText.split(' '),
       );
-    else
-      return DragTextActivity(
+    else if (storyMode == StoryMode.dragTextMode)
+      return DragText(
         data: widget.imageItemsAnswer,
       );
+    else {
+      return Container();
+    }
   }
 
   Widget _buildImage() {

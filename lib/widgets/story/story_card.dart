@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:data/data.dart';
+import 'package:jamaica/widgets/story/router.dart';
 import 'package:jamaica/widgets/story/story_page.dart';
 
 class StoryCard extends StatelessWidget {
@@ -60,8 +61,9 @@ class StoryCard extends StatelessWidget {
               // splashColor: Colors.red,
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => StoryPage(
-                        pages: storyConfig.pages, title: storyConfig.title)));
+                  builder: (context) => StoryPage(
+                      pages: storyConfig.pages, title: storyConfig.title),
+                ));
               },
             )
           ],
