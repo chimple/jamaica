@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/standard_json_plugin.dart';
+import 'package:data/models/class_join.dart';
 import 'package:data/models/quiz_session.dart';
 import 'package:data/models/quiz_update.dart';
 import 'package:data/models/serializers.dart';
@@ -329,6 +330,19 @@ class StateContainerState extends State<StateContainer> {
 
   student(String studentId) async {
     studentIdVal = studentId;
+  }
+
+  studentJoin(String studentid, String sessionId, String teacherId) async {
+    final standardSerializers =
+        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+    await student(studentid);
+    ClassJoin classJoin = ClassJoin((b) => b
+      ..studentId = studentid
+      ..sessionId = classStudents.sessionId);
+    final classJoinJson = standardSerializers.serialize(classJoin);
+    final classJoinJsonString = jsonEncode(classJoinJson);
+    print(classJoinJsonString);
+    sendMessageTo(teacherId, classJoinJsonString);
   }
 
   @override
