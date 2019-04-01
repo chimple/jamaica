@@ -1,4 +1,4 @@
-import 'package:data/models/contest_session.dart';
+import 'package:data/models/quiz_session.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/game_utils.dart';
@@ -9,10 +9,10 @@ import 'package:jamaica/widgets/stars.dart';
 typedef UpdateContestScore(int score);
 
 class Game extends StatefulWidget {
-  final ContestSession contestSession;
+  final QuizSession quizSession;
   final UpdateCoins updateCoins;
   final UpdateContestScore updateScore;
-  const Game({Key key, this.contestSession, this.updateCoins, this.updateScore})
+  const Game({Key key, this.quizSession, this.updateCoins, this.updateScore})
       : super(key: key);
   @override
   _GameState createState() => _GameState();
@@ -42,6 +42,7 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
+    print("......controll comming in game");
     return Scaffold(
       backgroundColor: Colors.purple,
       body: SafeArea(
@@ -70,7 +71,7 @@ class _GameState extends State<Game> {
                       ),
                       Expanded(
                         child: Stars(
-                          total: widget.contestSession.gameData.length,
+                          total: widget.quizSession.gameData.length,
                           show: _stars,
                         ),
                       )
@@ -86,12 +87,16 @@ class _GameState extends State<Game> {
   }
 
   Widget _buildGame(BuildContext context, int index, updateScore) {
-    if (index < widget.contestSession.gameData.length) {
+    print("lets check the values ..is  $index");
+    if (index < widget.quizSession.gameData.length) {
       return buildGame(
-          gameData: widget.contestSession.gameData[index],
+          gameData: widget.quizSession.gameData[index],
           onGameOver: (score) {
+            print("in side clicking or not lets check $index");
             setState(() {
               updateScore(score);
+            });
+            setState(() {
               _score += score;
               if (score > 0) _stars++;
 //              _currentGame++;
