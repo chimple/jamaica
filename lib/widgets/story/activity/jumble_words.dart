@@ -89,23 +89,31 @@ class _JumbleWordsState extends State<JumbleWords> {
           return Container(
             child: Text(
               s,
-              style: textStyle(color: !c ? Colors.red[50] : Colors.red),
+              style: textStyle(
+                  color: !c ? Colors.red[50] : Colors.red, fSize: textSize),
             ),
           );
         });
   }
 
+  double textSize;
   @override
   Widget build(BuildContext context) {
+    textSize = MediaQuery.of(context).orientation == Orientation.portrait
+        ? MediaQuery.of(context).size.width * .065
+        : MediaQuery.of(context).size.height * .065;
     int index = 0;
-    return Stack(
-      alignment: AlignmentDirectional.center,
+    return Flow(
+      // alignment: AlignmentDirectional.center,
+      delegate: _FlowDelegate(),
       children: <Widget>[
-        Wrap(
-          spacing: 15,
-          children: answerDetails
-              .map((s) => _dragTarget(s.choice, index++, s.appear))
-              .toList(),
+        Center(
+          child: Wrap(
+            spacing: 15,
+            children: answerDetails
+                .map((s) => _dragTarget(s.choice, index++, s.appear))
+                .toList(),
+          ),
         ),
         BentoBox(
           calculateLayout: BentoBox.calculateOrderlyRandomizedLayout,
@@ -120,7 +128,7 @@ class _JumbleWordsState extends State<JumbleWords> {
                       child: Material(
                           color: Colors.transparent,
                           child: Text(c.choice,
-                              style: textStyle(color: Colors.red))))
+                              style: textStyle(color: Colors.red,fSize: textSize))))
                   : Container(
                       key: Key("${(index).toString()}"),
                     ))
@@ -128,5 +136,22 @@ class _JumbleWordsState extends State<JumbleWords> {
         )
       ],
     );
+  }
+}
+
+class _FlowDelegate extends FlowDelegate {
+  final int index;
+  _FlowDelegate({this.index});
+  @override
+  void paintChildren(FlowPaintingContext context) {
+    for (int i = 0; i < context.childCount; i++)
+      context.paintChild(i,
+          transform: Matrix4.translationValues(0.0, 0.0, 0.0));
+  }
+
+  @override
+  bool shouldRepaint(FlowDelegate oldDelegate) {
+    // TODO: implement shouldRepaint
+    return true;
   }
 }
