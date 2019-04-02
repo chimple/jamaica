@@ -6,12 +6,12 @@ import 'package:jamaica/widgets/score.dart';
 import 'package:jamaica/widgets/slide_up_route.dart';
 import 'package:jamaica/widgets/stars.dart';
 
-typedef UpdateContestScore(int score);
+typedef UpdateQuizScore(int score);
 
 class Game extends StatefulWidget {
   final QuizSession quizSession;
   final UpdateCoins updateCoins;
-  final UpdateContestScore updateScore;
+  final UpdateQuizScore updateScore;
   const Game({Key key, this.quizSession, this.updateCoins, this.updateScore})
       : super(key: key);
   @override
