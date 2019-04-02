@@ -93,11 +93,10 @@ class _GameState extends State<Game> {
           gameData: widget.quizSession.gameData[index],
           onGameOver: (score) {
             print("in side clicking or not lets check $index");
-            setState(() {
-              updateScore(score);
-            });
+
             setState(() {
               _score += score;
+              updateScore(_score);
               if (score > 0) _stars++;
 //              _currentGame++;
             });

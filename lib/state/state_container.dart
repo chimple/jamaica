@@ -335,6 +335,19 @@ class StateContainerState extends State<StateContainer> {
     studentIdVal = studentId;
   }
 
+  studentJoin(String studentid, String sessionId, String teacherId) async {
+    final standardSerializers =
+        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+    await student(studentid);
+    ClassJoin classJoin = ClassJoin((b) => b
+      ..studentId = studentid
+      ..sessionId = classStudents.sessionId);
+    final classJoinJson = standardSerializers.serialize(classJoin);
+    final classJoinJsonString = jsonEncode(classJoinJson);
+    print(classJoinJsonString);
+    sendMessageTo(teacherId, classJoinJsonString);
+  }
+
   @override
   Widget build(BuildContext context) {
     return _InheritedStateContainer(
