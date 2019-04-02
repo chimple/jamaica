@@ -128,7 +128,8 @@ class _JumbleWordsState extends State<JumbleWords> {
                       child: Material(
                           color: Colors.transparent,
                           child: Text(c.choice,
-                              style: textStyle(color: Colors.red,fSize: textSize))))
+                              style: textStyle(
+                                  color: Colors.red, fSize: textSize))))
                   : Container(
                       key: Key("${(index).toString()}"),
                     ))
