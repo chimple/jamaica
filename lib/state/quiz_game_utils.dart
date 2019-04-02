@@ -10,12 +10,12 @@ sendQuizPerformance(
     DateTime startTime,
     DateTime endTime,
     BuildContext context}) {
-  final contestSession = StateContainer.of(context).quizSession;
+  final quizSession = StateContainer.of(context).quizSession;
   switch (gameData.gameId) {
     case 'BasicCountingGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
 
       break;
@@ -23,18 +23,18 @@ sendQuizPerformance(
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'BoxMatchingGame':
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'CountingGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'CrosswordGame':
@@ -44,38 +44,38 @@ sendQuizPerformance(
     case 'DiceGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'FindWordGame':
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'FingerGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'JumbledWordsGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers.toString(), score,
+      return sendPerformance(quizSession, gd.answers.toString(), score,
           startTime, endTime, context);
       break;
     case 'MatchTheShapeGame':
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'MatchWithImageGame':
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'MathOpGame':
       final gd = gameData as MathOpData;
@@ -87,48 +87,48 @@ sendQuizPerformance(
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'OrderBySizeGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'RecognizeNumberGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'RhymeWordsGame':
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'SequenceAlphabetGame':
       final gd = gameData as MultiData;
 
       return sendPerformance(
-          contestSession, gd.answers[0], score, startTime, endTime, context);
+          quizSession, gd.answers[0], score, startTime, endTime, context);
       break;
     case 'SequenceTheNumberGame':
       final gd = gameData as NumMultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
     case 'TrueFalseGame':
       final gd = gameData as MultiData;
 
-      return sendPerformance(contestSession, gd.answers[0].toString(), score,
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
   }
 }
 
-sendPerformance(QuizSession contestSession, String string, int score,
+sendPerformance(QuizSession quizSession, String string, int score,
     DateTime startTime, DateTime endTime, BuildContext context) {
   final standardSerializers =
       (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
@@ -156,9 +156,9 @@ sendPerformance(QuizSession contestSession, String string, int score,
 
   Performance session = Performance((p) => p
     ..studentId = studentId
-    ..gameId = contestSession.gameId
-    ..sessionId = contestSession.sessionId
-    ..level = contestSession.level
+    ..gameId = quizSession.gameId
+    ..sessionId = quizSession.sessionId
+    ..level = quizSession.level
     ..question = "question we have to send"
     ..answer = string
     ..correct = correct
