@@ -83,7 +83,7 @@ Widget buildGame({GameData gameData, OnGameOver onGameOver}) {
     case 'FindWordGame':
       final gd = gameData as MultiData;
       return FindWordGame(
-        // image: gd.specials.first,
+        image: gd.specials.first,
         answer: gd.answers,
         choices: gd.choices,
         onGameOver: onGameOver,

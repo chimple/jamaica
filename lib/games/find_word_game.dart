@@ -44,10 +44,10 @@ class _FindWordGameState extends State<FindWordGame> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // Flexible(
-        //   flex: 1,
-        //   child: Image.asset(widget.image),
-        // ),
+        Flexible(
+          flex: 1,
+          child: Image.asset(widget.image),
+        ),
         Flexible(
           flex: 1,
           child: Text(word.join()),
@@ -63,7 +63,7 @@ class _FindWordGameState extends State<FindWordGame> {
                       reaction: c.reaction,
                       child: Center(child: Text(c.letter)),
                       onPressed: () {
-                        // widget.onGameOver(1);
+                        widget.onGameOver(1);
                         if (c.letter == widget.answer[word.length]) {
                           setState(() {
                             score++;

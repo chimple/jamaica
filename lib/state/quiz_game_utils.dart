@@ -162,7 +162,7 @@ sendPerformance(QuizSession contestSession, String string, int score,
     ..question = "question we have to send"
     ..answer = string
     ..correct = correct
-    ..score=score
+    ..score = score
     ..startTime = timeStart
     ..endTime = timeEnd);
 
