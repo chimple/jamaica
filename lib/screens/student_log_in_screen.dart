@@ -44,8 +44,7 @@ class _StudentLogInScreenState extends State<StudentLogInScreen> {
             .toList(growable: false)
         : null;
 
-    return Scaffold( 
-      
+    return Scaffold(
       backgroundColor: Colors.orange,
       body: SafeArea(
         child: Column(children: [
@@ -79,10 +78,8 @@ class _StudentLogInScreenState extends State<StudentLogInScreen> {
                   )
                 : _students != null
                     ? GridView.count(
-                        key: Key('student_list'),
-                        primary: false,
-                        padding: const EdgeInsets.all(20.0),
-                        crossAxisSpacing: 10.0,
+                        key: new Key('local_student_list'),
+                        primary: true,
                         crossAxisCount: 4,
                         children: _students
                             .map((student) => StudentItem(student: student))

@@ -353,10 +353,8 @@ class StateContainerState extends State<StateContainer> {
       ..grade = grade
       ..photo = image);
     final studentJson = standardSerializers.serialize(student);
-    // final studentJsonString = jsonEncode(studentJson);
-    // print(studentJsonString);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('$id+$name', json.encode(studentJson));
+    prefs.setString('$id', json.encode(studentJson));
   }
 
   studentJoin(String studentid, String sessionId, String teacherId) async {

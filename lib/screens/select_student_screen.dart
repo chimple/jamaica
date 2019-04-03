@@ -1,4 +1,3 @@
-import 'package:built_value/standard_json_plugin.dart';
 import 'package:data/data.dart';
 import 'package:data/models/class_students.dart';
 import 'package:flutter/material.dart';
@@ -24,17 +23,13 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (StateContainer.of(context).classStudents == null) {
-      return Center(
-        child: SizedBox(
-            height: 30.0, width: 30.0, child: CircularProgressIndicator()),
-      );
-    }
-    classStudents = StateContainer.of(context).classStudents;
+    if (StateContainer.of(context).classStudents != null) {
+      classStudents = StateContainer.of(context).classStudents;
 
-    studentList.clear();
-    for (var i = 0; i < classStudents.students.length; i++) {
-      studentList.add(classStudents.students[i]);
+      studentList.clear();
+      for (var i = 0; i < classStudents.students.length; i++) {
+        studentList.add(classStudents.students[i]);
+      }
     }
     MediaQueryData media = MediaQuery.of(context);
     Orientation orientation = MediaQuery.of(context).orientation;
@@ -72,26 +67,32 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
             ),
           ),
           Expanded(
-            child: GridView.count(
-              key: new Key('student_list_page'),
-              primary: true,
-              childAspectRatio: orientation == Orientation.portrait
-                  ? media.size.width / (media.size.height / 1.5)
-                  : media.size.width / (media.size.height * 1.3),
-              crossAxisCount: 4,
-              children: studentList
-                  .map((t) => InkWell(
-                      onTap: () async {
-                        await StateContainer.of(context).studentJoin(
-                            t.id,
-                            classStudents.sessionId,
-                            widget.selectedTeacher['endPointId']);
-                        Navigator.of(context).pushNamed('/chatbot');
-                      },
-                      child: StudentDetails(t)))
-                  .toList(growable: false),
-            ),
-          ),
+              child: StateContainer.of(context).classStudents != null
+                  ? GridView.count(
+                      key: new Key('student_list_page'),
+                      primary: true,
+                      childAspectRatio: orientation == Orientation.portrait
+                          ? media.size.width / (media.size.height / 1.5)
+                          : media.size.width / (media.size.height * 1.3),
+                      crossAxisCount: 4,
+                      children: studentList
+                          .map((t) => InkWell(
+                              onTap: () async {
+                                await StateContainer.of(context).studentJoin(
+                                    t.id,
+                                    classStudents.sessionId,
+                                    widget.selectedTeacher['endPointId']);
+                                Navigator.of(context).pushNamed('/chatbot');
+                              },
+                              child: StudentDetails(t)))
+                          .toList(growable: false),
+                    )
+                  : Center(
+                      child: SizedBox(
+                          height: 30.0,
+                          width: 30.0,
+                          child: CircularProgressIndicator()),
+                    )),
         ],
       ),
     );

@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:built_value/standard_json_plugin.dart';
-import 'package:data/data.dart';
-import 'package:data/models/serializers.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/state_container.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jamaica/storyboards/widgets/drop_down.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SelfSignUpScreen extends StatefulWidget {
   @override
@@ -20,9 +16,10 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   String _studentName;
   String _standard;
-  String _id = "test123";
-  String _gender;
-  String _image = "xyz";
+  String _id;
+  File _image;
+  String _board;
+  String studentImage;
   List<String> _standardList = ['1', '2', '3', '4', '5', '6'];
 
   @override
@@ -32,7 +29,7 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
       body: Column(
         children: <Widget>[
           Container(
-            height: 100.0,
+            height: MediaQuery.of(context).size.height * 0.1,
             child: Center(
               child: Text(
                 "Self Sign Up",
@@ -46,7 +43,7 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
           Center(
             child: Container(
               color: Colors.black,
-              width: 500.0,
+              width: MediaQuery.of(context).size.width * 0.9,
               height: 8.0,
             ),
           ),
@@ -65,8 +62,9 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                   child: Center(
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height * 0.7,
-                      width: MediaQuery.of(context).size.height * 0.4,
+                      width: MediaQuery.of(context).size.width * 0.8,
                       child: ListView(
+                        scrollDirection: Axis.vertical,
                         physics: NeverScrollableScrollPhysics(),
                         children: <Widget>[
                           Center(
@@ -76,16 +74,17 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                                     child: IconButton(
                                       color: const Color(0xFFE18025),
                                       icon: Icon(Icons.add_a_photo),
-                                      iconSize: 50.0,
+                                      iconSize: 80.0,
                                       onPressed: () {
                                         openCamera();
                                       },
                                     ),
-                                    maxRadius: 50.0,
+                                    maxRadius: 80.0,
                                   )
                                 : CircleAvatar(
-                                    backgroundImage: ExactAssetImage("assets/stories/images/002page3.jpg"),
-                                    maxRadius: 50.0,
+                                    backgroundImage:
+                                        ExactAssetImage(studentImage),
+                                    maxRadius: 80.0,
                                   ),
                           ),
                           const SizedBox(
@@ -101,20 +100,13 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                                   const EdgeInsets.symmetric(horizontal: 16.0),
                               child: TextFormField(
                                 style: TextStyle(color: Colors.white),
-
-                                // initialValue:
-
-                                //     widget.update ? widget.student.studentName : null,
-
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Student Name',
+                                  hintText: 'Enter Student Name',
                                 ),
-
                                 onSaved: (input) {
                                   _studentName = input;
                                 },
-
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'Please enter student name';
@@ -128,11 +120,7 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                           ),
                           Dropdown(
                             menuItems: _standardList,
-
                             hintText: 'select standard',
-
-                            // value: widget.update ? widget.student.standard : null,
-
                             selectedItem: (String value) {
                               _standard = value;
                             },
@@ -141,11 +129,10 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                             height: 24.0,
                           ),
                           Dropdown(
-                            menuItems: <String>['male', 'female'],
-                            hintText: 'select gender',
-                            // value: widget.update ? widget.student.gender : null,
+                            menuItems: <String>['Central', 'State'],
+                            hintText: 'select Board',
                             selectedItem: (String value) {
-                              _gender = value;
+                              _board = value;
                             },
                           ),
                           const SizedBox(
@@ -157,7 +144,7 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0)),
                               child: Text(
-                                'Submit',
+                                'Sign Up',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20.0,
@@ -167,16 +154,11 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   _formKey.currentState.save();
-
-                                  print(
-                                      "test going on herrrr  $_standard.. $_id $_studentName,,, $_image");
-                                      
-
                                   await StateContainer.of(context).selfSignUp(
                                       _standard,
-                                      _id,
+                                      "${_studentName + _standard}",
                                       _studentName,
-                                      _image);
+                                      studentImage);
 
                                   Navigator.of(context).pop();
                                 }
@@ -197,14 +179,20 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
   }
 
   openCamera() async {
-    // _image = await ImagePicker.pickImage(
-    //     source: ImageSource.camera, maxHeight: 128.0, maxWidth: 128.0);
-    // userImage(_image);
+    _image = await ImagePicker.pickImage(
+        source: ImageSource.camera, maxHeight: 256.0, maxWidth: 256.0);
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String _imagePath = appDocDir.uri
+        .resolve("${DateTime.now().millisecondsSinceEpoch}.jpg")
+        .path;
+    File _imageFile = await _image.copy(_imagePath);
+    userImage(_imagePath);
   }
 
-  // userImage(File _image) async {
-  //   setState(() {
-  //     this._image = _image;
-  //   });
-  // }
+  userImage(String _image) async {
+    setState(() {
+      // this._image = _image;
+      this.studentImage = _image;
+    });
+  }
 }
