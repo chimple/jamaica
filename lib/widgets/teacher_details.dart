@@ -26,10 +26,23 @@ class TeacherDetails extends StatelessWidget {
       margin: EdgeInsets.all(size.width * .02),
       child: Column(
         children: <Widget>[
-          CircleAvatar(
-          backgroundImage: AssetImage(classSession.teacherPhoto),
-          maxRadius: 50.0,
-        ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey, width: 5.0),
+                borderRadius:
+                    const BorderRadius.all(const Radius.circular(50.0)),
+                image: DecorationImage(
+                  image: AssetImage(
+                      'assets/stories/images/${classSession.teacherPhoto}'),
+                )),
+            width: orientation == Orientation.portrait
+                ? size.width * 0.2
+                : size.width * 0.12,
+            height: orientation == Orientation.portrait
+                ? size.height * .1
+                : size.height * .2,
+          ),
           Text(classSession.teacherName,
               style: TextStyle(
                   fontSize: orientation == Orientation.portrait
