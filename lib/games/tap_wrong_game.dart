@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ class _ChoiceDetail {
       {this.choice,
       this.appear = true,
       this.isWrong = true,
-      this.reaction = Reaction.enter});
+      this.reaction = Reaction.success});
   @override
   String toString() =>
       '_ChoiceDetail(choice: $choice, appear: $appear,isWrong: $isWrong, reaction: $reaction)';
@@ -62,24 +61,19 @@ class _TapWrongGameState extends State<TapWrongGame> {
             key: Key((index).toString()),
             child: Center(child: Text(c.choice ?? '')),
             onPressed: () {
-              Future.delayed(const Duration(milliseconds: 2300), () {
-                if (mounted)
-                  setState(() {
-                    if (c.isWrong) {
-                      var temp = choiceDetails.removeAt(index);
-                      if (complete % 2 == 0) {
-                        choiceDetails.insert(0, temp);
-                      } else
-                        choiceDetails.add(temp);
-                      complete++;
-                      c.appear = false;
-                      return Reaction.success;
-                    } else {
-                      c.reaction = Reaction.failure;
-                      return c.reaction;
-                    }
-                  });
-              });
+              if (c.isWrong) {
+                setState(() {
+                  var temp = choiceDetails.removeAt(index);
+                  if (complete % 2 == 0) {
+                    choiceDetails.insert(0, temp);
+                  } else
+                    choiceDetails.add(temp);
+                  complete++;
+                  c.appear = false;
+                });
+                return Reaction.success;
+              } else
+                return Reaction.failure;
             },
           );
   }

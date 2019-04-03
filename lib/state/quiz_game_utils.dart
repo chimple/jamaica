@@ -80,7 +80,7 @@ sendQuizPerformance(
     case 'MathOpGame':
       final gd = gameData as MathOpData;
 
-      //  return sendPerformnce(quizSession, gd.answers[0].toString(), score,
+      //  return sendPerformnce(contestSession, gd.answers[0].toString(), score,
       //     startTime, endTime, context);
       break;
     case 'MemoryGame':
@@ -168,6 +168,7 @@ sendPerformance(QuizSession quizSession, String string, int score,
     ..question = "question we have to send"
     ..answer = string
     ..correct = correct
+    ..score = score
     ..startTime = timeStart
     ..endTime = timeEnd);
 
