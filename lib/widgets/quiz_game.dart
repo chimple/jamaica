@@ -1,6 +1,7 @@
 import 'package:data/models/quiz_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jamaica/screens/quiz_performance.dart';
 import 'package:jamaica/state/quiz_game_utils.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/game.dart';
@@ -12,11 +13,14 @@ class QuizGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime startTime;
+    print("......controll comming here");
+
     startTime = new DateTime.now();
     int i = 0;
+
     final quizSession = StateContainer.of(context).quizSession;
-    final quizUpdate = StateContainer.of(context).quizUpdate;
-    if (quizUpdate == null && quizSession != null) {
+    final quizStart = StateContainer.of(context).quizUpdate;
+    if (quizStart == null && quizSession != null) {
       return new Center(
           child: new SizedBox(
         width: 20.0,
@@ -34,6 +38,12 @@ class QuizGame extends StatelessWidget {
             startTime: startTime,
             endTime: endTime,
             context: context);
+        print("before clicking to button there $i");
+        Navigator.push(
+          context,
+          new MaterialPageRoute(builder: (ctxt) => new QuizPerformance()),
+        );
+        print("after  clicking to button there");
         startTime = endTime;
       },
     );

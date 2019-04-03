@@ -5,10 +5,12 @@ import 'package:data/models/serializers.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/state_container.dart';
+
 import 'package:jamaica/widgets/quiz_game.dart';
 import 'package:data/data.dart';
 import 'package:flutter/services.dart';
 import 'package:jamaica/widgets/chat_bot.dart';
+import 'package:jamaica/widgets/quiz_game.dart';
 import 'package:jamaica/widgets/slide_up_route.dart';
 
 class HomeScreen extends StatefulWidget {

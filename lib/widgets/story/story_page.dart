@@ -17,8 +17,15 @@ class StoryPage extends StatefulWidget {
 
 class StoryPageState extends State<StoryPage> {
   bool _isPlaying = false;
-  List<StoryMode> storyMode = [];
   PageController pageController = PageController();
+  List<StoryMode> _storyMode = [];
+  @override
+  void initState() {
+    super.initState();
+    for (int i = 0; i < widget.pages.length; i++)
+      _storyMode.add(StoryMode.textMode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -43,14 +50,18 @@ class StoryPageState extends State<StoryPage> {
               imagePath: widget.pages[index].imagePath,
               audioFile: widget.pages[index].audioPath,
               fullText: widget.pages[index].text,
+              imageItemsAnswer: widget.pages[index].imageItemsAnswer,
               pageNumber: widget.pages[index].pageNumber,
-              pageSliding: () {
-                setState(() {
-                  _isPlaying = !_isPlaying;
-                  // pageController.jumpToPage(
-                  //     int.parse(widget.pages[index].pageNumber) - 1);
-                });
-              });
+              storyMode: _storyMode[index],
+              index: index,
+              storyModeCallback: (index, StoryMode sm) => setState(
+                    () => _storyMode[index] = sm,
+                  ),
+              pageSliding: () => setState(() {
+                    _isPlaying = !_isPlaying;
+                    // pageController.jumpToPage(
+                    //     int.parse(widget.pages[index].pageNumber) - 1);
+                  }));
         },
         itemCount: widget.pages.length,
       ),

@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/standard_json_plugin.dart';
-import 'package:data/models/class_join.dart';
+import 'package:data/data.dart';
 import 'package:data/models/quiz_session.dart';
-import 'package:data/models/quiz_update.dart';
 import 'package:data/models/serializers.dart';
 import 'package:data/models/class_students.dart';
 import 'package:data/models/student.dart';
@@ -315,10 +314,14 @@ class StateContainerState extends State<StateContainer> {
     switch (newJson[key]) {
       case 'QuizSession':
         quizSessionEndPointId = message['textMessages']['endPointId'];
+
         quizSession = standardSerializers.deserialize(newJson);
         break;
       case 'QuizUpdate':
-        quizUpdate = standardSerializers.deserialize(newJson);
+        final sessionId = newJson['sessionId'];
+        if (quizSession.sessionId == sessionId) {
+          quizUpdate = standardSerializers.deserialize(newJson);
+        }
         break;
       case 'ClassStudents':
         teacherEndPointId = message['textMessages']['endPointId'];
