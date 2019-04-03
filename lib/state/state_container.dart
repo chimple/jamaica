@@ -35,7 +35,6 @@ class StateContainerState extends State<StateContainer> {
   Nearby _nearBy = Nearby.instance;
   List<dynamic> messages = [];
   String studentIdVal;
-  String selfSignUpStudents;
 
   var quizSessionEndPointId;
 
@@ -77,17 +76,11 @@ class StateContainerState extends State<StateContainer> {
     state = widget.state ?? AppState.loading();
     initialize();
     discovering();
-    initData();
   }
 
   void discovering() async {
     await startDiscovery();
     print("firtst   $advertisers");
-  }
-
-  initData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    selfSignUpStudents = prefs.getString('students1');
   }
 
   initialize() async {
