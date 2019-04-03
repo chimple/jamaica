@@ -125,6 +125,12 @@ sendQuizPerformance(
       return sendPerformance(quizSession, gd.answers[0].toString(), score,
           startTime, endTime, context);
       break;
+    case 'JumbleWordsGame':
+      final gd = gameData as MultiData;
+
+      return sendPerformance(quizSession, gd.answers[0].toString(), score,
+          startTime, endTime, context);
+      break;
   }
 }
 

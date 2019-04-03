@@ -2,16 +2,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/widgets/story/custom_editable_text.dart';
 
-class TextHighlighterActivity extends StatefulWidget {
+class TextHighlighter extends StatefulWidget {
   final String text;
   final Function(String) onCorrectAnswer;
-  TextHighlighterActivity({this.text, this.onCorrectAnswer});
+  TextHighlighter({this.text, this.onCorrectAnswer});
   @override
-  _TextHighlighterActivityState createState() =>
-      _TextHighlighterActivityState();
+  _TextHighlighterState createState() => _TextHighlighterState();
 }
 
-class _TextHighlighterActivityState extends State<TextHighlighterActivity> {
+class _TextHighlighterState extends State<TextHighlighter> {
   int _baseOffset = 0;
   bool highlightOnLongPress = false;
   String _startSubString = '', _middleSubString = '', _endSubString = '';
