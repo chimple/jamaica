@@ -132,9 +132,20 @@ sendPerformance(QuizSession quizSession, String string, int score,
     DateTime startTime, DateTime endTime, BuildContext context) {
   final standardSerializers =
       (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
-  final bool correct = score != 0 ? true : false;
+  bool correct = score != 0 ? true : false;
   final studentId = StateContainer.of(context).studentIdVal;
-
+  final val = StateContainer.of(context).overView;
+  if (val.isNotEmpty) {
+    val.forEach((e) {
+      if (studentId == e.studentId) {
+        if (score <= e.score) {
+          correct = false;
+        } else {
+          correct = true;
+        }
+      }
+    });
+  }
   var timeStart = new DateTime.utc(
       startTime.year,
       startTime.month,
@@ -154,7 +165,7 @@ sendPerformance(QuizSession quizSession, String string, int score,
       endTime.second,
       endTime.millisecond);
 
-  Performance session = Performance((p) => p
+  Performance performance = Performance((p) => p
     ..studentId = studentId
     ..gameId = quizSession.gameId
     ..sessionId = quizSession.sessionId
@@ -166,7 +177,8 @@ sendPerformance(QuizSession quizSession, String string, int score,
     ..startTime = timeStart
     ..endTime = timeEnd);
 
-  final json = standardSerializers.serialize(session);
+  StateContainer.of(context).addPerformanceData(performance);
+  final json = standardSerializers.serialize(performance);
   final jsonString = jsonEncode(json);
   final endPointId = StateContainer.of(context).quizSessionEndPointId;
   StateContainer.of(context).sendMessageTo(endPointId, jsonString);
