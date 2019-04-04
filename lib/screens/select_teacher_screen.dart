@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jamaica/screens/select_student_screen.dart';
+import 'package:jamaica/screens/student_log_in_screen.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/teacher_details.dart';
 
@@ -54,7 +55,9 @@ class _TeachersScreenState extends State<TeachersScreen> {
                     color: Colors.white,
                     onPressed: () {
                       StateContainer.of(context).stopDiscovery();
-                      Navigator.of(context).pushNamed('/chatbot');
+                      Navigator.of(context).push(MaterialPageRoute<Null>(
+                          builder: (BuildContext context) =>
+                              StudentLogInScreen()));
                     },
                   ),
                 ],

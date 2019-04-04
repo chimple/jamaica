@@ -18,8 +18,9 @@ class StudentDetails extends StatelessWidget {
               border: Border.all(color: Colors.grey, width: 5.0),
               borderRadius: const BorderRadius.all(const Radius.circular(60.0)),
               image: DecorationImage(
-                image: AssetImage('assets/stories/images/002page3.jpg'),
-              )),
+                image: AssetImage(studentDetails.photo),
+              )
+              ),
           width: orientation == Orientation.portrait
               ? size.width * 0.2
               : size.width * 0.12,
