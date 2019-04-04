@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 class QuizTimer extends StatefulWidget {
-  final int time;
-  QuizTimer({Key key, this.time = 10}) : super(key: key);
+  QuizTimer({Key key}) : super(key: key);
   @override
   QuizTimerState createState() => QuizTimerState();
 }
 
 class QuizTimerState extends State<QuizTimer> with TickerProviderStateMixin {
   AnimationController animationController;
- 
+
   String get timerString {
     Duration duration =
         animationController.duration * animationController.value;
@@ -19,22 +18,19 @@ class QuizTimerState extends State<QuizTimer> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        vsync: this, duration: Duration(seconds: widget.time));
-          animationController.reverse(
-                        from: animationController.value == 0.0
-                            ? 1.0
-                            : animationController.value);
-
   }
-
 
   @override
   Widget build(BuildContext context) {
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 30));
+    animationController.reverse(
+        from:
+            animationController.value == 0.0 ? 1.0 : animationController.value);
     return Column(
       children: <Widget>[
         Container(
-          width: 600.0,
+          width: MediaQuery.of(context).size.width * 0.9,
           child: AnimatedBuilder(
             animation: animationController,
             builder: (BuildContext context, Widget child) {
@@ -47,43 +43,6 @@ class QuizTimerState extends State<QuizTimer> with TickerProviderStateMixin {
             },
           ),
         ),
-        // AnimatedBuilder(
-        //     animation: animationController,
-        //     builder: (_, Widget child) {
-        //       return Text(
-        //         timerString,
-        //         style: Theme.of(context).textTheme.display4,
-        //       );
-        //     }),
-        // Container(
-        //   margin: EdgeInsets.all(8.0),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: <Widget>[
-        //       FloatingActionButton(
-        //         child: AnimatedBuilder(
-        //             animation: animationController,
-        //             builder: (_, Widget child) {
-        //               return Icon(animationController.isAnimating
-        //                   ? Icons.pause
-        //                   : Icons.play_arrow);
-        //             }),
-        //         onPressed: () {
-        //           int timeTaken = int.parse(timerString);
-        //           if (animationController.isAnimating) {
-        //             animationController.stop();
-        //           } else {
-        //             animationController.reverse(
-        //                 from: animationController.value == 0.0
-        //                     ? 1.0
-        //                     : animationController.value);
-        //           }
-        //           print(widget.time - timeTaken);
-        //         },
-        //       )
-        //     ],
-        //   ),
-        // )
       ],
     );
   }
@@ -102,7 +61,7 @@ class TimerPainter extends CustomPainter {
     final start = Offset(0.0, size.height / 2);
     final end = Offset(size.width, size.height / 2);
     Paint paint = Paint()
-      ..color = Colors.yellow
+      ..color = Colors.white
       ..strokeWidth = 10.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
@@ -111,6 +70,9 @@ class TimerPainter extends CustomPainter {
     paint.color = Colors.blue;
     double progress = (1.0 - animation.value) * end.dx;
     canvas.drawLine(start, Offset(end.dx - progress, end.dy), paint);
+    paint.color = Colors.orange;
+
+    canvas.drawCircle(Offset(end.dx - progress, end.dy), 5.0, paint);
     // TODO: implement paint
   }
 

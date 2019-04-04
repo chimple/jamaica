@@ -9,7 +9,6 @@ class QuizTimerStory extends FullScreenStory {
           backgroundColor: Colors.purple,
           body: SafeArea(
             child: QuizTimer(
-              time: 30,
             ),
           ),
         )
