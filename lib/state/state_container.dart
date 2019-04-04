@@ -35,6 +35,7 @@ class StateContainerState extends State<StateContainer> {
   Nearby _nearBy = Nearby.instance;
   List<dynamic> messages = [];
   String studentIdVal;
+  List<Performance> overView=[];
 
   var quizSessionEndPointId;
 
@@ -361,6 +362,10 @@ class StateContainerState extends State<StateContainer> {
     final classJoinJsonString = jsonEncode(classJoinJson);
     print(classJoinJsonString);
     sendMessageTo(teacherId, classJoinJsonString);
+  }
+
+  addPerformanceData(Performance data){
+    overView.add(data);
   }
 
   @override
