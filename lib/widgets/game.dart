@@ -2,6 +2,7 @@ import 'package:data/models/quiz_session.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/game_utils.dart';
+import 'package:jamaica/widgets/quiz_timer.dart';
 import 'package:jamaica/widgets/score.dart';
 import 'package:jamaica/widgets/slide_up_route.dart';
 import 'package:jamaica/widgets/stars.dart';
@@ -12,7 +13,11 @@ class Game extends StatefulWidget {
   final QuizSession quizSession;
   final UpdateCoins updateCoins;
   final UpdateQuizScore updateScore;
-  const Game({Key key, this.quizSession, this.updateCoins, this.updateScore})
+  const Game(
+      {Key key,
+      this.quizSession,
+      this.updateCoins,
+      this.updateScore})
       : super(key: key);
   @override
   _GameState createState() => _GameState();
@@ -22,6 +27,7 @@ class _GameState extends State<Game> {
   int _currentGame = 0;
   int _score = 0;
   int _stars = 0;
+
   Navigator _navigator;
 
   @override
@@ -43,6 +49,7 @@ class _GameState extends State<Game> {
   @override
   Widget build(BuildContext context) {
     print("......controll comming in game");
+
     return Scaffold(
       backgroundColor: Colors.purple,
       body: SafeArea(
@@ -74,10 +81,11 @@ class _GameState extends State<Game> {
                           total: widget.quizSession.gameData.length,
                           show: _stars,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
+                QuizTimer(),
               ],
             ),
           ],
@@ -96,11 +104,11 @@ class _GameState extends State<Game> {
 
             setState(() {
               _score += score;
-              updateScore(_score);
+              // updateScore(_score);
+              // widget.updateTimer(30);
               if (score > 0) _stars++;
 //              _currentGame++;
             });
-
             Navigator.push(
                 context,
                 SlideUpRoute(

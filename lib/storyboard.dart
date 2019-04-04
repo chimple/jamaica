@@ -38,6 +38,7 @@ import 'package:jamaica/storyboards/games/game_level_story.dart';
 import 'package:jamaica/storyboards/games/score_screen_story.dart';
 import 'package:jamaica/storyboards/theme_map_story.dart';
 import 'package:jamaica/storyboards/widgets/game_story.dart';
+import 'package:jamaica/storyboards/widgets/quiz_timer_story.dart';
 import 'package:jamaica/storyboards/widgets/score_story.dart';
 import 'package:jamaica/storyboards/widgets/select_student_screen_story.dart';
 import 'package:jamaica/storyboards/widgets/select_teacher_screen_story.dart';
@@ -74,6 +75,7 @@ void main() {
     MemoryGameStory(),
     OrderBySizeGameStory(),
     OrderItGameStory(),
+    QuizTimerStory(),
     RecognizeNumberGameStory(),
     ReflexGameStory(),
     RhymeWordsGameStory(),

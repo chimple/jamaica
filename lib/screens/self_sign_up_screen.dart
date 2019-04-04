@@ -61,8 +61,7 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                   key: _formKey,
                   child: Center(
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       child: ListView(
                         scrollDirection: Axis.vertical,
                         physics: NeverScrollableScrollPhysics(),
@@ -84,7 +83,7 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
                                 : CircleAvatar(
                                     backgroundImage:
                                         ExactAssetImage(studentImage),
-                                    maxRadius: 80.0,
+                                    maxRadius: 50.0,
                                   ),
                           ),
                           const SizedBox(
