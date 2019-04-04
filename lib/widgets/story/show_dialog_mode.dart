@@ -10,7 +10,8 @@ enum StoryMode {
   dragTextMode,
   audioBoldTextMode,
   textMode,
-  doneStatus
+  doneStatus,
+  jumbledWords
 }
 
 class ShowDialogMode extends StatefulWidget {

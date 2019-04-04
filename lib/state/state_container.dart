@@ -6,10 +6,12 @@ import 'package:data/data.dart';
 import 'package:data/models/quiz_session.dart';
 import 'package:data/models/serializers.dart';
 import 'package:data/models/class_students.dart';
+import 'package:data/models/student.dart';
 import 'package:data/models/user_profile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
 import 'package:nearby/nearby.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 
 class StateContainer extends StatefulWidget {
@@ -334,6 +336,19 @@ class StateContainerState extends State<StateContainer> {
 
   student(String studentId) async {
     studentIdVal = studentId;
+  }
+
+  selfSignUp(String grade, String id, String name, String image) async {
+    final standardSerializers =
+        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+    Student student = Student((b) => b
+      ..name = name
+      ..id = id
+      ..grade = grade
+      ..photo = image);
+    final studentJson = standardSerializers.serialize(student);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('$id', json.encode(studentJson));
   }
 
   studentJoin(String studentid, String sessionId, String teacherId) async {
