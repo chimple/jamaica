@@ -4,7 +4,8 @@ import 'package:jamaica/widgets/story/custom_editable_text.dart';
 
 class TextHighlighter extends StatefulWidget {
   final String text;
-  TextHighlighter({this.text});
+  final Function(String) onCorrectAnswer;
+  TextHighlighter({this.text, this.onCorrectAnswer});
   @override
   _TextHighlighterState createState() => _TextHighlighterState();
 }
@@ -14,9 +15,7 @@ class _TextHighlighterState extends State<TextHighlighter> {
   bool highlightOnLongPress = false;
   String _startSubString = '', _middleSubString = '', _endSubString = '';
   int highlightIndex = -1;
-  void _startOffset(TextSelection t) {
-    _baseOffset = t.base.offset;
-  }
+  void _startOffset(TextSelection t) => _baseOffset = t.base.offset;
 
   void _updateOffset(int extendOffset) {
     if (_baseOffset < extendOffset)
@@ -65,6 +64,7 @@ class _TextHighlighterState extends State<TextHighlighter> {
             draEnd: (t) {
               _baseOffset = t.base.offset;
               _updateOffset(t.extent.offset);
+              widget.onCorrectAnswer(_middleSubString);
             },
             onLongPress: (s, textSelection) {
               // showDialogOnLongPress(

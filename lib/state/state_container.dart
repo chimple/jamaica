@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/standard_json_plugin.dart';
-import 'package:data/models/class_students.dart';
+import 'package:data/data.dart';
+import 'package:data/models/quiz_session.dart';
 import 'package:data/models/serializers.dart';
+import 'package:data/models/class_students.dart';
 import 'package:data/models/user_profile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jamaica/models/app_state.dart';
@@ -31,6 +33,11 @@ class StateContainerState extends State<StateContainer> {
   Nearby _nearBy = Nearby.instance;
   List<dynamic> messages = [];
   String studentIdVal;
+
+  var quizSessionEndPointId;
+
+  QuizUpdate quizUpdate;
+  QuizSession quizSession;
   UserProfile userProfileDeatils;
   ClassStudents classStudents;
   String teacherEndPointId;
@@ -215,8 +222,7 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  connectTo(
-      Map<dynamic, dynamic> connectionInfo) async {
+  connectTo(Map<dynamic, dynamic> connectionInfo) async {
     // Connect to device
     _connectionSubscription =
         _nearBy.connectTo(connectionInfo).listen((result) async {
@@ -293,19 +299,29 @@ class StateContainerState extends State<StateContainer> {
     messages.add(message);
     final standardSerializers =
         (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
-
     final newJson = jsonDecode(message['textMessages']['message']);
-    print("recieved message iss...$newJson");
     var values = newJson.keys;
-    print("data of key is.............$values");
-    String keys = values.first;
+    String key = values.first;
+    switch (newJson[key]) {
+      case 'QuizSession':
+        quizSessionEndPointId = message['textMessages']['endPointId'];
 
-    if (newJson[keys] == "ClassStudents") {
-      teacherEndPointId = message['textMessages']['endPointId'];
-      classStudents = standardSerializers.deserialize(newJson);
-      print("class students are...$classStudents");
-    } else if (newJson[keys] == "UserProfile") {
-      userProfileDeatils = standardSerializers.deserialize(newJson);
+        quizSession = standardSerializers.deserialize(newJson);
+        break;
+      case 'QuizUpdate':
+        final sessionId = newJson['sessionId'];
+        if (quizSession.sessionId == sessionId) {
+          quizUpdate = standardSerializers.deserialize(newJson);
+        }
+        break;
+      case 'ClassStudents':
+        teacherEndPointId = message['textMessages']['endPointId'];
+        classStudents = standardSerializers.deserialize(newJson);
+        break;
+      case 'UserProfile':
+        userProfileDeatils = standardSerializers.deserialize(newJson);
+        break;
+      default:
     }
   }
 
@@ -317,6 +333,19 @@ class StateContainerState extends State<StateContainer> {
 
   student(String studentId) async {
     studentIdVal = studentId;
+  }
+
+  studentJoin(String studentid, String sessionId, String teacherId) async {
+    final standardSerializers =
+        (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
+    await student(studentid);
+    ClassJoin classJoin = ClassJoin((b) => b
+      ..studentId = studentid
+      ..sessionId = classStudents.sessionId);
+    final classJoinJson = standardSerializers.serialize(classJoin);
+    final classJoinJsonString = jsonEncode(classJoinJson);
+    print(classJoinJsonString);
+    sendMessageTo(teacherId, classJoinJsonString);
   }
 
   @override

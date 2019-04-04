@@ -20,6 +20,7 @@ import 'package:jamaica/games/rhyme_words_game.dart';
 import 'package:jamaica/games/sequence_alphabet_game.dart';
 import 'package:jamaica/games/sequence_the_number_game.dart';
 import 'package:jamaica/games/true_false_game.dart';
+import 'package:jamaica/widgets/story/activity/jumble_words.dart';
 
 typedef void OnGameOver(int score);
 
@@ -187,6 +188,14 @@ Widget buildGame({GameData gameData, OnGameOver onGameOver}) {
         answer: gd.choices.first,
         right_or_wrong: gd.answers.first == 'True',
         onGameOver: onGameOver,
+      );
+      break;
+    case 'JumbleWordsGame':
+      final gd = gameData as MultiData;
+      return JumbleWords(
+        onGameOver: onGameOver,
+        choices: gd.choices,
+        answers: gd.answers,
       );
       break;
   }

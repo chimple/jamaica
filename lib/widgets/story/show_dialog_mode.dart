@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 enum StoryMode {
+  activityMode,
   showDialogOnLongPressMode,
   textHighlighterMode,
   dragTextMode,
   audioBoldTextMode,
   textMode,
+  doneStatus,
+  jumbledWords
 }
 
 class ShowDialogMode extends StatefulWidget {
@@ -62,8 +65,11 @@ class _ShowDialogModeState extends State<ShowDialogMode> {
       );
     }
 
-    return Wrap(
-      children: widget.listofWords.map((s) => _build(s, index++)).toList(),
+    return SingleChildScrollView(
+      controller: ScrollController(),
+      child: Wrap(
+        children: widget.listofWords.map((s) => _build(s, index++)).toList(),
+      ),
     );
   }
 

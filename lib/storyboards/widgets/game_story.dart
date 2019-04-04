@@ -1,6 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:data/data.dart';
-import 'package:data/models/contest_session.dart';
+import 'package:data/models/quiz_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:jamaica/widgets/game.dart';
@@ -11,7 +11,7 @@ class GameStory extends FullScreenStory {
   List<Widget> get storyContent => [
         Game(
           updateCoins: (coins) => print(coins),
-          contestSession: ContestSession((b) => b
+          quizSession: QuizSession((b) => b
             ..gameId = 'SequenceAlphabetGame'
             ..level = 1
             ..sessionId = '2'
@@ -323,6 +323,15 @@ class GameStory extends FullScreenStory {
                 ..gameId = 'CountingGame'
                 ..answers.addAll([8])
                 ..choices.addAll([1, 2, 3, 4, 5, 6, 7, 8, 9])),
+            ])
+            ..gameId = 'JumbleWordsGame'
+            ..level = 1
+            ..sessionId = '2'
+            ..gameData.addAll([
+              MultiData((g) => g
+                ..gameId = 'JumbleWordsGame'
+                ..question = 'He Like to tease people'
+                ..answers.addAll(['He', 'Like', 'to', 'tease', 'people'])),
             ])),
         ),
       ];

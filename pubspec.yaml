@@ -70,12 +70,14 @@ flutter:
     - assets/map/
     - assets/game/
     - assets/accessories/
+    - assets/chat/
     - assets/character/
     - assets/stories/
     - assets/stories/images/
     - assets/audio/
     - assets/stories/story_audio/
     - assets/score/
+
 
 
   # To add assets to your application, add an assets section, like this:

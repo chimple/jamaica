@@ -1,4 +1,4 @@
-import 'package:data/models/contest_session.dart';
+import 'package:data/models/quiz_session.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:jamaica/state/game_utils.dart';
@@ -6,11 +6,13 @@ import 'package:jamaica/widgets/score.dart';
 import 'package:jamaica/widgets/slide_up_route.dart';
 import 'package:jamaica/widgets/stars.dart';
 
-class Game extends StatefulWidget {
-  final ContestSession contestSession;
-  final UpdateCoins updateCoins;
+typedef UpdateQuizScore(int score);
 
-  const Game({Key key, this.contestSession, this.updateCoins})
+class Game extends StatefulWidget {
+  final QuizSession quizSession;
+  final UpdateCoins updateCoins;
+  final UpdateQuizScore updateScore;
+  const Game({Key key, this.quizSession, this.updateCoins, this.updateScore})
       : super(key: key);
   @override
   _GameState createState() => _GameState();
@@ -27,7 +29,8 @@ class _GameState extends State<Game> {
     super.initState();
     _navigator = Navigator(
       onGenerateRoute: (settings) => SlideUpRoute(
-            widgetBuilder: (context) => _buildGame(context, 0),
+            widgetBuilder: (context) =>
+                _buildGame(context, 0, widget.updateScore),
           ),
     );
   }
@@ -39,6 +42,7 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
+    print("......controll comming in game");
     return Scaffold(
       backgroundColor: Colors.purple,
       body: SafeArea(
@@ -67,7 +71,7 @@ class _GameState extends State<Game> {
                       ),
                       Expanded(
                         child: Stars(
-                          total: widget.contestSession.gameData.length,
+                          total: widget.quizSession.gameData.length,
                           show: _stars,
                         ),
                       )
@@ -82,20 +86,26 @@ class _GameState extends State<Game> {
     );
   }
 
-  Widget _buildGame(BuildContext context, int index) {
-    if (index < widget.contestSession.gameData.length) {
+  Widget _buildGame(BuildContext context, int index, updateScore) {
+    print("lets check the values ..is  $index");
+    if (index < widget.quizSession.gameData.length) {
       return buildGame(
-          gameData: widget.contestSession.gameData[index],
+          gameData: widget.quizSession.gameData[index],
           onGameOver: (score) {
+            print("in side clicking or not lets check $index");
+
             setState(() {
               _score += score;
+              updateScore(_score);
               if (score > 0) _stars++;
 //              _currentGame++;
             });
+
             Navigator.push(
                 context,
                 SlideUpRoute(
-                    widgetBuilder: (context) => _buildGame(context, ++index)));
+                    widgetBuilder: (context) =>
+                        _buildGame(context, ++index, updateScore)));
           });
     } else {
       return Score(
