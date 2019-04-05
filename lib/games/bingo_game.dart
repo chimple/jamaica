@@ -47,6 +47,7 @@ class _BingoGameState extends State<BingoGame> {
   static int _maxSize = 2;
   var _referenceMatrix;
   List _letters = [];
+  List _questions =[];
   bool _bingo = false;
   var score = 0;
 
@@ -58,8 +59,6 @@ class _BingoGameState extends State<BingoGame> {
       choiceDetails.add(e);
       questionDetails.add(v);
     });
-
-    ques = questionDetails[0];
     if (choiceDetails.length <= 8) {
       _maxSize = 2;
     } else if (choiceDetails.length < 16) {
@@ -67,25 +66,24 @@ class _BingoGameState extends State<BingoGame> {
     } else {
       _maxSize = 4;
     }
+ _questions = questionDetails.sublist(0,_maxSize * _maxSize);
+    ques = _questions[0];
+    
 
     _referenceMatrix = new List.generate(_maxSize, (_) => new List(_maxSize));
-    for (var i = 0; i < choiceDetails.length; i += _maxSize * _maxSize) {
-      _shuffledLetters.addAll(choiceDetails
-          .skip(i)
-          .take(_maxSize * _maxSize)
-          .toList(growable: false));
-    }
     _letters = choiceDetails.sublist(0, _maxSize * _maxSize);
+   
     _letters.shuffle();
     int k = 0;
     cDetails = _letters
         .map((c) => _ChoiceDetail(choice: c, type: _Type.choice, index: k++))
         .toList(growable: false);
-
-    qDetails = questionDetails
+    print("object is  $_letters");
+    qDetails = _questions
         .map((e) => _ChoiceDetail(
             choice: e, type: _Type.question, reaction: Reaction.success))
         .toList(growable: false);
+        print("object is qdetails $_questions");
   }
 
   @override
@@ -120,14 +118,14 @@ class _BingoGameState extends State<BingoGame> {
 
   _checkTheanswer(int index, String choice) {
     var str1 = choiceDetails.indexOf(choice);
-    var str2 = questionDetails.indexOf(ques);
+    var str2 = _questions.indexOf(ques);
 
     if (str1 == str2) {
       setState(() {
         count++;
         score++;
       });
-      ques = questionDetails[count];
+      ques = _questions[count];
       int counter = 0;
       for (int i = 0; i < _maxSize; i++) {
         for (int j = 0; j < _maxSize; j++) {
