@@ -63,7 +63,6 @@ class _FindWordGameState extends State<FindWordGame> {
                       reaction: c.reaction,
                       child: Center(child: Text(c.letter)),
                       onPressed: () {
-                        widget.onGameOver(1);
                         if (c.letter == widget.answer[word.length]) {
                           setState(() {
                             score++;
@@ -74,6 +73,9 @@ class _FindWordGameState extends State<FindWordGame> {
                           });
                         } else {
                           if (score > 0) score--;
+                          setState(() {
+                           widget.onGameOver(0); 
+                          });
                           c.reaction = Reaction.failure;
                         }
                       },
