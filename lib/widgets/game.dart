@@ -13,11 +13,7 @@ class Game extends StatefulWidget {
   final QuizSession quizSession;
   final UpdateCoins updateCoins;
   final UpdateQuizScore updateScore;
-  const Game(
-      {Key key,
-      this.quizSession,
-      this.updateCoins,
-      this.updateScore})
+  const Game({Key key, this.quizSession, this.updateCoins, this.updateScore})
       : super(key: key);
   @override
   _GameState createState() => _GameState();
@@ -95,24 +91,24 @@ class _GameState extends State<Game> {
   }
 
   Widget _buildGame(BuildContext context, int index, updateScore) {
-    print("lets check the values ..is  $index");
     if (index < widget.quizSession.gameData.length) {
       return buildGame(
           gameData: widget.quizSession.gameData[index],
           onGameOver: (score) {
-            print("in side clicking or not lets check $index");
-
-            setState(() {
-              _score += score;
-              if (updateScore != null) updateScore(_score);
-              if (score > 0) _stars++;
+            if (updateScore != null)
+              updateScore(_score);
+            else {
+              setState(() {
+                _score += score;
+                if (score > 0) _stars++;
 //              _currentGame++;
-            });
-            Navigator.push(
-                context,
-                SlideUpRoute(
-                    widgetBuilder: (context) =>
-                        _buildGame(context, ++index, updateScore)));
+              });
+              Navigator.push(
+                  context,
+                  SlideUpRoute(
+                      widgetBuilder: (context) =>
+                          _buildGame(context, ++index, updateScore)));
+            }
           });
     } else {
       return Score(
