@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jamaica/storyboards/widgets/drop_down.dart';
@@ -26,151 +27,157 @@ class _SelfSignUpScreenState extends State<SelfSignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue,
-      body: Column(
+      body: Stack(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Center(
-              child: Text(
-                "Self Sign Up",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
+            child: SvgPicture.asset(
+              'assets/background_01.svg',
+              fit: BoxFit.fill,
             ),
           ),
-          Center(
-            child: Container(
-              color: Colors.black,
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: 8.0,
-            ),
-          ),
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/Background_potriat.png'),
-                        fit: BoxFit.fill),
+          Column(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: Center(
+                  child: Text(
+                    "Self Sign Up",
+                    style: TextStyle(
+                        fontSize: 30.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                Form(
-                  key: _formKey,
-                  child: Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: <Widget>[
-                          Center(
-                            child: _image == null
-                                ? CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    child: IconButton(
-                                      color: const Color(0xFFE18025),
-                                      icon: Icon(Icons.add_a_photo),
-                                      iconSize: 80.0,
-                                      onPressed: () {
-                                        openCamera();
-                                      },
+              ),
+              Center(
+                child: Container(
+                  color: Colors.black,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 8.0,
+                ),
+              ),
+              Expanded(
+                child: Stack(
+                  children: <Widget>[
+                    Form(
+                      key: _formKey,
+                      child: Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            physics: NeverScrollableScrollPhysics(),
+                            children: <Widget>[
+                              Center(
+                                child: _image == null
+                                    ? CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: IconButton(
+                                          color: const Color(0xFFE18025),
+                                          icon: Icon(Icons.add_a_photo),
+                                          iconSize: 80.0,
+                                          onPressed: () {
+                                            openCamera();
+                                          },
+                                        ),
+                                        maxRadius: 60.0,
+                                      )
+                                    : CircleAvatar(
+                                        backgroundImage:
+                                            ExactAssetImage(studentImage),
+                                        maxRadius: 60.0,
+                                      ),
+                              ),
+                              const SizedBox(
+                                height: 24.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.black54,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: TextFormField(
+                                    style: TextStyle(color: Colors.white),
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Enter Student Name',
                                     ),
-                                    maxRadius: 80.0,
-                                  )
-                                : CircleAvatar(
-                                    backgroundImage:
-                                        ExactAssetImage(studentImage),
-                                    maxRadius: 50.0,
+                                    onSaved: (input) {
+                                      _studentName = input;
+                                    },
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Please enter student name';
+                                      }
+                                    },
                                   ),
-                          ),
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.black54,
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: TextFormField(
-                                style: TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Enter Student Name',
-                                ),
-                                onSaved: (input) {
-                                  _studentName = input;
-                                },
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Please enter student name';
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          Dropdown(
-                            menuItems: _standardList,
-                            hintText: 'select standard',
-                            selectedItem: (String value) {
-                              _standard = value;
-                            },
-                          ),
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          Dropdown(
-                            menuItems: <String>['Central', 'State'],
-                            hintText: 'select Board',
-                            selectedItem: (String value) {
-                              _board = value;
-                            },
-                          ),
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          Center(
-                            child: RaisedButton(
-                              color: const Color(0xFFE18025),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
-                                  color: Colors.white,
                                 ),
                               ),
-                              onPressed: () async {
-                                if (_formKey.currentState.validate()) {
-                                  _formKey.currentState.save();
-                                  await StateContainer.of(context).selfSignUp(
-                                      _standard,
-                                      "${_studentName + _standard}",
-                                      _studentName,
-                                      studentImage);
+                              const SizedBox(
+                                height: 24.0,
+                              ),
+                              Dropdown(
+                                menuItems: _standardList,
+                                hintText: 'select standard',
+                                selectedItem: (String value) {
+                                  _standard = value;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 24.0,
+                              ),
+                              Dropdown(
+                                menuItems: <String>['Central', 'State'],
+                                hintText: 'select Board',
+                                selectedItem: (String value) {
+                                  _board = value;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 24.0,
+                              ),
+                              Center(
+                                child: RaisedButton(
+                                  color: const Color(0xFFE18025),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  child: Text(
+                                    'Sign Up',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    if (_formKey.currentState.validate()) {
+                                      _formKey.currentState.save();
 
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                            ),
+                                      await StateContainer.of(context)
+                                          .selfSignUp(
+                                              _standard,
+                                              "${_studentName + _standard}",
+                                              _studentName,
+                                              studentImage);
+
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
