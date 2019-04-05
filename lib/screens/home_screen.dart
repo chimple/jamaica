@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:built_value/standard_json_plugin.dart';
@@ -51,6 +52,30 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+                title: new Text('Are you sure?'),
+                content: new Text('Do you want to exit the class'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  new FlatButton(
+                    onPressed: () {
+                      StateContainer.of(context).disconnect();
+                      SystemNavigator.pop();
+                    },
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     print('ChatBotScreen:build');
@@ -67,99 +92,103 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     final quizSession = StateContainer.of(context).quizSession;
 
-    return Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: Colors.cyan,
-        body: quizSession == null
-            ? SafeArea(
-                child: Column(
-                  verticalDirection: VerticalDirection.up,
-                  children: <Widget>[
-                    Expanded(
-                      child: _navigator,
-                    ),
-                    Flexible(
-                      child: Hero(
-                        tag: 'chimp',
-                        child: FlareActor(
-                          "assets/character/chimp.flr",
-                          alignment: Alignment.center,
-                          fit: BoxFit.contain,
-                          animation: _emotion,
-                          callback: (String name) =>
-                              setState(() => _emotion = 'idle'),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Colors.cyan,
+          body: quizSession == null
+              ? SafeArea(
+                  child: Column(
+                    verticalDirection: VerticalDirection.up,
+                    children: <Widget>[
+                      Expanded(
+                        child: _navigator,
+                      ),
+                      Flexible(
+                        child: Hero(
+                          tag: 'chimp',
+                          child: FlareActor(
+                            "assets/character/chimp.flr",
+                            alignment: Alignment.center,
+                            fit: BoxFit.contain,
+                            animation: _emotion,
+                            callback: (String name) =>
+                                setState(() => _emotion = 'idle'),
+                          ),
                         ),
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.account_circle),
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed('/profile'),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.map),
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed('/map'),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.games),
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed('/games'),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.store),
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed('/store'),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.book),
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed('/story'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            : AlertDialog(
-                title: new Text("Quiz  to Start student"),
-                content: RaisedButton(
-                    onPressed: () {
-                      final standardSerializers = (serializers.toBuilder()
-                            ..addPlugin(StandardJsonPlugin()))
-                          .build();
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.account_circle),
+                            onPressed: () =>
+                                Navigator.of(context).pushNamed('/profile'),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.map),
+                            onPressed: () =>
+                                Navigator.of(context).pushNamed('/map'),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.games),
+                            onPressed: () =>
+                                Navigator.of(context).pushNamed('/games'),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.store),
+                            onPressed: () =>
+                                Navigator.of(context).pushNamed('/store'),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.book),
+                            onPressed: () =>
+                                Navigator.of(context).pushNamed('/story'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              : AlertDialog(
+                  title: new Text("Quiz  to Start student"),
+                  content: RaisedButton(
+                      onPressed: () {
+                        final standardSerializers = (serializers.toBuilder()
+                              ..addPlugin(StandardJsonPlugin()))
+                            .build();
 
-                      final quizSession =
-                          StateContainer.of(context).quizSession;
-                      final studentId = StateContainer.of(context).studentIdVal;
+                        final quizSession =
+                            StateContainer.of(context).quizSession;
+                        final studentId =
+                            StateContainer.of(context).studentIdVal;
 
-                      QuizJoin quizJoin = QuizJoin((d) => d
-                        ..sessionId = quizSession.sessionId
-                        ..studentId = studentId);
+                        QuizJoin quizJoin = QuizJoin((d) => d
+                          ..sessionId = quizSession.sessionId
+                          ..studentId = studentId);
 
-                      final jsonquizJoin =
-                          standardSerializers.serialize(quizJoin);
-                      final jsonquizJoinString = jsonEncode(jsonquizJoin);
-                      print(jsonquizJoinString);
-                      print(".......object is.....$quizJoin");
-                      final endPointId =
-                          StateContainer.of(context).quizSessionEndPointId;
-                      StateContainer.of(context)
-                          .sendMessageTo(endPointId, jsonquizJoinString);
+                        final jsonquizJoin =
+                            standardSerializers.serialize(quizJoin);
+                        final jsonquizJoinString = jsonEncode(jsonquizJoin);
+                        print(jsonquizJoinString);
+                        print(".......object is.....$quizJoin");
+                        final endPointId =
+                            StateContainer.of(context).quizSessionEndPointId;
+                        StateContainer.of(context)
+                            .sendMessageTo(endPointId, jsonquizJoinString);
 
-                      Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (ctxt) => new QuizGame(
-                                  quizSession: quizSession,
-                                )),
-                      );
-                    },
-                    child: new Text("Yes, Ready To Play")),
-              ));
+                        Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (ctxt) => new QuizGame(
+                                    quizSession: quizSession,
+                                  )),
+                        );
+                      },
+                      child: new Text("Yes, Ready To Play")),
+                )),
+    );
   }
 
   Widget _buildChatBot(BuildContext context, {String choice}) {

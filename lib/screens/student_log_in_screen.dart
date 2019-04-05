@@ -3,6 +3,7 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:data/models/serializers.dart';
 import 'package:data/models/student.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:jamaica/screens/self_sign_up_screen.dart';
 import 'package:jamaica/widgets/student_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,53 +47,68 @@ class _StudentLogInScreenState extends State<StudentLogInScreen> {
 
     return Scaffold(
       backgroundColor: Colors.orange,
-      body: SafeArea(
-        child: Column(children: [
-          Padding(
-            padding: EdgeInsets.only(left: media.size.width * .05),
-            child: Container(
-              width: media.size.width,
-              child: Text(
-                "Select your Photo",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            child: SvgPicture.asset(
+              'assets/background_02.svg',
+              fit: BoxFit.fill,
+            ),
+          ),
+          SafeArea(
+            child: Column(children: [
+              Padding(
+                padding: EdgeInsets.only(left: media.size.width * .05),
+                child: Container(
+                  width: media.size.width,
+                  child: Text(
+                    "Select your Photo",
+                    style: TextStyle(
+                        fontSize: 30.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-            ),
+              Center(
+                child: Container(
+                  margin: EdgeInsets.all(5.0),
+                  color: Colors.white70,
+                  width: media.size.width * .9,
+                  height: 5.0,
+                ),
+              ),
+              Expanded(
+                child: _isLoading
+                    ? SizedBox(
+                        width: 20.0,
+                        height: 20.0,
+                        child: CircularProgressIndicator(),
+                      )
+                    : _students != null
+                        ? GridView.count(
+                            key: new Key('local_student_list'),
+                            primary: true,
+                            crossAxisCount: 4,
+                            children: _students
+                                .map((student) => StudentItem(student: student))
+                                .toList())
+                        : Container(),
+              ),
+            ]),
           ),
-          Center(
-            child: Container(
-              margin: EdgeInsets.all(5.0),
-              color: Colors.white70,
-              width: media.size.width * .9,
-              height: 5.0,
-            ),
-          ),
-          Expanded(
-            child: _isLoading
-                ? SizedBox(
-                    width: 20.0,
-                    height: 20.0,
-                    child: CircularProgressIndicator(),
-                  )
-                : _students != null
-                    ? GridView.count(
-                        key: new Key('local_student_list'),
-                        primary: true,
-                        crossAxisCount: 4,
-                        children: _students
-                            .map((student) => StudentItem(student: student))
-                            .toList())
-                    : Container(),
-          ),
-        ]),
+        ],
       ),
       floatingActionButton: Transform.scale(
         scale: 1.5,
         child: FloatingActionButton(
+          elevation: 10.0,
+          backgroundColor: Colors.white,
           key: ValueKey('add-student'),
-          child: Icon(Icons.add),
+          child: Icon(
+            Icons.add,
+            color: Colors.black,
+          ),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute<Null>(
               builder: (BuildContext context) => SelfSignUpScreen())),
         ),

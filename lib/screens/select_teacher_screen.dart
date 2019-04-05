@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:jamaica/screens/select_student_screen.dart';
 import 'package:jamaica/screens/student_log_in_screen.dart';
 import 'package:jamaica/state/state_container.dart';
@@ -31,74 +32,89 @@ class _TeachersScreenState extends State<TeachersScreen> {
     return Scaffold(
       backgroundColor: Colors.orange,
       key: _scaffoldKey,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: media.size.height * .08,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: media.size.width * .05),
-                    child: Text(
-                      "Choose your Class",
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add_circle_outline),
-                    iconSize: 40.0,
-                    color: Colors.white,
-                    onPressed: () {
-                      StateContainer.of(context).stopDiscovery();
-                      Navigator.of(context).push(MaterialPageRoute<Null>(
-                          builder: (BuildContext context) =>
-                              StudentLogInScreen()));
-                    },
-                  ),
-                ],
-              ),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            child: SvgPicture.asset(
+              'assets/background_02.svg',
+              fit: BoxFit.fill,
             ),
-            Center(
-              child: Container(
-                color: Colors.white70,
-                width: media.size.width * .9,
-                height: media.size.height * .004,
-              ),
-            ),
-            Expanded(
-              child: GridView.count(
-                key: new Key('teacher_list'),
-                primary: true,
-                crossAxisCount: 4,
-                childAspectRatio: orientation == Orientation.portrait
-                    ? media.size.width / (media.size.height / 1.4)
-                    : media.size.width / (media.size.height * 1.6),
-                children: widget.advertisers
-                    .map((advertiser) => InkWell(
-                        onTap: () {
-                          setState(() async {
-                            selectedTeacher = advertiser;
-                            await StateContainer.of(context)
-                                .connectTo(selectedTeacher);
-                            Navigator.of(context).push(MaterialPageRoute<Null>(
-                                builder: (BuildContext context) =>
-                                    SelectStudentScreen(
-                                      selectedTeacher: selectedTeacher,
-                                      // message: messageData,
-                                    )));
-                          });
+          ),
+          SafeArea(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: media.size.height * .08,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: media.size.width * .05),
+                        child: Text(
+                          "Choose your Class",
+                          style: TextStyle(
+                              fontSize: 30.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add_circle_outline),
+                        iconSize: 40.0,
+                        color: Colors.white,
+                        onPressed: () {
+                          StateContainer.of(context).stopDiscovery();
+
+                          Navigator.of(context).push(MaterialPageRoute<Null>(
+                              builder: (BuildContext context) =>
+                                  StudentLogInScreen()));
                         },
-                        child: TeacherDetails(advertiser)))
-                    .toList(growable: false),
-              ),
+                      ),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    color: Colors.white70,
+                    width: media.size.width * .9,
+                    height: media.size.height * .004,
+                  ),
+                ),
+                Expanded(
+                  child: GridView.count(
+                    key: new Key('teacher_list'),
+                    primary: true,
+                    crossAxisCount: 4,
+                    childAspectRatio: orientation == Orientation.portrait
+                        ? media.size.width / (media.size.height / 1.4)
+                        : media.size.width / (media.size.height * 1.6),
+                    children: widget.advertisers
+                        .map((advertiser) => InkWell(
+                            onTap: () {
+                              setState(() async {
+                                selectedTeacher = advertiser;
+
+                                await StateContainer.of(context)
+                                    .connectTo(selectedTeacher);
+
+                                Navigator.of(context).push(
+                                    MaterialPageRoute<Null>(
+                                        builder: (BuildContext context) =>
+                                            SelectStudentScreen(
+                                              selectedTeacher: selectedTeacher,
+
+                                              // message: messageData,
+                                            )));
+                              });
+                            },
+                            child: TeacherDetails(advertiser)))
+                        .toList(growable: false),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

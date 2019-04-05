@@ -1,6 +1,7 @@
 import 'package:data/data.dart';
 import 'package:data/models/class_students.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:jamaica/state/state_container.dart';
 import 'package:jamaica/widgets/student_details.dart';
 import 'package:jamaica/widgets/teacher_details.dart';
@@ -36,63 +37,80 @@ class _SelectStudentScreenState extends State<SelectStudentScreen> {
 
     return Scaffold(
       backgroundColor: Colors.orange,
-      body: Column(
+      body: Stack(
         children: <Widget>[
           Container(
-            child: Center(
-              child: TeacherDetails(widget.selectedTeacher),
+            child: SvgPicture.asset(
+              'assets/background_02.svg',
+              fit: BoxFit.fill,
             ),
           ),
-          Center(
-            child: Container(
-              margin: EdgeInsets.all(5.0),
-              color: Colors.white70,
-              width: media.size.width * .9,
-              height: orientation == Orientation.portrait
-                  ? media.size.height * .004
-                  : media.size.height * .005,
+          SafeArea(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Center(
+                    child: TeacherDetails(widget.selectedTeacher),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.all(5.0),
+                    color: Colors.white70,
+                    width: media.size.width * .9,
+                    height: orientation == Orientation.portrait
+                        ? media.size.height * .004
+                        : media.size.height * .005,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: media.size.width * .05),
+                  child: Container(
+                    width: media.size.width,
+                    child: Text(
+                      "Select your Photo",
+                      style: TextStyle(
+                          fontSize: 30.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: StateContainer.of(context).classStudents != null
+                        ? GridView.count(
+                            key: new Key('student_list_page'),
+                            primary: true,
+                            childAspectRatio: orientation ==
+                                    Orientation.portrait
+                                ? media.size.width / (media.size.height / 1.5)
+                                : media.size.width / (media.size.height * 1.3),
+                            crossAxisCount: 4,
+                            children: studentList
+                                .map((t) => InkWell(
+                                    onTap: () async {
+                                      await StateContainer.of(context)
+                                          .studentJoin(
+                                              t.id,
+                                              classStudents.sessionId,
+                                              widget.selectedTeacher[
+                                                  'endPointId']);
+
+                                      Navigator.of(context)
+                                          .pushNamed('/chatbot');
+                                    },
+                                    child: StudentDetails(t)))
+                                .toList(growable: false),
+                          )
+                        : Center(
+                            child: SizedBox(
+                                height: 30.0,
+                                width: 30.0,
+                                child: CircularProgressIndicator()),
+                          )),
+              ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: media.size.width * .05),
-            child: Container(
-              width: media.size.width,
-              child: Text(
-                "Select your Photo",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          Expanded(
-              child: StateContainer.of(context).classStudents != null
-                  ? GridView.count(
-                      key: new Key('student_list_page'),
-                      primary: true,
-                      childAspectRatio: orientation == Orientation.portrait
-                          ? media.size.width / (media.size.height / 1.5)
-                          : media.size.width / (media.size.height * 1.3),
-                      crossAxisCount: 4,
-                      children: studentList
-                          .map((t) => InkWell(
-                              onTap: () async {
-                                await StateContainer.of(context).studentJoin(
-                                    t.id,
-                                    classStudents.sessionId,
-                                    widget.selectedTeacher['endPointId']);
-                                Navigator.of(context).pushNamed('/chatbot');
-                              },
-                              child: StudentDetails(t)))
-                          .toList(growable: false),
-                    )
-                  : Center(
-                      child: SizedBox(
-                          height: 30.0,
-                          width: 30.0,
-                          child: CircularProgressIndicator()),
-                    )),
         ],
       ),
     );

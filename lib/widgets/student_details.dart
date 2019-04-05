@@ -14,13 +14,18 @@ class StudentDetails extends StatelessWidget {
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.grey, width: 5.0),
-              borderRadius: const BorderRadius.all(const Radius.circular(60.0)),
-              image: DecorationImage(
-                image: AssetImage(studentDetails.photo),
-              )
-              ),
+            // color: Colors.white,
+            // border: Border.all(color: Colors.white, width: 2.0),
+            shape: BoxShape.circle,
+            // borderRadius: const BorderRadius.all(const Radius.circular(60.0)),
+            // image: DecorationImage(
+            //   image: AssetImage(studentDetails.photo),
+            // )
+          ),
+          child: CircleAvatar(
+            backgroundImage: ExactAssetImage(studentDetails.photo),
+            maxRadius: 50.0,
+          ),
           width: orientation == Orientation.portrait
               ? size.width * 0.2
               : size.width * 0.12,
