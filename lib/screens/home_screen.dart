@@ -5,6 +5,7 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:data/models/serializers.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jamaica/state/state_container.dart';
 
 import 'package:jamaica/widgets/quiz_game.dart';
@@ -91,7 +92,9 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     final quizSession = StateContainer.of(context).quizSession;
-
+    MediaQueryData media = MediaQuery.of(context);
+    var size = media.size;
+    final userName = StateContainer.of(context).state.userProfile.name;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -119,33 +122,266 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.account_circle),
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/profile'),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.map),
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/map'),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.games),
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/games'),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.store),
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/store'),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.book),
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/story'),
-                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: Stack(
+                                          children: <Widget>[
+                                            Container(
+                                              height: media.orientation ==
+                                                      Orientation.portrait
+                                                  ? size.width * 0.104
+                                                  : size.width * 0.062,
+                                              width: media.orientation ==
+                                                      Orientation.portrait
+                                                  ? size.width * 0.285
+                                                  : size.width * 0.170,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: media.orientation ==
+                                                            Orientation.portrait
+                                                        ? size.width * 0.0064
+                                                        : size.width * 0.005),
+                                                borderRadius:
+                                                    BorderRadius.circular(50.0),
+                                                color: Colors.black12,
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.of(context)
+                                                            .pushNamed(
+                                                                '/profile');
+                                                      },
+                                                      child: CircleAvatar(
+                                                        child: new Container(
+                                                            height: media.orientation ==
+                                                                    Orientation
+                                                                        .portrait
+                                                                ? size.width *
+                                                                    0.204
+                                                                : size.width *
+                                                                    0.12,
+                                                            width: media.orientation ==
+                                                                    Orientation
+                                                                        .portrait
+                                                                ? size.width *
+                                                                    0.204
+                                                                : size.width *
+                                                                    0.12,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        width: media.orientation == Orientation.portrait
+                                                                            ? size.width *
+                                                                                0.0064
+                                                                            : size.width *
+                                                                                0.005),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(150.0), // shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.elliptical(170, 200))),
+                                                                    color: Colors.black12,
+                                                                    image: DecorationImage(
+                                                                      image: ExactAssetImage(
+                                                                          "assets/accessories/profile_pic.png"),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ))),
+                                                        radius:
+                                                            media.orientation ==
+                                                                    Orientation
+                                                                        .portrait
+                                                                ? size.width *
+                                                                    0.051
+                                                                : size.width *
+                                                                    0.03,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: <Widget>[
+                                                    Text(
+                                                      userName,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            media.orientation ==
+                                                                    Orientation
+                                                                        .portrait
+                                                                ? size.width *
+                                                                    0.034
+                                                                : size.width *
+                                                                    0.02,
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: <Widget>[
+                                                        Icon(
+                                                          Icons.star,
+                                                          color: Colors.red,
+                                                          size: media.orientation ==
+                                                                  Orientation
+                                                                      .portrait
+                                                              ? size.width *
+                                                                  0.045
+                                                              : size.width *
+                                                                  0.0283,
+                                                        ),
+                                                        Text(
+                                                          '1000',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: media
+                                                                          .orientation ==
+                                                                      Orientation
+                                                                          .portrait
+                                                                  ? size.width *
+                                                                      0.034
+                                                                  : size.width *
+                                                                      0.02),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          0,
+                                          0,
+                                          media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.2
+                                              : size.width * 0.32,
+                                          0),
+                                      child: Text('Profile',
+                                          style: TextStyle(
+                                              fontSize: media.orientation ==
+                                                      Orientation.portrait
+                                                  ? size.width * 0.025
+                                                  : size.width * 0.015)),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                          Flexible(
+                            flex: 1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .pushNamed('/games');
+                                      },
+                                      child: Container(
+                                          height: media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.1
+                                              : size.width * 0.06,
+                                          width: media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.1
+                                              : size.width * 0.06,
+                                          child: SvgPicture.asset(
+                                              'assets/accessories/games.svg')),
+                                    ),
+                                    Text('Games',
+                                        style: TextStyle(
+                                            fontSize: media.orientation ==
+                                                    Orientation.portrait
+                                                ? size.width * 0.025
+                                                : size.width * 0.015))
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .pushNamed('/story');
+                                      },
+                                      child: Container(
+                                          height: media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.1
+                                              : size.width * 0.06,
+                                          width: media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.1
+                                              : size.width * 0.06,
+                                          child: SvgPicture.asset(
+                                              'assets/accessories/story.svg')),
+                                    ),
+                                    Text(
+                                      'Stories',
+                                      style: TextStyle(
+                                          fontSize: media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.025
+                                              : size.width * 0.015),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).pushNamed('/map');
+                                      },
+                                      child: Container(
+                                          height: media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.1
+                                              : size.width * 0.06,
+                                          width: media.orientation ==
+                                                  Orientation.portrait
+                                              ? size.width * 0.1
+                                              : size.width * 0.06,
+                                          child: SvgPicture.asset(
+                                              'assets/accessories/map.svg')),
+                                    ),
+                                    Text('Map',
+                                        style: TextStyle(
+                                            fontSize: media.orientation ==
+                                                    Orientation.portrait
+                                                ? size.width * 0.025
+                                                : size.width * 0.015))
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ],
